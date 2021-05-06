@@ -1,26 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './SelectableList.css';
 
 
 class SelectableList extends Component
-{
-	
-	constructor(props)
-	{
-		super(props);
-		this.state = { selectedIndex: 0 };
-	}
-	
-	selectItem(itemIndex)
-	{
-		if(this.state.selectedIndex !== itemIndex)
-		{
-			this.setState({
-				selectedIndex: itemIndex
-			});
-		}
-	}
-	
+{	
 	render()
 	{
 		return (
@@ -30,8 +14,8 @@ class SelectableList extends Component
 						return (
 							<li 
 								key={"selectable-" + index} 
-								className={(this.state.selectedIndex === index) ? "SelectableListItemSelected" : ""} 
-								onClick={() => this.selectItem(index)}
+								className={(this.props.selectedItemIndex === index) ? "SelectableListItemSelected" : ""} 
+								onClick={() => this.props.setSelectedItemIndex(index)}
 							>
 								{child}
 							</li>
@@ -41,6 +25,11 @@ class SelectableList extends Component
 			</div>
 		);
 	}
+}
+
+SelectableList.propTypes = {
+	selectedItemIndex: PropTypes.number,
+	setSelectedItemIndex: PropTypes.func.isRequired
 }
 
 export default SelectableList;
