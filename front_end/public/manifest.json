@@ -1,0 +1,7 @@
+{
+  "short_name": "SchemaShovelWeb",
+  "name": "Schema Shovel Web",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone"
+}
