@@ -15,6 +15,7 @@
 
 .SelectableList li {
 	margin: 5px;
+	cursor: pointer;
 }
 
 .SelectableList .SelectableListItemSelected {
