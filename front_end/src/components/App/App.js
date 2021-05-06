@@ -27,7 +27,7 @@ class App extends Component
 		return (
 			<div className="App">
 				<header>
-					<h1>Schema Shovel Web</h1>
+					<h1>SchemaShovel Web</h1>
 					<h2>Select a database schema below (or upload a new schema) to begin</h2>
 				</header>
 				
