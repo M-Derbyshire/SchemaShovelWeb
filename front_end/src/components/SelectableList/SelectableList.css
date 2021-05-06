@@ -1,0 +1,22 @@
+.SelectableList {
+	background-color: white;
+	border: solid 2px #666666;
+	margin: 1rem auto;
+	padding: 1rem;
+	width: fit-content;
+	min-width: 60vw;
+}
+
+.SelectableList ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+.SelectableList li {
+	margin: 5px;
+}
+
+.SelectableList .SelectableListItemSelected {
+	background-color: #9c46ff;
+}
