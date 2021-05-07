@@ -38,7 +38,7 @@ class EditableItem extends Component
 	{
 		e.stopPropagation();
 		
-		this.props.saveChanges(e.target.value);
+		this.props.saveChanges(this.state.currentText);
 		
 		this.setState({
 			isSavingChanges: true
@@ -61,7 +61,8 @@ class EditableItem extends Component
 		//If we are in editing mode, things need to be displayed differently
 		const textElem = (!this.state.isInEditMode) ? 
 							(<span className="EIStaticText">{this.state.currentText}</span>) :
-							(<input className="EditableItemStaticText" type="text" value={this.state.currentText} onChange={(e) => this.textChange(e)} />);
+							(<input className="EITextInput" type="text" value={this.state.currentText} 
+								onChange={(e) => this.textChange(e)} />);
 		
 		//The button has 3 uses: "edit" (enter editing mode), "save" and "saving".
 		//There is also a cancel button, when editing, to exit without saving.
