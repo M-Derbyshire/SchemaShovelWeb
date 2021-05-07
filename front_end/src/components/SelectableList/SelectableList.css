@@ -16,9 +16,11 @@
 
 .SelectableList li {
 	margin: 5px;
+	padding: 5px;
 	cursor: pointer;
+	min-width: max-content;
 }
 
-.SelectableList .SelectableListItemSelected {
+.SelectableList .SelectableItemSelected {
 	background-color: #9c46ff;
 }

@@ -14,7 +14,7 @@ class SelectableList extends Component
 						return (
 							<li 
 								key={"selectable-" + index} 
-								className={(this.props.selectedItemIndex === index) ? "SelectableListItemSelected" : ""} 
+								className={(this.props.selectedItemIndex === index) ? "SelectableItemSelected" : ""} 
 								onClick={() => this.props.setSelectedItemIndex(index)}
 							>
 								{child}

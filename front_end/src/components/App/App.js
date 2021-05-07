@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import SelectableList from '../SelectableList/SelectableList';
+import EditableItem from '../EditableItem/EditableItem';
 
 
 class App extends Component
@@ -32,10 +33,10 @@ class App extends Component
 				</header>
 				
 				<SelectableList selectedItemIndex={this.state.selectedDatabaseIndex} 
-					setSelectedItemIndex={this.setSelectedDatabaseIndex.bind(this)} >
-					<p>Test1</p>
-					<p>Test2</p>
-					<p>Test3</p>
+						setSelectedItemIndex={this.setSelectedDatabaseIndex.bind(this)} >
+					<EditableItem isSelected text="Test 1" saveChanges={() => {}} />
+					<EditableItem text="Test 2" saveChanges={() => {}} />
+					<EditableItem text="Test 3" saveChanges={() => {}} />
 				</SelectableList>
 			</div>
 		);

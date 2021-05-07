@@ -1,0 +1,18 @@
+.EditableItem {
+	display: inline-flex;
+	width: 100%;
+	justify-content: space-between;
+	border: solid 1px #bbb;
+	padding: 5px;
+	box-sizing: border-box;
+}
+
+.EditableItem .EITextArea {
+	flex-shrink: 0;
+	font-weight: 600;
+}
+
+.EditableItem .EIButtonArea {
+	margin: auto 0.5em;
+	flex-shrink: 0;
+}
