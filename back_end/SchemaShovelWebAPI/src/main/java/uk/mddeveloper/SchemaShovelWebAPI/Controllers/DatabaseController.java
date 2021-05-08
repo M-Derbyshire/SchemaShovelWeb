@@ -125,6 +125,7 @@ public class DatabaseController {
 	{
 		try
 		{
+			//The cascading policy for the related entities is handled by the DB
 			databaseRepo.deleteById(id);
 		}
 		catch(Exception e)
