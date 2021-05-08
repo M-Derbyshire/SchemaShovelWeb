@@ -1,18 +1,11 @@
 package uk.mddeveloper.SchemaShovelWebAPI.Controllers.EntityDescriptionUpdate;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.BadRequestException;
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.InternalServerErrorException;
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.RecordNotFoundException;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.IDescribable;
-import uk.mddeveloper.SchemaShovelWebAPI.Repositories.SchemaRepository;
 
 @RestController
 public class DescriptionUpdateSuperController<T extends IDescribable> {
