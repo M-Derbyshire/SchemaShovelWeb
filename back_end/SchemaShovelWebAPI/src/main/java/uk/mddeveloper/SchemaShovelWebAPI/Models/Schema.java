@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@javax.persistence.Table(name = "\"Schema\"")
 public class Schema {
 	
 	public Schema() {}

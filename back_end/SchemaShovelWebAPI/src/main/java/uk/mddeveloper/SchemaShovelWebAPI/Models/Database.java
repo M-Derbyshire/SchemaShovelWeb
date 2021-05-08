@@ -8,9 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
+@javax.persistence.Table(name = "\"Database\"")
 public class Database {
 	
 	public Database() {}

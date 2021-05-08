@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@javax.persistence.Table(name = "\"Column\"")
 public class Column {
 	
 	public Column() {}
