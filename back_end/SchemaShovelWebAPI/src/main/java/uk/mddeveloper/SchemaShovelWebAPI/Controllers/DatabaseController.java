@@ -46,7 +46,14 @@ public class DatabaseController {
 	@PostMapping("/")
 	Database create(@RequestBody Database newDatabase) throws BadRequestException
 	{
-		return databaseRepo.save(newDatabase);
+		try
+		{
+			return databaseRepo.save(newDatabase);
+		}
+		catch(Exception e)
+		{
+			throw new BadRequestException();
+		}
 	}
 	
 	@PutMapping("/{id}")
