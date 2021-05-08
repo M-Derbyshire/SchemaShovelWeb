@@ -1,5 +1,6 @@
 package uk.mddeveloper.SchemaShovelWebAPI.Models;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,7 +29,7 @@ public class Column {
 	@JsonIgnore
 	private Table table;
 	
-	@javax.persistence.Column(name = "foreignKeyToSchemaTableName")
+	@javax.persistence.Column(name = "foreignKeyToSchemaTableName", nullable = true)
 	private String fkToTable;
 	
 	
