@@ -2,8 +2,6 @@ package uk.mddeveloper.SchemaShovelWebAPI.Models;
 
 import java.util.List;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @javax.persistence.Table(name = "\"Schema\"")
-public class Schema {
+public class Schema implements IDescribable {
 	
 	public Schema() {}
 	
