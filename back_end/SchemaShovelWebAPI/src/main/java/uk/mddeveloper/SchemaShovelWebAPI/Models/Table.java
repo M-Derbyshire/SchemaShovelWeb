@@ -35,9 +35,6 @@ public class Table {
 	@OneToMany(mappedBy = "table")
 	private List<Column> columns;
 	
-	@OneToMany(mappedBy = "fkToTable")
-	private List<Column> fkColumnsToThisTable;
-	
 	
 	
 	
@@ -47,14 +44,6 @@ public class Table {
 
 	public void setColumns(List<Column> columns) {
 		this.columns = columns;
-	}
-
-	public List<Column> getFkColumnsToThisTable() {
-		return fkColumnsToThisTable;
-	}
-
-	public void setFkColumnsToThisTable(List<Column> fkColumnsToThisTable) {
-		this.fkColumnsToThisTable = fkColumnsToThisTable;
 	}
 
 	public Long getId() {

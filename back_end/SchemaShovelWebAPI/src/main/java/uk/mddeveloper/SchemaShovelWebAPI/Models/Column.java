@@ -28,10 +28,8 @@ public class Column {
 	@JsonIgnore
 	private Table table;
 	
-	@ManyToOne
-	@JoinColumn(name = "foreignKeyToTableID")
-	@JsonIgnore
-	private Table fkToTable;
+	@javax.persistence.Column(name = "foreignKeyToSchemaTableName")
+	private String fkToTable;
 	
 	
 	
@@ -69,11 +67,11 @@ public class Column {
 		this.table = table;
 	}
 
-	public Table getFkToTable() {
+	public String getFkToTable() {
 		return fkToTable;
 	}
 
-	public void setFkToTable(Table fkToTable) {
+	public void setFkToTable(String fkToTable) {
 		this.fkToTable = fkToTable;
 	}
 	
