@@ -22,6 +22,7 @@ import uk.mddeveloper.SchemaShovelWebAPI.Repositories.ColumnRepository;
 import uk.mddeveloper.SchemaShovelWebAPI.Repositories.DatabaseRepository;
 import uk.mddeveloper.SchemaShovelWebAPI.Repositories.SchemaRepository;
 import uk.mddeveloper.SchemaShovelWebAPI.Repositories.TableRepository;
+import uk.mddeveloper.SchemaShovelWebAPI.Repositories.Projections.DatabaseNameIdProjection;
 
 @RestController
 @RequestMapping("/api/v1/databases")
@@ -42,9 +43,9 @@ public class DatabaseController {
 	//Retrieval methods
 	
 	@GetMapping("/")
-	List<Database> getAll()
+	List<DatabaseNameIdProjection> getAll()
 	{
-		return databaseRepo.findAll();
+		return databaseRepo.findAllIdAndName();
 	}
 	
 	@GetMapping("/{id}")
