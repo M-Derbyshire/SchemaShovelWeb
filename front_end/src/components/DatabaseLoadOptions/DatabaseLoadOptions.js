@@ -10,9 +10,7 @@ class DatabaseLoadOptions extends Component
 	{
 		return (
 			<div className="DatabaseLoadOptions">
-				<button 
-					// We check if it's NAN specifically, as 0 is falsy
-					disabled={this.props.selectedDatabaseIndex < 0} 
+				<button disabled={this.props.selectedDatabaseIndex < 0} 
 					onClick={() => this.props.loadSelectedDatabase(this.props.selectedDatabaseIndex)}>
 				Load Database</button>
 				
