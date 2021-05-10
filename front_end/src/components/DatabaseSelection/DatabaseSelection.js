@@ -16,7 +16,7 @@ class DatabaseSelection extends Component
 				</header>
 				<SelectableList selectedItemIndex={this.props.selectedDatabaseIndex} 
 						setSelectedItemIndex={this.props.setSelectedDatabaseIndex} >
-					<EditableItem isSelected text="Test 1" saveChanges={() => {}} />
+					<EditableItem isSelected text="Test 1" saveChanges={() => {}} textLengthLimit={4} />
 					<EditableItem text="Test 2" saveChanges={() => {}} />
 					<EditableItem text="Test 3" saveChanges={() => {}} />
 				</SelectableList>

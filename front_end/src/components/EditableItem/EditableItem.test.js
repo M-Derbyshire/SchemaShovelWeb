@@ -120,3 +120,25 @@ test("When EditableItem is being saved, the saveChanges prop function will be ca
 	//Check has ran
 	expect(mockSaveChanges).toHaveBeenCalledWith("test2");
 });
+
+
+test("EditableItem will have add a maxLength attribute to the edit text box, of the value passed as textLengthLimit prop", () => {
+	
+	const item1 = ReactTestUtils.renderIntoDocument(
+		<EditableItem saveChanges={fakeSaveChanges} text="testing123" textLengthLimit={1} />
+	);
+	const editButton1 = ReactTestUtils.findRenderedDOMComponentWithClass(item1, "EIEditButton");
+	ReactTestUtils.Simulate.click(editButton1); //Enter edit mode
+	const textInput1 = ReactTestUtils.findRenderedDOMComponentWithClass(item1, "EITextInput");
+	
+	const item2 = ReactTestUtils.renderIntoDocument(
+		<EditableItem saveChanges={fakeSaveChanges} text="testing123" textLengthLimit={11} />
+	);
+	const editButton2 = ReactTestUtils.findRenderedDOMComponentWithClass(item2, "EIEditButton"); 
+	ReactTestUtils.Simulate.click(editButton2); //Enter edit mode
+	const textInput2 = ReactTestUtils.findRenderedDOMComponentWithClass(item2, "EITextInput");
+	
+	
+	expect(textInput1.getAttribute("maxLength")).toBe("1");
+	expect(textInput2.getAttribute("maxLength")).toBe("11");
+});

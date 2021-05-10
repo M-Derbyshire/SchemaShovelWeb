@@ -15,6 +15,7 @@ class EditableItem extends Component
 		this.state = {
 			isInEditMode: false,
 			isSavingChanges: false,
+			textLengthLimit: (props.textLengthLimit) ? props.textLengthLimit : -1,
 			savedText, 
 			currentText: savedText, //The current text of the item (may not have been saved yet)
 		};
@@ -62,7 +63,10 @@ class EditableItem extends Component
 		const textElem = (!this.state.isInEditMode) ? 
 							(<span className="EIStaticText">{this.state.currentText}</span>) :
 							(<input className="EITextInput" type="text" value={this.state.currentText} 
-								onChange={(e) => this.textChange(e)} />);
+								onChange={(e) => this.textChange(e)} 
+								maxLength={(this.state.textLengthLimit > -1) ? 
+												this.state.textLengthLimit : 
+												undefined} />);
 		
 		//The button has 3 uses: "edit" (enter editing mode), "save" and "saving".
 		//There is also a cancel button, when editing, to exit without saving.
@@ -106,6 +110,7 @@ class EditableItem extends Component
 EditableItem.propTypes = {
 	text: PropTypes.string,
 	saveChanges: PropTypes.func.isRequired,
+	textLengthLimit: PropTypes.number,
 }
 
 export default EditableItem;
