@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import SelectableList from '../SelectableList/SelectableList';
-import EditableItem from '../EditableItem/EditableItem';
+import DatabaseSelection from '../DatabaseSelection/DatabaseSelection';
 
 
 class App extends Component
@@ -17,7 +16,7 @@ class App extends Component
 	
 	setSelectedDatabaseIndex(index)
 	{
-		if(this.state.selectedItemIndex !== index)
+		if(this.state.selectedDatabaseIndex !== index)
 		{
 			this.setState({ selectedDatabaseIndex: index });
 		}
@@ -29,15 +28,11 @@ class App extends Component
 			<div className="App">
 				<header>
 					<h1>SchemaShovel Web</h1>
-					<h2>Select a database schema below (or upload a new schema) to begin</h2>
 				</header>
 				
-				<SelectableList selectedItemIndex={this.state.selectedDatabaseIndex} 
-						setSelectedItemIndex={this.setSelectedDatabaseIndex.bind(this)} >
-					<EditableItem isSelected text="Test 1" saveChanges={() => {}} />
-					<EditableItem text="Test 2" saveChanges={() => {}} />
-					<EditableItem text="Test 3" saveChanges={() => {}} />
-				</SelectableList>
+				<DatabaseSelection 
+					selectedDatabaseIndex={this.state.selectedDatabaseIndex} 
+					setSelectedDatabaseIndex={this.setSelectedDatabaseIndex.bind(this)} />
 			</div>
 		);
 	}
