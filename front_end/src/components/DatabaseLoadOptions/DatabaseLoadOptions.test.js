@@ -48,38 +48,19 @@ test("DatabaseLoadOptions will disable it's load database button, if selected in
 	
 });
 
-test("DatabaseLoadOptions will run the function passed as the loadSelectedDatabase prop, with the index as a parameter, when the load button is pressed", () => {
+test("DatabaseLoadOptions will run the function passed as the loadSelectedDatabase prop when the load button is pressed", () => {
 	
 	const mockLoadSelectedDatabase = jest.fn();
 	
-	const options0 = ReactTestUtils.renderIntoDocument(
+	const options = ReactTestUtils.renderIntoDocument(
 		<DatabaseLoadOptions
 			loadSelectedDatabase={mockLoadSelectedDatabase}
 			selectedDatabaseIndex={0}/>
 	);
-	const loadButton0 = ReactTestUtils.findRenderedDOMComponentWithClass(options0, "loadDatabaseButton");
+	const loadButton = ReactTestUtils.findRenderedDOMComponentWithClass(options, "loadDatabaseButton");
 	
-	const options1 = ReactTestUtils.renderIntoDocument(
-		<DatabaseLoadOptions
-			loadSelectedDatabase={mockLoadSelectedDatabase}
-			selectedDatabaseIndex={1}/>
-	);
-	const loadButton1 = ReactTestUtils.findRenderedDOMComponentWithClass(options1, "loadDatabaseButton");
+	ReactTestUtils.Simulate.click(loadButton);
 	
-	const options2 = ReactTestUtils.renderIntoDocument(
-		<DatabaseLoadOptions
-			loadSelectedDatabase={mockLoadSelectedDatabase}
-			selectedDatabaseIndex={2}/>
-	);
-	const loadButton2 = ReactTestUtils.findRenderedDOMComponentWithClass(options2, "loadDatabaseButton");
-	
-	
-	ReactTestUtils.Simulate.click(loadButton0);
-	ReactTestUtils.Simulate.click(loadButton1);
-	ReactTestUtils.Simulate.click(loadButton2);
-	
-	expect(mockLoadSelectedDatabase).toHaveBeenNthCalledWith(1, 0);
-	expect(mockLoadSelectedDatabase).toHaveBeenNthCalledWith(2, 1);
-	expect(mockLoadSelectedDatabase).toHaveBeenNthCalledWith(3, 2);
+	expect(mockLoadSelectedDatabase).toHaveBeenCalled();
 	
 });

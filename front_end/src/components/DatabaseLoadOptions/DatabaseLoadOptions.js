@@ -11,7 +11,7 @@ class DatabaseLoadOptions extends Component
 		return (
 			<div className="DatabaseLoadOptions">
 				<button className="loadDatabaseButton" disabled={this.props.selectedDatabaseIndex < 0}
-					onClick={() => this.props.loadSelectedDatabase(this.props.selectedDatabaseIndex)}>
+					onClick={() => this.props.loadSelectedDatabase()}>
 				Load Database</button>
 				
 				{/* This will eventually take you to the database upload route */}
