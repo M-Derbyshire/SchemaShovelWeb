@@ -1,10 +1,12 @@
 package uk.mddeveloper.SchemaShovelWebAPI.Controllers.EntityDescriptionUpdate;
 
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.RestController;
 
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.InternalServerErrorException;
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.RecordNotFoundException;
+import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.UnprocessableEntityException;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.IDescribable;
 
 @RestController
@@ -38,8 +40,12 @@ public class DescriptionUpdateSuperController<T extends IDescribable> {
 	
 	
 	//When passed JSON that only contains the description
-	DescriptionOnlyHelperModel updateDescriptionUsingProvidedRepo(DescriptionOnlyHelperModel newDescription, Long id, JpaRepository<T, Long> repo) 
-			throws RecordNotFoundException, RuntimeException, Throwable
+	DescriptionOnlyHelperModel updateDescriptionUsingProvidedRepo(
+			DescriptionOnlyHelperModel newDescription, 
+			Long id, 
+			JpaRepository<T, Long> repo
+			) 
+			throws UnprocessableEntityException, InternalServerErrorException
 	{	
 		try
 		{
@@ -56,9 +62,16 @@ public class DescriptionUpdateSuperController<T extends IDescribable> {
 		{
 			throw e;
 		}
-		catch(Throwable e)
+		catch(InvalidDataAccessApiUsageException e)
 		{
-			e.printStackTrace();
+			throw new UnprocessableEntityException();
+		}
+		catch(RuntimeException e)
+		{
+			if(e instanceof UnprocessableEntityException || e instanceof RecordNotFoundException)
+			{
+				throw e;
+			}
 			throw new InternalServerErrorException();
 		}
 	}

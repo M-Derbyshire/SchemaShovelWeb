@@ -3,6 +3,7 @@ package uk.mddeveloper.SchemaShovelWebAPI.Controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.BadRequestException;
+import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.InternalServerErrorException;
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.RecordNotFoundException;
+import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.UnprocessableEntityException;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Column;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Database;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Schema;
@@ -43,15 +46,52 @@ public class DatabaseController {
 	//Retrieval methods
 	
 	@GetMapping("/")
-	List<DatabaseNameIdProjection> getAll()
+	List<DatabaseNameIdProjection> getAll() throws InternalServerErrorException
 	{
-		return databaseRepo.findAllIdAndName();
+		List<DatabaseNameIdProjection> results;
+		
+		try
+		{
+			results = databaseRepo.findAllIdAndName();
+		}
+		catch(RuntimeException e)
+		{
+			throw new InternalServerErrorException();
+		}
+		
+		return results;
 	}
 	
+	
 	@GetMapping("/{id}")
-	Database getOne(@PathVariable Long id) throws RecordNotFoundException
+	Database getOne(@PathVariable Long id) 
+			throws RecordNotFoundException, UnprocessableEntityException, InternalServerErrorException
 	{
-		return databaseRepo.findById(id).orElseThrow(() -> new RecordNotFoundException());
+		Database result = null;
+		
+		try
+		{
+			result = databaseRepo.findById(id).orElseThrow(() -> new RecordNotFoundException());
+		}
+		catch(RecordNotFoundException e)
+		{
+			throw e;
+		}
+		catch(InvalidDataAccessApiUsageException e)
+		{
+			throw new UnprocessableEntityException();
+		}
+		catch(RuntimeException e)
+		{
+			if(e instanceof UnprocessableEntityException || e instanceof RecordNotFoundException)
+			{
+				throw e;
+			}
+			
+			throw new InternalServerErrorException();
+		}
+		
+		return result;
 	}
 	
 	
@@ -59,7 +99,8 @@ public class DatabaseController {
 	//Create/update methods
 	
 	@PostMapping("/")
-	Database create(@RequestBody Database newDatabase) throws BadRequestException
+	Database create(@RequestBody Database newDatabase) 
+			throws UnprocessableEntityException, InternalServerErrorException
 	{
 		
 		try
@@ -87,31 +128,51 @@ public class DatabaseController {
 			}
 			
 			
-			
-			return newDatabase;
-			
+			return newDatabase;	
 		}
-		catch(Exception e)
+		catch(InvalidDataAccessApiUsageException e)
 		{
-			throw new BadRequestException();
+			throw new UnprocessableEntityException();
+		}
+		catch(RuntimeException e)
+		{
+			if(e instanceof UnprocessableEntityException)
+			{
+				throw e;
+			}
+			throw new InternalServerErrorException();
 		}
 	}
 	
 	
 	@PutMapping("/{id}")
-	Database update(@RequestBody Database newDatabase, @PathVariable Long id) throws RuntimeException
+	Database update(@RequestBody Database newDatabase, @PathVariable Long id) 
+			throws RecordNotFoundException, UnprocessableEntityException, InternalServerErrorException
 	{
-		Database database = databaseRepo.findById(id).orElseThrow(() -> new RecordNotFoundException());
-		
-		database.setName(newDatabase.getName());
+		Database database = null;
 		
 		try
 		{
+			database = databaseRepo.findById(id).orElseThrow(() -> new RecordNotFoundException());
+			database.setName(newDatabase.getName());
+			
 			database = databaseRepo.save(database);
 		}
-		catch(Exception e)
+		catch(RecordNotFoundException e)
 		{
-			throw new BadRequestException();
+			throw e;
+		}
+		catch(InvalidDataAccessApiUsageException e)
+		{
+			throw new UnprocessableEntityException();
+		}
+		catch(RuntimeException e)
+		{
+			if(e instanceof UnprocessableEntityException || e instanceof RecordNotFoundException)
+			{
+				throw e;
+			}
+			throw new InternalServerErrorException();
 		}
 		
 		return database;
@@ -122,16 +183,36 @@ public class DatabaseController {
 	//Delete method
 	
 	@DeleteMapping("/{id}")
-	void delete(@PathVariable Long id) throws BadRequestException
+	void delete(@PathVariable Long id) 
+			throws BadRequestException, InternalServerErrorException, RecordNotFoundException
 	{
 		try
 		{
 			//The cascading policy for the related entities is handled by the DB
-			databaseRepo.deleteById(id);
+			if(databaseRepo.existsById(id))
+			{
+				databaseRepo.deleteById(id);
+			}
+			else
+			{
+				throw new RecordNotFoundException();
+			}
 		}
-		catch(Exception e)
+		catch(RecordNotFoundException e)
 		{
-			throw new BadRequestException();
+			throw e;
+		}
+		catch(InvalidDataAccessApiUsageException e)
+		{
+			throw new UnprocessableEntityException();
+		}
+		catch(RuntimeException e)
+		{
+			if(e instanceof UnprocessableEntityException || e instanceof RecordNotFoundException)
+			{
+				throw e;
+			}
+			throw new InternalServerErrorException();
 		}
 	}
 }
