@@ -191,7 +191,7 @@ public class DatabaseController {
 			//The cascading policy for the related entities is handled by the DB
 			if(databaseRepo.existsById(id))
 			{
-				databaseRepo.deleteById(id);
+				databaseRepo.deleteRecordAndRelations(id);
 			}
 			else
 			{

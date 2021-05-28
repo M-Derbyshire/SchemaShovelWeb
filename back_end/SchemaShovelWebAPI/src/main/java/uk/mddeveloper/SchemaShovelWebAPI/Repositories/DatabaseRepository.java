@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Database;
@@ -16,4 +18,6 @@ public interface DatabaseRepository extends JpaRepository<Database, Long> {
 	@Query(value="select d.id as id, d.name as name from Database d")
 	public List<DatabaseNameIdProjection> findAllIdAndName();
 	
+	@Procedure("spDeleteDatabaseRecordAndRelations")
+	public void deleteRecordAndRelations(@Param("databaseID") Long id);
 }
