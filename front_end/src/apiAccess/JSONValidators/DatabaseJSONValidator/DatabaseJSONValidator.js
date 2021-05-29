@@ -1,23 +1,10 @@
-import Queue from '../Queue/Queue';
+import JSONValidator from '../JSONValidator/JSONValidator';
 
-export default class DatabaseJSONValidator
+export default class DatabaseJSONValidator extends JSONValidator
 {
 	constructor()
 	{
-		this._errorQueue = new Queue();
-	}
-	
-	//Returns true/false, dependant on if there were validation errors
-	//in the errorQueue
-	hasErrors()
-	{
-		return !this._errorQueue.isEmpty();
-	}
-	
-	//Returns (and dequeues) the next error in the errorQueue
-	getNextError()
-	{
-		return this._errorQueue.dequeue();
+		super();
 	}
 	
 	
@@ -150,18 +137,5 @@ export default class DatabaseJSONValidator
 	_getWordWithCapitalisedFirstLetter(word)
 	{
 		return word.charAt(0).toUpperCase() + word.slice(1);;
-	}
-	
-	
-	_propertyIsOfType(item, propName, propType)
-	{
-		if(propType === "array")
-		{
-			return Array.isArray(item[propName]);
-		}
-		else
-		{
-			return (typeof item[propName] === propType);
-		}
 	}
 }

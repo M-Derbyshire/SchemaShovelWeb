@@ -1,10 +1,10 @@
 import DatabaseJSONValidator from './DatabaseJSONValidator';
 
-import checkValidatorErrorCount from './testHelpers/checkValidatorErrorCount';
-import badSchemas from './testHelpers/badSchemasJSON';
-import badTables from './testHelpers/badTablesJSON';
-import badColumns from './testHelpers/badColumnJSON';
-import columsForFkToTableTest from './testHelpers/columsForFkToTableTest';
+import checkValidatorErrorCount from '../testHelpers/checkValidatorErrorCount';
+import badSchemas from '../testHelpers/badSchemasJSON';
+import badTables from '../testHelpers/badTablesJSON';
+import badColumns from '../testHelpers/badColumnJSON';
+import columsForFkToTableTest from '../testHelpers/columsForFkToTableTest';
 
 
 test("Will return true from validateJSON if no errors", () => {
@@ -14,7 +14,7 @@ test("Will return true from validateJSON if no errors", () => {
 	
 });
 
-// See './testHelpers/badSchemasJSON'
+// See '../testHelpers/badSchemasJSON'
 test("Will return false from validateJSON if errors", () => {
 	
 	const validator = new DatabaseJSONValidator();
@@ -22,7 +22,7 @@ test("Will return false from validateJSON if errors", () => {
 	
 });
 
-// See './testHelpers/badSchemasJSON'
+// See '../testHelpers/badSchemasJSON'
 test("hasErrors will return true if there are errors", () => {
 	
 	const validator = new DatabaseJSONValidator();
@@ -39,7 +39,7 @@ test("hasErrors will return false if there are no errors", () => {
 	
 });
 
-// See './testHelpers/badSchemasJSON'
+// See '../testHelpers/badSchemasJSON'
 test("getNextError will remove and return an error (of type string)", () => {
 	
 	const validator = new DatabaseJSONValidator();
@@ -62,7 +62,8 @@ test("Will have an error if given JSON is unparseable", () => {
 	
 });
 
-// See './testHelpers/badSchemasJSON'
+
+// See '../testHelpers/badSchemasJSON'
 test("Will find all errors with schemas", () => {
 	
 	const validator = new DatabaseJSONValidator();
@@ -77,7 +78,7 @@ test("Will find all errors with schemas", () => {
 	
 });
 
-// See './testHelpers/badTablesJSON'
+// See '../testHelpers/badTablesJSON'
 test("Will find all errors with tables", () => {
 	
 	const validator = new DatabaseJSONValidator();
@@ -90,7 +91,7 @@ test("Will find all errors with tables", () => {
 	checkValidatorErrorCount(validator, errorCount);
 });
 
-// See './testHelpers/badColumnJSON'
+// See '../testHelpers/badColumnJSON'
 test("Will find all errors with columns", () => {
 	
 	const validator = new DatabaseJSONValidator();
