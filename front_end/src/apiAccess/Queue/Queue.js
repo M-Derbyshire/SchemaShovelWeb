@@ -1,9 +1,3 @@
-/*
-- peek() //Returns the item at the front of the queue (but does not remove it)
-- isEmpty()
-- getLength()
-*/
-
 export default class Queue
 {
 	constructor()
