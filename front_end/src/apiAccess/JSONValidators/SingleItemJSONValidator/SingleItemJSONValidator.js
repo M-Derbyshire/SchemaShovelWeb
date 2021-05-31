@@ -1,18 +1,16 @@
 import JSONValidator from '../JSONValidator/JSONValidator';
 
-export default class DescriptionJSONValidator extends JSONValidator
+export default class SingleItemJSONValidator extends JSONValidator
 {
-	constructor()
+	constructor(validProperties)
 	{
 		super();
+		
+		this._validProperties = validProperties;
 	}
 	
 	validateJSON(descJSON)
 	{
-		const validProperties = [
-			{ name: "description", type: "string" }
-		];
-		
 		try
 		{
 			const descArray = JSON.parse(descJSON);
@@ -20,7 +18,7 @@ export default class DescriptionJSONValidator extends JSONValidator
 			
 			if(!hasArraySizeErrors)
 			{
-				this._validateSingleItem(descArray[0], 0, "Description JSON", validProperties);
+				this._validateSingleItem(descArray[0], 0, "Description JSON", this._validProperties);
 			}
 		}
 		catch(err)
