@@ -5,6 +5,7 @@ export default class JSONValidator
 	constructor()
 	{
 		this._errorQueue = new Queue();
+		this._addError = this._errorQueue.enqueue.bind(this._errorQueue);
 	}
 	
 	//Returns true/false, dependant on if there were validation errors

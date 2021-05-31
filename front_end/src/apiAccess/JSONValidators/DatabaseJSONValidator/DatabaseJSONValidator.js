@@ -12,16 +12,14 @@ export default class DatabaseJSONValidator extends JSONValidator
 	//Returns true if JSON is valid, or false if there were errors
 	validateJSON(dbJSON)
 	{
-		const addError = this._errorQueue.enqueue.bind(this._errorQueue);
-		
 		try
 		{
 			const schemas = JSON.parse(dbJSON);
-			this._validateSchemaArray(schemas, addError);
+			this._validateSchemaArray(schemas, this._addError);
 		}
 		catch(err)
 		{
-			addError(`Unable to parse provided JSON. Failed with error: "${err.message}"`);
+			this._addError(`Unable to parse provided JSON. Failed with error: "${err.message}"`);
 		}
 		
 		return !this.hasErrors();
