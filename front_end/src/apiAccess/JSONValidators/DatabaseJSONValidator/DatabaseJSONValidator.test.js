@@ -22,38 +22,6 @@ test("Will return false from validateJSON if errors", () => {
 	
 });
 
-// See '../testHelpers/badSchemasJSON'
-test("hasErrors will return true if there are errors", () => {
-	
-	const validator = new DatabaseJSONValidator();
-	validator.validateJSON(badSchemas.json);
-	expect(validator.hasErrors()).toBeTruthy();
-	
-});
-
-test("hasErrors will return false if there are no errors", () => {
-	
-	const validator = new DatabaseJSONValidator();
-	validator.validateJSON("[]");
-	expect(validator.hasErrors()).toBeFalsy();
-	
-});
-
-// See '../testHelpers/badSchemasJSON'
-test("getNextError will remove and return an error (of type string)", () => {
-	
-	const validator = new DatabaseJSONValidator();
-	validator.validateJSON(badSchemas.json);
-	
-	for(let i = 0; i < badSchemas.errorCount; i++)
-	{
-		expect(typeof validator.getNextError()).toBe("string");
-	}
-	
-	expect(validator.hasErrors()).toBeFalsy();
-	
-});
-
 test("Will have an error if given JSON is unparseable", () => {
 	
 	const validator = new DatabaseJSONValidator();
