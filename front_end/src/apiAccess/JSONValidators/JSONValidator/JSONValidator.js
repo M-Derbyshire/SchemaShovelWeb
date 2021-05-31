@@ -31,18 +31,18 @@ export default class JSONValidator
 	//item could be a schema/table/column
 	//item index is the index of the item in it's respective array
 	//itemName could be "schema"/"table"/"column"
-	_validateSingleItem(item, itemIndex, itemName, validProperties, addError)
+	_validateSingleItem(item, itemIndex, itemName, validProperties)
 	{
-		this._checkForInvalidProperties(validProperties, item, itemIndex, itemName, addError);
+		this._checkForInvalidProperties(validProperties, item, itemIndex, itemName);
 		
 		validProperties.forEach((prop) => {
 			const optional = (prop.hasOwnProperty("optional") && prop.optional);
-			this._validateProperty(item, itemIndex, itemName, prop.name, prop.type, addError, optional);
+			this._validateProperty(item, itemIndex, itemName, prop.name, prop.type, optional);
 		});
 	}
 	
 	
-	_checkForInvalidProperties(validProperties, item, itemIndex, itemName, addError)
+	_checkForInvalidProperties(validProperties, item, itemIndex, itemName)
 	{
 		const SentenceStartItemName = this._getWordWithCapitalisedFirstLetter(itemName);
 		
@@ -50,7 +50,7 @@ export default class JSONValidator
 		for(const [key, value] of Object.entries(item))
 		{
 			if(validProperties.filter(vp => vp.name === key).length === 0)
-				addError(`${SentenceStartItemName} at index ${itemIndex} contains an invalid property: ${key}.`);
+				this._addError(`${SentenceStartItemName} at index ${itemIndex} contains an invalid property: ${key}.`);
 		}
 	}
 	
@@ -67,18 +67,18 @@ export default class JSONValidator
 	}
 	
 	//propType for arrays is just "array"
-	_validateProperty(item, itemIndex, itemName, propName, propType, addError, optional = false)
+	_validateProperty(item, itemIndex, itemName, propName, propType, optional = false)
 	{
 		const SentenceStartItemName = this._getWordWithCapitalisedFirstLetter(itemName);
 		
 		if(item.hasOwnProperty(propName))
 		{
 			if(!this._propertyIsOfType(item, propName, propType))
-				addError(`${SentenceStartItemName}'s ${propName} property at index ${itemIndex} is not a valid ${propType}.`);
+				this._addError(`${SentenceStartItemName}'s ${propName} property at index ${itemIndex} is not a valid ${propType}.`);
 		}
 		else if(!optional)
 		{
-			addError(`${SentenceStartItemName} at index ${itemIndex} does not have a ${propName} property.`);
+			this._addError(`${SentenceStartItemName} at index ${itemIndex} does not have a ${propName} property.`);
 		}
 	}
 	

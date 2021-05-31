@@ -15,7 +15,7 @@ export default class DatabaseJSONValidator extends JSONValidator
 		try
 		{
 			const schemas = JSON.parse(dbJSON);
-			this._validateSchemaArray(schemas, this._addError);
+			this._validateSchemaArray(schemas);
 		}
 		catch(err)
 		{
@@ -29,7 +29,7 @@ export default class DatabaseJSONValidator extends JSONValidator
 	
 	
 	
-	_validateSchemaArray(schemas, addError)
+	_validateSchemaArray(schemas)
 	{
 		const validProperties = [
 			{ name: "name", type: "string" },
@@ -39,15 +39,15 @@ export default class DatabaseJSONValidator extends JSONValidator
 		
 		schemas.forEach((schema, index) => {
 			
-			this._validateSingleItem(schema, index, "schema", validProperties, addError);
+			this._validateSingleItem(schema, index, "schema", validProperties);
 			
-			if(Array.isArray(schema.tables)) this._validateTables(schema.tables, addError);
+			if(Array.isArray(schema.tables)) this._validateTables(schema.tables);
 			
 		});
 	}
 	
 	
-	_validateTables(tables, addError)
+	_validateTables(tables)
 	{
 		const validProperties = [
 			{ name: "name", type: "string" },
@@ -57,15 +57,15 @@ export default class DatabaseJSONValidator extends JSONValidator
 		
 		tables.forEach((table, index) => {
 			
-			this._validateSingleItem(table, index, "table", validProperties, addError);
+			this._validateSingleItem(table, index, "table", validProperties);
 			
-			if(Array.isArray(table.columns)) this._validateColumns(table.columns, addError);
+			if(Array.isArray(table.columns)) this._validateColumns(table.columns);
 			
 		});
 	}
 	
 	
-	_validateColumns(columns, addError)
+	_validateColumns(columns)
 	{
 		const validProperties = [
 			{ name: "name", type: "string" },
@@ -77,11 +77,11 @@ export default class DatabaseJSONValidator extends JSONValidator
 		
 		columns.forEach((column, index) => {
 			
-			this._validateSingleItem(column, index, "column", validProperties, addError);
+			this._validateSingleItem(column, index, "column", validProperties);
 			
 			if(column.hasOwnProperty("fkToTable") && !fkToTableRegex.test(column.fkToTable))
 			{
-				addError(`Column at index ${index} has a misshapen fkToTable property value: ${column.fkToTable}`);
+				this._addError(`Column at index ${index} has a misshapen fkToTable property value: ${column.fkToTable}`);
 			}
 		});
 	}
