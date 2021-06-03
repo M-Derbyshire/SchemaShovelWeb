@@ -14,6 +14,13 @@ export default class SingleItemJSONValidator extends JSONValidator
 		try
 		{
 			const descArray = JSON.parse(descJSON);
+			
+			if(!Array.isArray(descArray))
+			{
+				this._addError(`The provided JSON should be an array.`);
+				return false;
+			}
+			
 			const hasArraySizeErrors = !this._validateArraySize(descArray);
 			
 			if(!hasArraySizeErrors)
@@ -32,11 +39,7 @@ export default class SingleItemJSONValidator extends JSONValidator
 	//Returns true if no issues, and false if errors were raised
 	_validateArraySize(arr)
 	{
-		if(!Array.isArray(arr))
-		{
-			this._addError(`The provided JSON should be an array.`);
-		}
-		else if(arr.length > 1)
+		if(arr.length > 1)
 		{
 			this._addError(`The provided JSON should only contain one item.`);
 		}
