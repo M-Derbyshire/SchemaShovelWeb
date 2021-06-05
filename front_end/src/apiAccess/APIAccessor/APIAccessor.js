@@ -1,5 +1,5 @@
 import Queue from '../Queue/Queue';
-import DatabaseJSONValidator from '../JSONValidators/DatabaseJSONValidator/DatabaseJSONValidator';
+import JSONArrayValidator from '../JSONValidators/JSONArrayValidator/JSONArrayValidator';
 
 export default class APIAccessor
 {
@@ -7,7 +7,11 @@ export default class APIAccessor
 	{
 		this._baseURL = baseURL;
 		
-		this._databaseJSONValidator = new DatabaseJSONValidator();
+		const validProperties = [
+			{ name: "id", type: "number" },
+			{ name: "name", type: "string" }
+		];		
+		this._dbIDAndNameJSONValidator = new JSONArrayValidator("database", validProperties);
 		
 		this._errorQueue = new Queue();
 		this._addError = this._errorQueue.enqueue.bind(this._errorQueue);
@@ -19,15 +23,16 @@ export default class APIAccessor
 	{
 		const response = await fetch(path, settings);
 		
-		if(response.ok)
-		{
-			return await response.json();
-		}
-		else
+		if(!response.ok)
 		{
 			throw new Error(response.statusText);
 		}
-	}	
+		
+		const text = await response.text();
+		const json = JSON.parse(text);
+		
+		return [text, json];
+	}
 	
 	
 	
@@ -48,31 +53,20 @@ export default class APIAccessor
 	{
 		try
 		{
-			const response = await fetch(this._baseURL + "/databases/", {});
-			
-			if(!response.ok)
-			{
-				throw new Error(response.statusText);
-			}
-			
-			const dbListText = await response.text();
-			const dbList = JSON.parse(dbListText);
+			const [dbListText, dbList] = await this._getJSONFromAPI(this._baseURL + "/databases/");
 			
 			if(!Array.isArray(dbList))
 			{
 				throw new Error("Value from API was not a valid array.");
 			}
 			
-			if(!this._databaseJSONValidator.validateJSON(dbListText))
-			{
-				throw new Error(this._databaseJSONValidator.getNextError());
-			} 
+			this._validateIDAndNameJSON(dbListText);
 			
 			return dbList;
 		}
 		catch(err)
 		{
-			this._addError(`Issue while loading database list: ${err.message}`);
+			this._addError(`Error while loading database list: ${err.message}`);
 			return [];
 		}
 	}
@@ -81,14 +75,20 @@ export default class APIAccessor
 	{
 		try
 		{
-			const db = await this._getJSONFromAPI(this._baseURL + "/databases/" + id);
+			const [dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases/" + id);
 			
-			if(!Array.isArray(db)) return db;
-			else throw new Error("Value from API is an array, and is therefore not a valid database record.");
+			if(Array.isArray(db))
+			{
+				throw new Error("Value from API is an array, and is therefore not a valid database record.");
+			}
+			
+			this._validateIDAndNameJSON(`[${dbText}]`);
+			
+			return db;
 		}
 		catch(err)
 		{
-			this._addError(`Issue while loading database record: ${err.message}`);
+			this._addError(`Error while loading database record: ${err.message}`);
 			return {};
 		}
 	}
@@ -110,14 +110,20 @@ export default class APIAccessor
 				})
 			};
 			
-			const db = await this._getJSONFromAPI(this._baseURL + "/databases/" + id, settings);
+			const [dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases/" + id, settings);
 			
-			if(!Array.isArray(db)) return db;
-			else throw new Error("Value from API is an array, and is therefore not a valid database record.");
+			if(Array.isArray(db)) 
+			{
+				throw new Error("Value from API is an array, and is therefore not a valid database record.");
+			}
+			
+			this._validateIDAndNameJSON(`[${dbText}]`);
+			
+			return db;
 		}
 		catch(err)
 		{
-			this._addError(`Issue while updating database record: ${err.message}`);
+			this._addError(`Error while updating database record: ${err.message}`);
 			return {};
 		}
 	}
@@ -143,6 +149,16 @@ export default class APIAccessor
 		{
 			this._addError(`Error while deleting database record: ${err.message}.`);
 			return false;
+		}
+	}
+	
+	
+	//Throws error
+	_validateIDAndNameJSON(jsonText)
+	{
+		if(!this._dbIDAndNameJSONValidator.validateJSON(`${jsonText}`))
+		{
+			throw new Error(this._dbIDAndNameJSONValidator.getNextError());
 		}
 	}
 }
