@@ -46,4 +46,7 @@ test("getNextError() will return the correct error", () => {
 	expect(api.getNextError()).toBe(errorTexts[0]);
 	expect(api.getNextError()).toBe(errorTexts[1]);
 	expect(api.getNextError()).toBe(errorTexts[2]);
+	
+	//Make sure the errors were dequeued
+	expect(api.hasErrors()).toBeFalsy();
 });

@@ -57,15 +57,19 @@ export default class APIAccessor
 		}
 	}
 	
-	// async getDatabaseByID(id)
-	// {
-	// 	try
-	// 	{
-	// 		const db = await this._getJSONFromAPI(this._baseURL);
-	// 	}
-	// 	catch(err)
-	// 	{
+	async getDatabaseByID(id)
+	{
+		try
+		{
+			const db = await this._getJSONFromAPI(this._baseURL + "/databases/" + id);
 			
-	// 	}
-	// }
+			if(!Array.isArray(db)) return db;
+			else throw new Error("Value from API is an array, and is therefore not a valid database record.");
+		}
+		catch(err)
+		{
+			this._addError(`Issue while loading database record: ${err.message}`);
+			return {};
+		}
+	}
 }

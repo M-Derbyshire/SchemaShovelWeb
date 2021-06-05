@@ -13,7 +13,7 @@ beforeEach(() => {
 test("getDatabaseList() will access the database list from the correct URL, and return it", async () => {
 	
 	const api = new APIAccessor(base_url);
-	fetch.mockResponses('[{ "testProp": "testValue1" }, { "testProp": "testValue2" }]');
+	fetch.mockResponseOnce('[{ "testProp": "testValue1" }, { "testProp": "testValue2" }]');
 	
 	const result = await api.getDatabaseList();
 	
@@ -40,6 +40,10 @@ test("getDatabaseList() will return an empty array if there were errors, and rai
 	expect(badJSONResult.length).toBe(0);
 	
 	expect(api.hasErrors()).toBeTruthy();
+	
+	//Did we raise both?
+	api.getNextError();
+	expect(api.hasErrors()).toBeTruthy();
 });
 
 test("getDatabaseList() will return an empty array, and raise an error, if the JSON was not an array", async () => {
@@ -57,3 +61,50 @@ test("getDatabaseList() will return an empty array, and raise an error, if the J
 
 
 
+
+
+test("getDatabaseByID() will return the database object, from the right URL", async () => {
+	
+	const api = new APIAccessor(base_url);
+	const id = 1;
+	fetch.mockResponseOnce('{ "testProp": "testValue1" }');
+	
+	const result = await api.getDatabaseByID(id);
+	
+	expect(fetch).toHaveBeenCalledWith(base_url + "/databases/" + id);
+	
+	expect(Array.isArray(result)).toBeFalsy();
+	expect(result.testProp).toBe("testValue1");
+});
+
+test("getDatabaseByID() will return an empty object if there were errors, and raise them", async () => {
+	
+	const api = new APIAccessor(base_url);
+	fetch.mockResponses(
+		['{ "testProp": "testValue1" }', { status: 404 }],
+		['not valid JSON'] 
+	);
+	
+	const badStatusResult = await api.getDatabaseByID(0);
+	const badJSONResult = await api.getDatabaseByID(0);
+	
+	expect(Object.keys(badStatusResult).length).toBe(0);
+	expect(Object.keys(badJSONResult).length).toBe(0);
+	
+	expect(api.hasErrors()).toBeTruthy();
+	
+	//Did we raise both?
+	api.getNextError();
+	expect(api.hasErrors()).toBeTruthy();
+});
+
+test("getDatabaseByID() will return an empty object, and raise an error, if the returned JSON was an array", async () => {
+	
+	const api = new APIAccessor(base_url);
+	fetch.mockResponseOnce('[{ "testProp": "testValue1" }]');
+	
+	const result = await api.getDatabaseByID(0);
+	
+	expect(Object.keys(result).length).toBe(0);
+	expect(api.hasErrors()).toBeTruthy();
+});
