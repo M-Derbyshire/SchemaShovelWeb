@@ -10,14 +10,14 @@ beforeEach(() => {
 });
 
 
-test("getDatabaseList() will access the database list from the base URL, and return it", async () => {
+test("getDatabaseList() will access the database list from the correct URL, and return it", async () => {
 	
 	const api = new APIAccessor(base_url);
 	fetch.mockResponses('[{ "testProp": "testValue1" }, { "testProp": "testValue2" }]');
 	
 	const result = await api.getDatabaseList();
 	
-	expect(fetch).toHaveBeenCalledWith(base_url);
+	expect(fetch).toHaveBeenCalledWith(base_url + "/databases/");
 	
 	expect(result[0].testProp).toBe("testValue1");
 	expect(result[1].testProp).toBe("testValue2");

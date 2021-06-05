@@ -45,7 +45,7 @@ export default class APIAccessor
 	{
 		try
 		{
-			const dbList = await this._getJSONFromAPI(this._baseURL);
+			const dbList = await this._getJSONFromAPI(this._baseURL + "/databases/");
 			
 			if(Array.isArray(dbList)) return dbList;
 			else throw new Error("Value from API was not a valid array.");
@@ -56,4 +56,16 @@ export default class APIAccessor
 			return [];
 		}
 	}
+	
+	// async getDatabaseByID(id)
+	// {
+	// 	try
+	// 	{
+	// 		const db = await this._getJSONFromAPI(this._baseURL);
+	// 	}
+	// 	catch(err)
+	// 	{
+			
+	// 	}
+	// }
 }
