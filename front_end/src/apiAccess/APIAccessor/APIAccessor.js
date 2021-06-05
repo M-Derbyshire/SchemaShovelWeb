@@ -1,10 +1,13 @@
 import Queue from '../Queue/Queue';
+import DatabaseJSONValidator from '../JSONValidators/DatabaseJSONValidator/DatabaseJSONValidator';
 
 export default class APIAccessor
 {
 	constructor(baseURL)
 	{
 		this._baseURL = baseURL;
+		
+		this._databaseJSONValidator = new DatabaseJSONValidator();
 		
 		this._errorQueue = new Queue();
 		this._addError = this._errorQueue.enqueue.bind(this._errorQueue);
@@ -45,10 +48,27 @@ export default class APIAccessor
 	{
 		try
 		{
-			const dbList = await this._getJSONFromAPI(this._baseURL + "/databases/");
+			const response = await fetch(this._baseURL + "/databases/", {});
 			
-			if(Array.isArray(dbList)) return dbList;
-			else throw new Error("Value from API was not a valid array.");
+			if(!response.ok)
+			{
+				throw new Error(response.statusText);
+			}
+			
+			const dbListText = await response.text();
+			const dbList = JSON.parse(dbListText);
+			
+			if(!Array.isArray(dbList))
+			{
+				throw new Error("Value from API was not a valid array.");
+			}
+			
+			if(!this._databaseJSONValidator.validateJSON(dbListText))
+			{
+				throw new Error(this._databaseJSONValidator.getNextError());
+			} 
+			
+			return dbList;
 		}
 		catch(err)
 		{

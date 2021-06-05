@@ -13,21 +13,21 @@ beforeEach(() => {
 test("getDatabaseList() will access the database list from the correct URL, and return it", async () => {
 	
 	const api = new APIAccessor(base_url);
-	fetch.mockResponseOnce('[{ "testProp": "testValue1" }, { "testProp": "testValue2" }]');
+	fetch.mockResponseOnce('[{ "name": "test1", "description": "test1", "tables": [] }]');
 	
 	const result = await api.getDatabaseList();
 	
 	expect(fetch).toHaveBeenCalledWith(base_url + "/databases/", {});
 	
-	expect(result[0].testProp).toBe("testValue1");
-	expect(result[1].testProp).toBe("testValue2");
+	expect(result[0].name).toBe("test1");
+	expect(result[0].description).toBe("test1");
 });
 
 test("getDatabaseList() will return an empty array if there were errors, and raise them", async () => {
 	
 	const api = new APIAccessor("/");
 	fetch.mockResponses(
-		['[{ "testProp": "testValue" }]', { status: 404 }],
+		['[{ "name": "test1", "description": "test1", "tables": [] }]', { status: 404 }],
 		['not valid JSON', { status: 200 }]
 	);
 	
@@ -49,12 +49,22 @@ test("getDatabaseList() will return an empty array if there were errors, and rai
 test("getDatabaseList() will return an empty array, and raise an error, if the JSON was not an array", async () => {
 	
 	const api = new APIAccessor("/");
-	fetch.mockResponseOnce('{ "testProp": "testValue" }');
+	fetch.mockResponseOnce('{ "name": "test1", "description": "test1", "tables": [] }');
 	
 	const result = await api.getDatabaseList();
 	
 	expect(Array.isArray(result)).toBeTruthy();
 	expect(result.length).toBe(0);
+	
+	expect(api.hasErrors()).toBeTruthy();
+});
+
+test("getDatabaseList() will use the DatabaseJSONValidator to validate the returned JSON", async () => {
+	
+	const api = new APIAccessor("/");
+	fetch.mockResponseOnce('[{ "notValidProp": "test1" }]');
+	
+	const result = await api.getDatabaseList();
 	
 	expect(api.hasErrors()).toBeTruthy();
 });
