@@ -9,19 +9,19 @@ export default class SingleItemJSONValidator extends JSONValidator
 		this._validProperties = validProperties;
 	}
 	
-	validateJSON(descJSON)
+	validateJSON(json)
 	{
 		try
 		{
-			const descItem = JSON.parse(descJSON);
+			const item = JSON.parse(json);
 			
-			if(Array.isArray(descItem))
+			if(Array.isArray(item))
 			{
 				this._addError(`The provided JSON should be a single object, not an array.`);
 				return false;
 			}
 			
-			this._validateSingleItem(descItem, 0, "Description JSON", this._validProperties);
+			this._validateSingleItem(item, 0, "Description JSON", this._validProperties);
 		}
 		catch(err)
 		{
