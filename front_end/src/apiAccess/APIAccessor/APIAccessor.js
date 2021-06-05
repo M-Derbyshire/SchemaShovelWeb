@@ -73,7 +73,6 @@ export default class APIAccessor
 		}
 	}
 	
-	
 	async updateDatabaseName(id, newName)
 	{
 		try
@@ -100,6 +99,30 @@ export default class APIAccessor
 		{
 			this._addError(`Issue while updating database record: ${err.message}`);
 			return {};
+		}
+	}
+	
+	async deleteDatabase(id)
+	{
+		try
+		{
+			const response = await fetch(`${this._baseURL}/databases/${id}`, {
+				method: "DELETE"
+			});
+		
+			if(response.ok)
+			{
+				return true
+			}
+			else
+			{
+				throw new Error(response.statusText);
+			}
+		}
+		catch(err)
+		{
+			this._addError(`Error while deleting database record: ${err.message}.`);
+			return false;
 		}
 	}
 }

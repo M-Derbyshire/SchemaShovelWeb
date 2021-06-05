@@ -176,3 +176,35 @@ test("updateDatabaseName() will return an empty object, and raise errors, if the
 	expect(api.hasErrors()).toBeTruthy();
 });
 
+
+
+test("deleteDatabase() will return true if the database was successfully deleted", async () => {
+	
+	const api = new APIAccessor(base_url);
+	fetch.mockResponseOnce('', { status: 200 });
+	
+	expect(await api.deleteDatabase(0)).toBeTruthy();
+});
+
+test("deleteDatabase() will return false, and raise an error, if there was an error", async () => {
+	
+	const api = new APIAccessor(base_url);
+	fetch.mockResponseOnce('', { status: 404 });
+	
+	expect(await api.deleteDatabase(0)).toBeFalsy();
+	expect(api.hasErrors()).toBeTruthy();
+});
+
+test("deleteDatabase() will call the API with the correct path", async () => {
+	
+	const api = new APIAccessor(base_url);
+	const id = 1;
+	
+	fetch.mockResponseOnce('', { status: 200 });
+	
+	api.deleteDatabase(id);
+	
+	expect(fetch).toHaveBeenCalledWith(`${base_url}/databases/${id}`, {
+		method: "DELETE"
+	});
+});
