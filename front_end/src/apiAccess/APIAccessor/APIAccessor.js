@@ -12,9 +12,9 @@ export default class APIAccessor
 	
 	
 	//Throws error
-	async _getJSONFromAPI(path)
+	async _getJSONFromAPI(path, settings = {})
 	{
-		const response = await fetch(path);
+		const response = await fetch(path, settings);
 		
 		if(response.ok)
 		{
@@ -69,6 +69,36 @@ export default class APIAccessor
 		catch(err)
 		{
 			this._addError(`Issue while loading database record: ${err.message}`);
+			return {};
+		}
+	}
+	
+	
+	async updateDatabaseName(id, newName)
+	{
+		try
+		{
+			if(typeof newName !== "string") throw new Error("The provided name was not a valid string");
+			
+			const settings = {
+				method: "PATCH",
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					name: newName
+				})
+			};
+			
+			const db = await this._getJSONFromAPI(this._baseURL + "/databases/" + id, settings);
+			
+			if(!Array.isArray(db)) return db;
+			else throw new Error("Value from API is an array, and is therefore not a valid database record.");
+		}
+		catch(err)
+		{
+			this._addError(`Issue while updating database record: ${err.message}`);
 			return {};
 		}
 	}
