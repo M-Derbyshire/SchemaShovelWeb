@@ -19,11 +19,6 @@ test("getDatabaseList() will access the database list from the correct URL, and 
 	
 	expect(fetch).toHaveBeenCalledWith(base_url + "/databases/", {});
 	
-	while(api.hasErrors())
-	{
-		console.log(api.getNextError());
-	}
-	
 	expect(result[0].id).toBe(1);
 	expect(result[0].name).toBe("test1");
 });
@@ -82,12 +77,11 @@ test("getDatabaseByID() will return the database object, from the right URL", as
 	
 	const api = new APIAccessor(base_url);
 	const id = 1;
-	fetch.mockResponseOnce('{ "id": 1, "name": "test1" }');
+	fetch.mockResponseOnce('{ "id": 1, "name": "test1", "schemas": [] }');
 	
 	const result = await api.getDatabaseByID(id);
 	
 	expect(fetch).toHaveBeenCalledWith(base_url + "/databases/" + id, {});
-	
 	expect(Array.isArray(result)).toBeFalsy();
 	expect(result.name).toBe("test1");
 });
@@ -96,7 +90,7 @@ test("getDatabaseByID() will return an empty object if there were errors, and ra
 	
 	const api = new APIAccessor(base_url);
 	fetch.mockResponses(
-		['{ "id": 1, "name": "test1" }', { status: 404 }],
+		['{ "id": 1, "name": "test1", "schemas": [] }', { status: 404 }],
 		['not valid JSON'] 
 	);
 	
@@ -116,7 +110,7 @@ test("getDatabaseByID() will return an empty object if there were errors, and ra
 test("getDatabaseByID() will return an empty object, and raise an error, if the returned JSON was an array", async () => {
 	
 	const api = new APIAccessor(base_url);
-	fetch.mockResponseOnce('[{ "id": 1, "name": "test1" }]');
+	fetch.mockResponseOnce('[{ "id": 1, "name": "test1", "schemas": [] }]');
 	
 	const result = await api.getDatabaseByID(0);
 	
@@ -143,7 +137,7 @@ test("updateDatabaseName() will return the new DB object, after having sent the 
 	const dbID = 1
 	
 	const resultValue = "test";
-	fetch.mockResponseOnce(`{ "id": 1, "name": "${resultValue}" }`);
+	fetch.mockResponseOnce(`{ "id": 1, "name": "${resultValue}", "schemas": [] }`);
 	
 	const result = await api.updateDatabaseName(dbID, newName);
 	
@@ -161,7 +155,7 @@ test("updateDatabaseName() will return the new DB object, after having sent the 
 test("updateDatabaseName() will return an empty object, and raise an error, if the given name was not a string", async () => {
 	
 	const api = new APIAccessor(base_url);
-	fetch.mockResponseOnce('{ "id": 1, "name": "test" }');
+	fetch.mockResponseOnce('{ "id": 1, "name": "test", "schemas": [] }');
 	
 	const result = await api.updateDatabaseName(0, true);
 	
@@ -172,7 +166,7 @@ test("updateDatabaseName() will return an empty object, and raise an error, if t
 test("updateDatabaseName() will return an empty object, and raise an error, if the result JSON was an array", async () => {
 	
 	const api = new APIAccessor(base_url);
-	fetch.mockResponseOnce('[{ "id": 1, "name": "test" }]');
+	fetch.mockResponseOnce('[{ "id": 1, "name": "test", "schemas": [] }]');
 	
 	const result = await api.updateDatabaseName(0, "test");
 	
@@ -184,7 +178,7 @@ test("updateDatabaseName() will return an empty object, and raise errors, if the
 	
 	const api = new APIAccessor(base_url);
 	fetch.mockResponses(
-		['{ "id": 1, "name": "test" }', { status: 404 }],
+		['{ "id": 1, "name": "test", "schemas": [] }', { status: 404 }],
 		['not valid JSON'] 
 	);
 	

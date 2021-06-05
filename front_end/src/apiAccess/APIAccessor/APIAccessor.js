@@ -12,6 +12,10 @@ export default class APIAccessor
 			{ name: "name", type: "string" }
 		];		
 		this._dbIDAndNameJSONValidator = new JSONArrayValidator("database", validProperties);
+		this._dbJSONValidator = new JSONArrayValidator("database", [
+			...validProperties,
+			{ name: "schemas", type: "array" }
+		]);
 		
 		this._errorQueue = new Queue();
 		this._addError = this._errorQueue.enqueue.bind(this._errorQueue);
@@ -82,7 +86,7 @@ export default class APIAccessor
 				throw new Error("Value from API is an array, and is therefore not a valid database record.");
 			}
 			
-			this._validateIDAndNameJSON(`[${dbText}]`);
+			this._validateDatabaseJSON(`[${dbText}]`);
 			
 			return db;
 		}
@@ -117,7 +121,7 @@ export default class APIAccessor
 				throw new Error("Value from API is an array, and is therefore not a valid database record.");
 			}
 			
-			this._validateIDAndNameJSON(`[${dbText}]`);
+			this._validateDatabaseJSON(`[${dbText}]`);
 			
 			return db;
 		}
@@ -156,9 +160,21 @@ export default class APIAccessor
 	//Throws error
 	_validateIDAndNameJSON(jsonText)
 	{
-		if(!this._dbIDAndNameJSONValidator.validateJSON(`${jsonText}`))
+		this._validateJSONWithValidator(jsonText, this._dbIDAndNameJSONValidator);
+	}
+	
+	//Throws error
+	_validateDatabaseJSON(jsonText)
+	{
+		this._validateJSONWithValidator(jsonText, this._dbJSONValidator);
+	}
+	
+	//Throws error
+	_validateJSONWithValidator(jsonText, validator)
+	{
+		if(!validator.validateJSON(`${jsonText}`))
 		{
-			throw new Error(this._dbIDAndNameJSONValidator.getNextError());
+			throw new Error(validator.getNextError());
 		}
 	}
 }
