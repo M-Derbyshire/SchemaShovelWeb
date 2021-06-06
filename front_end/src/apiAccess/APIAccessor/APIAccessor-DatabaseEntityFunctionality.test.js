@@ -133,6 +133,92 @@ test("getDatabaseByID() will use a JSONValidator to validate the returned JSON",
 
 
 
+
+
+test("createDatabase() will return a new DB object, after having sent the correct data to the correct path", async () => {
+	
+	const api = new APIAccessor(base_url);
+	const name = "test1";
+	
+	fetch.mockResponseOnce(`{ "id": 1, "name": "${name}", "schemas": [] }`);
+	
+	const newDB = `{ "name": "${name}", "schemas": [] }`;
+	const result = await api.createDatabase(newDB);
+	
+	expect(result.name).toBe(name);
+	expect(fetch).toHaveBeenCalledWith(base_url + "/databases", {
+		method: "POST",
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: newDB
+	});
+});
+
+test("createDatabase() will use a JSONValidator, and raise an error (returning an empty object), if the passed in JSON was invalid", async () => {
+	
+	const api = new APIAccessor(base_url);
+	fetch.mockResponseOnce(`{ "id": 1, "name": "test", "schemas": [] }`); //correct, so won't cause an error
+	
+	const newDB = `{ "name": "badTest" }`; //No schemas array
+	const result = await api.createDatabase(newDB);
+	
+	expect(Object.keys(result).length).toBe(0);
+	expect(api.hasErrors()).toBeTruthy();
+});
+
+test("createDatabase() will return an empty object, and raise an error, if the result JSON was an array", async () => {
+	
+	const api = new APIAccessor(base_url);
+	fetch.mockResponseOnce('[{ "id": 1, "name": "test", "schemas": [] }]');
+	
+	const newDB = `{ "name": "${name}", "schemas": [] }`;
+	const result = await api.createDatabase(newDB);
+	
+	expect(Object.keys(result).length).toBe(0);
+	expect(api.hasErrors()).toBeTruthy();
+});
+
+test("createDatabase() will return an empty object, and raise errors, if there were any", async () => {
+	
+	const api = new APIAccessor(base_url);
+	fetch.mockResponses(
+		['{ "id": 1, "name": "test", "schemas": [] }', { status: 404 }],
+		['not valid JSON'] 
+	);
+	
+	const newDB = `{ "name": "${name}", "schemas": [] }`;
+	const badStatusResult = await api.createDatabase(newDB);
+	const badJSONResult = await api.createDatabase(newDB);
+	
+	expect(Object.keys(badStatusResult).length).toBe(0);
+	expect(Object.keys(badJSONResult).length).toBe(0);
+	
+	expect(api.hasErrors()).toBeTruthy();
+	//Did we raise both?
+	api.getNextError();
+	api.getNextError();
+	expect(api.hasErrors()).toBeFalsy();
+});
+
+test("createDatabase() will use a JSONValidator to validate the returned JSON", async () => {
+	
+	const api = new APIAccessor("/");
+	fetch.mockResponseOnce('{ "notValidProp": "test1" }');
+	
+	const newDB = `{ "name": "${name}", "schemas": [] }`;
+	const result = await api.createDatabase(newDB);
+	
+	expect(Object.keys(result).length).toBe(0);
+	expect(api.hasErrors()).toBeTruthy();
+});
+
+
+
+
+
+
 test("updateDatabaseName() will return the new DB object, after having sent the correct data to the correct path", async () => {
 	
 	const api = new APIAccessor(base_url);

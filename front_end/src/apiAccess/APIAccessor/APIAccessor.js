@@ -13,7 +13,8 @@ export default class APIAccessor
 			{ name: "name", type: "string" }
 		];		
 		this._dbIDAndNameJSONValidator = new JSONArrayValidator("database", validProperties);
-		this._dbJSONValidator = new DatabaseJSONValidator();
+		this._userDBJSONValidator = new DatabaseJSONValidator(false);
+		this._apiDBJSONValidator = new DatabaseJSONValidator(true);
 		
 		this._errorQueue = new Queue();
 		this._addError = this._errorQueue.enqueue.bind(this._errorQueue);
@@ -68,13 +69,15 @@ export default class APIAccessor
 		}
 	}
 	
+	
+	
 	async getDatabaseByID(id)
 	{
 		try
 		{
 			const [dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases/" + id);
 			
-			this._validateDatabaseJSON(`${dbText}`);
+			this._validateDatabaseJSON(`${dbText}`, false);
 			
 			return db;
 		}
@@ -84,6 +87,58 @@ export default class APIAccessor
 			return {};
 		}
 	}
+	
+	
+	
+	
+	async createDatabase(newDB)
+	{
+		let dbText, db;
+		
+		try
+		{
+			this._validateDatabaseJSON(newDB, true);
+		}
+		catch(preCreationError)
+		{
+			this._addError(`Error while creating database record: ${preCreationError.message}`);
+			return {};
+		}
+		
+		try
+		{
+			const settings = {
+				method: "POST",
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: newDB
+			};
+			
+			[dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases", settings);
+		}
+		catch(duringCreationError)
+		{
+			this._addError(`Error during creation of database record: ${duringCreationError.message}`);
+			return {};
+		}
+		
+		try
+		{
+			this._validateDatabaseJSON(dbText, false);
+		}
+		catch(postCreationError)
+		{
+			this._addError(`Error after creation of database record: ${postCreationError.message}`);
+			return {};
+		}
+		
+		return db;
+	}
+	
+	
+	
 	
 	async updateDatabaseName(id, newName)
 	{
@@ -104,7 +159,7 @@ export default class APIAccessor
 			
 			const [dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases/" + id, settings);
 			
-			this._validateDatabaseJSON(`${dbText}`);
+			this._validateDatabaseJSON(`${dbText}`, false);
 			
 			return db;
 		}
@@ -114,6 +169,8 @@ export default class APIAccessor
 			return {};
 		}
 	}
+	
+	
 	
 	async deleteDatabase(id)
 	{
@@ -140,6 +197,7 @@ export default class APIAccessor
 	}
 	
 	
+	
 	//Throws error
 	_validateIDAndNameJSON(jsonText)
 	{
@@ -147,9 +205,10 @@ export default class APIAccessor
 	}
 	
 	//Throws error
-	_validateDatabaseJSON(jsonText)
+	_validateDatabaseJSON(jsonText, jsonIsFromUser)
 	{
-		this._validateJSONWithValidator(jsonText, this._dbJSONValidator);
+		const validator = (jsonIsFromUser) ? this._userDBJSONValidator : this._apiDBJSONValidator;
+		this._validateJSONWithValidator(jsonText, validator);
 	}
 	
 	//Throws error
