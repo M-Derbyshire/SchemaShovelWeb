@@ -3,15 +3,18 @@ import SingleItemJSONValidator from '../SingleItemJSONValidator/SingleItemJSONVa
 
 export default class DatabaseJSONValidator extends JSONValidator
 {
-	constructor()
+	constructor(shouldHaveIDProperty = true)
 	{
 		super();
 		
-		this._singleItemValidator = new SingleItemJSONValidator([
-			{ name: "id", type: "number" },
+		const validProperties = [
 			{ name: "name", type: "string" },
 			{ name: "schemas", type: "array" }
-		]);
+		];
+		
+		if(shouldHaveIDProperty) validProperties.push({ name: "id", type: "number" });
+		
+		this._singleItemValidator = new SingleItemJSONValidator(validProperties);
 	}
 	
 	

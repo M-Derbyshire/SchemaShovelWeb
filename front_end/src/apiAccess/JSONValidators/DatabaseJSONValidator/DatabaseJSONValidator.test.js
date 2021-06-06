@@ -49,6 +49,14 @@ test("Will raise errors from validateJSON if the first layer of JSON is missing 
 	expect(validator.hasErrors()).toBeFalsy();
 });
 
+test("Will not return an error from validateJSON if the id is missing, but shouldHaveIDProperty is false", () => {
+	
+	const validator = new DatabaseJSONValidator(false);
+	
+	//No ID
+	expect(validator.validateJSON('{ "name": "test", "schemas": [] }')).toBeTruthy();
+});
+
 test("Will raise errors from validateJSON if the first layer of JSON has properties with incorrect types", () => {
 	
 	const validator = new DatabaseJSONValidator();
