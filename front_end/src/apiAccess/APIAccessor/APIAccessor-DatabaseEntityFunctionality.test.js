@@ -66,6 +66,8 @@ test("getDatabaseList() will use a JSONValidator to validate the returned JSON",
 	
 	const result = await api.getDatabaseList();
 	
+	expect(Array.isArray(result)).toBeTruthy();
+	expect(result.length).toBe(0);
 	expect(api.hasErrors()).toBeTruthy();
 });
 
@@ -125,6 +127,7 @@ test("getDatabaseByID() will use a JSONValidator to validate the returned JSON",
 	
 	const result = await api.getDatabaseByID(0);
 	
+	expect(Object.keys(result).length).toBe(0);
 	expect(api.hasErrors()).toBeTruthy();
 });
 
@@ -202,6 +205,7 @@ test("updateDatabaseName() will use a JSONValidator to validate the returned JSO
 	
 	const result = await api.updateDatabaseName(0, "test");
 	
+	expect(Object.keys(result).length).toBe(0);
 	expect(api.hasErrors()).toBeTruthy();
 });
 

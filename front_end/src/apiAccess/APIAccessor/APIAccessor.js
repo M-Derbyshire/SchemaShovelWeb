@@ -1,5 +1,6 @@
 import Queue from '../Queue/Queue';
 import JSONArrayValidator from '../JSONValidators/JSONArrayValidator/JSONArrayValidator';
+import DatabaseJSONValidator from '../JSONValidators/DatabaseJSONValidator/DatabaseJSONValidator';
 
 export default class APIAccessor
 {
@@ -12,10 +13,7 @@ export default class APIAccessor
 			{ name: "name", type: "string" }
 		];		
 		this._dbIDAndNameJSONValidator = new JSONArrayValidator("database", validProperties);
-		this._dbJSONValidator = new JSONArrayValidator("database", [
-			...validProperties,
-			{ name: "schemas", type: "array" }
-		]);
+		this._dbJSONValidator = new DatabaseJSONValidator();
 		
 		this._errorQueue = new Queue();
 		this._addError = this._errorQueue.enqueue.bind(this._errorQueue);
@@ -59,11 +57,6 @@ export default class APIAccessor
 		{
 			const [dbListText, dbList] = await this._getJSONFromAPI(this._baseURL + "/databases/");
 			
-			if(!Array.isArray(dbList))
-			{
-				throw new Error("Value from API was not a valid array.");
-			}
-			
 			this._validateIDAndNameJSON(dbListText);
 			
 			return dbList;
@@ -81,12 +74,7 @@ export default class APIAccessor
 		{
 			const [dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases/" + id);
 			
-			if(Array.isArray(db))
-			{
-				throw new Error("Value from API is an array, and is therefore not a valid database record.");
-			}
-			
-			this._validateDatabaseJSON(`[${dbText}]`);
+			this._validateDatabaseJSON(`${dbText}`);
 			
 			return db;
 		}
@@ -116,12 +104,7 @@ export default class APIAccessor
 			
 			const [dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases/" + id, settings);
 			
-			if(Array.isArray(db)) 
-			{
-				throw new Error("Value from API is an array, and is therefore not a valid database record.");
-			}
-			
-			this._validateDatabaseJSON(`[${dbText}]`);
+			this._validateDatabaseJSON(`${dbText}`);
 			
 			return db;
 		}
