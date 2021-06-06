@@ -21,7 +21,7 @@ export default class SingleItemJSONValidator extends JSONValidator
 				return false;
 			}
 			
-			this._validateSingleItem(item, 0, "Description JSON", this._validProperties);
+			this._validateSingleItem(item, 0, "JSON", this._validProperties);
 		}
 		catch(err)
 		{
