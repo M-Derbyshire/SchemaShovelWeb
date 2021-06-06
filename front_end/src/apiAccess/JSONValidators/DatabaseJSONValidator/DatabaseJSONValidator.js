@@ -1,10 +1,17 @@
 import JSONValidator from '../JSONValidator/JSONValidator';
+import SingleItemJSONValidator from '../SingleItemJSONValidator/SingleItemJSONValidator';
 
 export default class DatabaseJSONValidator extends JSONValidator
 {
 	constructor()
 	{
 		super();
+		
+		this._singleItemValidator = new SingleItemJSONValidator([
+			{ name: "id", type: "number" },
+			{ name: "name", type: "string" },
+			{ name: "schemas", type: "array" }
+		]);
 	}
 	
 	
@@ -14,8 +21,12 @@ export default class DatabaseJSONValidator extends JSONValidator
 	{
 		try
 		{
-			const schemas = JSON.parse(dbJSON);
-			this._validateSchemaArray(schemas);
+			this._singleItemValidator.validateJSON(dbJSON);
+			this._getErrorsFromSingleItemValidator();
+			
+			const db = JSON.parse(dbJSON);
+			
+			if(db.schemas && Array.isArray(db.schemas))	this._validateSchemaArray(db.schemas);
 		}
 		catch(err)
 		{
@@ -26,7 +37,13 @@ export default class DatabaseJSONValidator extends JSONValidator
 	}
 	
 	
-	
+	_getErrorsFromSingleItemValidator()
+	{
+		while(this._singleItemValidator.hasErrors())
+		{
+			this._addError(this._singleItemValidator.getNextError());
+		}
+	}	
 	
 	
 	_validateSchemaArray(schemas)

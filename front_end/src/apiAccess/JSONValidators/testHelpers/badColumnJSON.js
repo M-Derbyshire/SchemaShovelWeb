@@ -1,7 +1,9 @@
 export default {
 	errorCount: 11,
-	json: JSON.stringify(
-		[{
+	json: JSON.stringify({
+		id: 1,
+		name: "test",
+		schemas: [{
 			name: "testSchema",
 			description: "testDesc",
 			tables: [
@@ -47,6 +49,6 @@ export default {
 					]
 				}
 			]
-		}
-	])
+		}]
+	})
 };
