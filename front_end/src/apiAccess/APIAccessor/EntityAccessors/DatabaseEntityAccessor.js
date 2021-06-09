@@ -44,7 +44,7 @@ export default class DatabaseEntityAccessor
 		{
 			const [dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases/" + id);
 			
-			this._validateDatabaseJSON(`${dbText}`, false);
+			this._validateDatabaseJSON(dbText, false);
 			
 			return db;
 		}
@@ -121,7 +121,7 @@ export default class DatabaseEntityAccessor
 			
 			const [dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases/" + id, settings);
 			
-			this._validateDatabaseJSON(`${dbText}`, false);
+			this._validateDatabaseJSON(dbText, false);
 			
 			return db;
 		}

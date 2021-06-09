@@ -1,5 +1,6 @@
 import Queue from '../Queue/Queue';
 import DatabaseEntityAccessor from './EntityAccessors/DatabaseEntityAccessor';
+import DescribableEntityAccessor from './EntityAccessors/DescribableEntityAccessor';
 
 export default class APIAccessor
 {
@@ -11,6 +12,12 @@ export default class APIAccessor
 		this._addError = this._errorQueue.enqueue.bind(this._errorQueue);
 		
 		this._databaseEntityAccessor = new DatabaseEntityAccessor(
+			this._baseURL, 
+			this._getJSONFromAPI, 
+			this._addError
+		);
+		
+		this._describableEntityAccessor = new DescribableEntityAccessor(
 			this._baseURL, 
 			this._getJSONFromAPI, 
 			this._addError
@@ -72,5 +79,11 @@ export default class APIAccessor
 	async deleteDatabase(id)
 	{
 		return await this._databaseEntityAccessor.deleteDatabase(id);
+	}
+	
+	
+	async updateEntityDescription(entityRouteName, id, newDescription)
+	{
+		return await this._describableEntityAccessor.updateEntityDescription(entityRouteName, id, newDescription);
 	}
 }
