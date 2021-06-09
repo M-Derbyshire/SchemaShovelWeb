@@ -1,5 +1,5 @@
 export default {
-	errorCount: 11,
+	errorCount: 10,
 	json: JSON.stringify({
 		id: 1,
 		name: "test",
@@ -38,13 +38,6 @@ export default {
 							name: 1,
 							description: false,
 							fkToTable: {}
-						},
-						{
-							//incorrect property
-							name: "test",
-							description: "test",
-							fkToTable: "testTable.testColumn",
-							iShouldNotBeHere: "test"
 						}
 					]
 				}

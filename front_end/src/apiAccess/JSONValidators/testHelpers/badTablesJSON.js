@@ -1,5 +1,5 @@
 export default {
-	errorCount: 10,
+	errorCount: 9,
 	json: JSON.stringify({
 		id: 1,
 		name: "test",
@@ -33,13 +33,6 @@ export default {
 					name: false,
 					description: 5,
 					columns: {} 
-				},
-				{
-					//bad property
-					name: "test",
-					description: "test",
-					columns: [],
-					iShouldNotBeHere: "test"
 				}
 			]
 		}]

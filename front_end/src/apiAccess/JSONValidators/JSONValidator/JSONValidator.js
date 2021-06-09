@@ -33,25 +33,10 @@ export default class JSONValidator
 	//itemName could be "schema"/"table"/"column"
 	_validateSingleItem(item, itemIndex, itemName, validProperties)
 	{
-		this._checkForInvalidProperties(validProperties, item, itemIndex, itemName);
-		
 		validProperties.forEach((prop) => {
 			const optional = (prop.hasOwnProperty("optional") && prop.optional);
 			this._validateProperty(item, itemIndex, itemName, prop.name, prop.type, optional);
 		});
-	}
-	
-	
-	_checkForInvalidProperties(validProperties, item, itemIndex, itemName)
-	{
-		const SentenceStartItemName = this._getWordWithCapitalisedFirstLetter(itemName);
-		
-		//Using for..in would include prototype entries, so not using that
-		for(const [key, value] of Object.entries(item))
-		{
-			if(validProperties.filter(vp => vp.name === key).length === 0)
-				this._addError(`${SentenceStartItemName} at index ${itemIndex} contains an invalid property: ${key}.`);
-		}
 	}
 	
 	_propertyIsOfType(item, propName, propType)

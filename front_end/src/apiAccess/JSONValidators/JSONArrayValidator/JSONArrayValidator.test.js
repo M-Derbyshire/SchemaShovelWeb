@@ -56,12 +56,3 @@ test("Will raise an error if the given JSON's properties are not of the right ty
 	expect(validator.hasErrors()).toBeTruthy();
 	
 });
-
-test("Will raise an error if the given JSON's item has an extra property", () => {
-	
-	const validator = new JSONArrayValidator(itemTypeName, testValidProperties);
-	validator.validateJSON('[{ "description": "test", "id": 1, "iShouldNotBeHere": "test" }]');
-	
-	expect(validator.hasErrors()).toBeTruthy();
-	
-});
