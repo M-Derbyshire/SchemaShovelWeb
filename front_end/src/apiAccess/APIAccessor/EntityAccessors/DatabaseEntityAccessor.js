@@ -174,7 +174,7 @@ export default class DatabaseEntityAccessor
 	//Throws error
 	_validateJSONWithValidator(jsonText, validator)
 	{
-		if(!validator.validateJSON(`${jsonText}`))
+		if(!validator.validateJSON(jsonText))
 		{
 			throw new Error(validator.getNextError());
 		}
