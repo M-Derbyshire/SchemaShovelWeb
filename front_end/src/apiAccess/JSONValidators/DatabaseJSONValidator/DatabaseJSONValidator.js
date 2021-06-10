@@ -1,8 +1,11 @@
 import JSONValidator from '../JSONValidator/JSONValidator';
 import SingleItemJSONValidator from '../SingleItemJSONValidator/SingleItemJSONValidator';
 
+//Used to validate an object (and its inner held objects) representation
+//of a database schema.
 export default class DatabaseJSONValidator extends JSONValidator
 {
+	//Should the validator make sure the database record has an ID property?
 	constructor(shouldHaveIDProperty = true)
 	{
 		super();
@@ -18,8 +21,8 @@ export default class DatabaseJSONValidator extends JSONValidator
 	}
 	
 	
-	//Takes the JSON string that represents the array of schemas
-	//Returns true if JSON is valid, or false if there were errors
+	//Takes the JSON string that represents the database schema.
+	//Returns true if JSON is valid, or false if there were errors.
 	validateJSON(dbJSON)
 	{
 		try

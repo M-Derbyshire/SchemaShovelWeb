@@ -1,5 +1,9 @@
 import Queue from '../../Queue/Queue';
 
+//Superclass for any JSON validators.
+//Provides an error queue, and related methods for that.
+//validateJSON() is the main method for subclasses
+//There are helper methods here, for use while validating
 export default class JSONValidator
 {
 	constructor()
@@ -21,6 +25,7 @@ export default class JSONValidator
 		return this._errorQueue.dequeue();
 	}
 	
+	//Overrides of this should return true if successful, or false if there were errors
 	validateJSON(json)
 	{
 		return true;
@@ -30,7 +35,7 @@ export default class JSONValidator
 	
 	//item could be a schema/table/column
 	//item index is the index of the item in it's respective array
-	//itemName could be "schema"/"table"/"column"
+	//itemName could be "schema"/"table"/"column"/etc
 	_validateSingleItem(item, itemIndex, itemName, validProperties)
 	{
 		validProperties.forEach((prop) => {
@@ -39,6 +44,7 @@ export default class JSONValidator
 		});
 	}
 	
+	//Type checking method
 	_propertyIsOfType(item, propName, propType)
 	{
 		if(propType === "array")
@@ -51,7 +57,10 @@ export default class JSONValidator
 		}
 	}
 	
+	//Validates a property that an object contains
+	//itemName could be "schema"/"table"/"column"/etc
 	//propType for arrays is just "array"
+	//optional determines if the object doesn't have to have this property
 	_validateProperty(item, itemIndex, itemName, propName, propType, optional = false)
 	{
 		const SentenceStartItemName = this._getWordWithCapitalisedFirstLetter(itemName);
@@ -66,7 +75,6 @@ export default class JSONValidator
 			this._addError(`${SentenceStartItemName} at index ${itemIndex} does not have a ${propName} property.`);
 		}
 	}
-	
 	
 	_getWordWithCapitalisedFirstLetter(word)
 	{

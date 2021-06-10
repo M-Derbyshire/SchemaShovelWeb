@@ -2,6 +2,13 @@ import SingleItemJSONValidator from '../../JSONValidators/SingleItemJSONValidato
 
 export default class DescribableEntityAccessor
 {
+	//baseURL is the root of the URL (e.g. "http://thisAPI.com/api/v1/")
+	//getJSONFromAPIFunc is a function that returns an array to be destructured, 
+	//	containing the response text, and also the JSON.
+	//	It will take 2 parameters:
+	//		path: the URL
+	//		settings: to be passed to fetch(), as the second argument
+	//addErrorFunc is a function, that should be passed the text for any errors that need raising.
 	constructor(baseURL, getJSONFromAPIFunc, addErrorFunc)
 	{
 		this._baseURL = baseURL;
@@ -13,7 +20,8 @@ export default class DescribableEntityAccessor
 		this._validator = new SingleItemJSONValidator(validProperties);
 	}
 	
-	//entityRouteName -> http://thisAPI.com/v1/<entityRouteName>/<id>
+	//entityRouteName is used like this: http://thisAPI.com/v1/<entityRouteName>/<id>
+	//Will return the response object if successful, or an empty object if there was an error
 	async updateEntityDescription(entityRouteName, id, newDescription)
 	{
 		try
@@ -48,7 +56,7 @@ export default class DescribableEntityAccessor
 		}
 	}
 	
-	
+	//Throws error
 	_validateDescriptionJSON(jsonText)
 	{
 		if(!this._validator.validateJSON(jsonText))
