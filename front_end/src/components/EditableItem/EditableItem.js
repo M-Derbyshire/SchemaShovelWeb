@@ -72,20 +72,20 @@ class EditableItem extends Component
 							(<span className="EIStaticText">{this.state.currentText}</span>) :
 							(<input className="EITextInput" type="text" value={this.state.currentText} 
 								onChange={(e) => this.textChange(e)} 
+								disabled={this.state.isSavingChanges}
 								maxLength={(this.state.textLengthLimit > -1) ? 
 												this.state.textLengthLimit : 
 												undefined} />);
 		
 		//The button has 3 uses: "edit" (enter editing mode), "save" and "saving".
 		//There is also a cancel button, when editing, to exit without saving.
-		let buttonText, buttonOnClick, buttonDisabled = false;
+		let buttonText, buttonOnClick;
 		let cancelButtonVisible = false;
 		if(this.state.isInEditMode)
 		{
 			if(this.state.isSavingChanges)
 			{
 				buttonText = "Saving...";
-				buttonDisabled = true;
 			}
 			else
 			{
@@ -99,7 +99,7 @@ class EditableItem extends Component
 			buttonText = "Edit";
 			buttonOnClick = () => this.toggleEditMode();
 		}
-		const buttonElem =  (<button onClick={buttonOnClick} disabled={buttonDisabled}
+		const buttonElem =  (<button onClick={buttonOnClick} disabled={this.state.isSavingChanges}
 									className={this.state.isInEditMode ? "EISaveButton" : "EIEditButton"} >
 									{buttonText}</button>);
 		
