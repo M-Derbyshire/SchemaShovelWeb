@@ -35,7 +35,7 @@ class App extends Component
 	{
 		if(!settings || !settings.apiBaseURL)
 		{
-			throw new Error("Settings JSON is mishapen.");
+			throw new Error("Settings JSON is misshapen.");
 		}
 		
 		this.setState({
