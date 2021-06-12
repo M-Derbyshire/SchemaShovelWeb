@@ -7,18 +7,27 @@ import DatabaseLoadOptions from '../DatabaseLoadOptions/DatabaseLoadOptions';
 
 class DatabaseSelection extends Component
 {	
-	render()
+	constructor(props)
 	{
+		super(props);
+		
+		this.state = {
+			databaseList: []
+		};
+	}
+	
+	render()
+	{		
 		return (
 			<div className="DatabaseSelection">
 				<header>
 					<h1>Select a database schema below (or upload a new schema) to begin</h1>
 				</header>
 				<SelectableList selectedItemIndex={this.props.selectedDatabaseIndex} 
-						setSelectedItemIndex={this.props.setSelectedDatabaseIndex} >
-					<EditableItem isSelected text="Test 1" saveChanges={() => {}} textLengthLimit={4} />
-					<EditableItem text="Test 2" saveChanges={() => {}} />
-					<EditableItem text="Test 3" saveChanges={() => {}} />
+					setSelectedItemIndex={this.props.setSelectedDatabaseIndex} 
+					isLoading={(this.state.databaseList.length === 0)}
+				>
+					{this.state.databaseList}
 				</SelectableList>
 				<DatabaseLoadOptions loadSelectedDatabase={() => {}} 
 						selectedDatabaseIndex={this.props.selectedDatabaseIndex} />
@@ -29,7 +38,8 @@ class DatabaseSelection extends Component
 
 DatabaseSelection.propTypes = {
 	selectedDatabaseIndex: PropTypes.number.isRequired,
-	setSelectedDatabaseIndex: PropTypes.func.isRequired
+	setSelectedDatabaseIndex: PropTypes.func.isRequired,
+	apiAccessor: PropTypes.object
 };
 
 export default DatabaseSelection;

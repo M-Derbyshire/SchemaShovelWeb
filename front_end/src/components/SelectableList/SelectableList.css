@@ -23,3 +23,10 @@
 .SelectableList .SelectableItemSelected {
 	background-color: #9c46ff;
 }
+
+.SelectableList .loadingText {
+	text-align: center;
+	font-size: x-large;
+	font-weight: bold;
+	color: #666;
+}
