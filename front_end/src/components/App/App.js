@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import APIAccessor from '../../apiAccess/APIAccessor/APIAccessor';
 import DatabaseSelection from '../DatabaseSelection/DatabaseSelection';
 
 
@@ -10,8 +11,36 @@ class App extends Component
 		super(props);
 		
 		this.state = {
-			selectedDatabaseIndex: -1
+			selectedDatabaseIndex: -1,
+			apiSettings: null,
+			apiAccessor: null
 		};
+	}
+	
+	componentDidMount()
+	{
+		this.loadAPISettings("settings.json");
+	}
+	
+	loadAPISettings(path)
+	{
+		fetch(path)
+			.then(response => response.json())
+			.then(json => this.onAPISettingsLoad(json))
+			.catch(err => console.error(`Error while loading API settings: ${err.message}`));
+	}
+	
+	onAPISettingsLoad(settings)
+	{
+		if(!settings || !settings.apiBaseURL)
+		{
+			throw new Error("Settings JSON is mishapen.");
+		}
+		
+		this.setState({
+			apiSettings: settings,
+			apiAccessor: new APIAccessor(settings.apiBaseURL)
+		});
 	}
 	
 	setSelectedDatabaseIndex(index)
