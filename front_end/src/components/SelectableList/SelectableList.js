@@ -10,7 +10,6 @@ class SelectableList extends Component
 	{
 		return (
 			<li 
-				key={"selectable-" + index} 
 				className={(this.props.selectedItemIndex === index) ? "SelectableItemSelected" : ""} 
 				onClick={() => this.props.setSelectedItemIndex(index)}>
 			{child}
@@ -21,7 +20,7 @@ class SelectableList extends Component
 	render()
 	{
 		const listContent = (!this.props.isLoading) ? 
-			this.props.children.map(this.childMapper.bind(this)) : 
+			React.Children.map(this.props.children, this.childMapper.bind(this)) : 
 			(<li className="loadingText" key={0}>Loading...</li>)
 		
 		return (
