@@ -39,11 +39,19 @@ class EditableItem extends Component
 	{
 		e.stopPropagation();
 		
-		this.props.saveChanges(this.state.currentText);
-		
 		this.setState({
 			isSavingChanges: true
 		});
+		
+		this.props.saveChanges(this.state.currentText)
+			.then(() => {
+				this.setState({
+					isSavingChanges: false,
+					isInEditMode: false,
+					savedText: this.state.currentText
+				});
+			})
+			.catch((err) => this.props.saveErrorHandler(err));
 	}
 	
 	cancelChanges(e)
@@ -109,7 +117,8 @@ class EditableItem extends Component
 
 EditableItem.propTypes = {
 	text: PropTypes.string,
-	saveChanges: PropTypes.func.isRequired,
+	saveChanges: PropTypes.func.isRequired, //Asynchronus function. Takes one parameter (the new text to be saved)
+	saveErrorHandler: PropTypes.func.isRequired, //Takes one parameter (the error)
 	textLengthLimit: PropTypes.number,
 }
 

@@ -11,12 +11,17 @@ class DatabaseSelection extends Component
 	{
 		const textLengthLimit = 100;
 		
+		const updateDatabaseName = (this.props.updateDatabaseName) ? 
+									this.props.updateDatabaseName :
+									() => {};
+		
 		return (
 			<EditableItem 
 				key={db.id}
 				text={db.name} 
 				textLengthLimit={textLengthLimit} 
-				saveChanges={(newName) => this.props.apiAccessor.updateDatabaseName(db.id, newName)} 
+				saveChanges={async (newName) => await updateDatabaseName(db.id, newName)} 
+				saveErrorHandler={() => {}}
 			/>
 		);
 	}
@@ -45,7 +50,7 @@ DatabaseSelection.propTypes = {
 	selectedDatabaseIndex: PropTypes.number.isRequired,
 	setSelectedDatabaseIndex: PropTypes.func.isRequired,
 	databaseList: PropTypes.array.isRequired,
-	apiAccessor: PropTypes.object
+	updateDatabaseName: PropTypes.func
 };
 
 export default DatabaseSelection;

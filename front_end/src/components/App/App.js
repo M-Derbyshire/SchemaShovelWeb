@@ -67,6 +67,8 @@ class App extends Component
 	
 	render()
 	{
+		const apiAccessor = this.state.apiAccessor;
+		
 		return (
 			<div className="App">
 				<header>
@@ -76,7 +78,11 @@ class App extends Component
 				<DatabaseSelection 
 					selectedDatabaseIndex={this.state.selectedDatabaseIndex} 
 					setSelectedDatabaseIndex={this.setSelectedDatabaseIndex.bind(this)} 
-					databaseList={this.state.databaseList} />
+					databaseList={this.state.databaseList}
+					updateDatabaseName={(apiAccessor) ? 
+										apiAccessor.updateDatabaseName.bind(apiAccessor) : 
+										undefined } 
+				/>
 			</div>
 		);
 	}

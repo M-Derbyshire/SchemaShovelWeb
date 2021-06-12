@@ -1,11 +1,13 @@
 import EditableItem from './EditableItem';
 import ReactTestUtils from 'react-dom/test-utils';
 
-const fakeSaveChanges = (x) => {};
+const fakeSaveChanges = (x) => new Promise(() => {return true}, () => {return false});
+const fakeSaveErrorHandler = (err) => err;
 
 test("EditableItem will display the given text as a text node (not in an input) when not in edit mode", () => {
 	
-	const item = ReactTestUtils.renderIntoDocument(<EditableItem saveChanges={fakeSaveChanges} text="testing123" />);
+	const item = ReactTestUtils.renderIntoDocument(<EditableItem 
+		saveChanges={fakeSaveChanges} saveErrorHandler={fakeSaveErrorHandler} text="testing123" />);
 	
 	const span = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EIStaticText");
 	const textArea = ReactTestUtils.scryRenderedDOMComponentsWithTag(item, "input");
@@ -16,7 +18,8 @@ test("EditableItem will display the given text as a text node (not in an input) 
 
 test("EditableItem will display an edit button when not in edit mode", () => {
 	
-	const item = ReactTestUtils.renderIntoDocument(<EditableItem saveChanges={fakeSaveChanges} text="testing123" />);
+	const item = ReactTestUtils.renderIntoDocument(<EditableItem 
+		saveChanges={fakeSaveChanges} saveErrorHandler={fakeSaveErrorHandler} text="testing123" />);
 	
 	const button = ReactTestUtils.scryRenderedDOMComponentsWithClass(item, "EIEditButton");
 	
@@ -25,7 +28,8 @@ test("EditableItem will display an edit button when not in edit mode", () => {
 
 test("EditableItem will display a textinput (with the given text), and save/cancel buttons if in edit mode", () => {
 	
-	const item = ReactTestUtils.renderIntoDocument(<EditableItem saveChanges={fakeSaveChanges} text="testing123" />);
+	const item = ReactTestUtils.renderIntoDocument(<EditableItem 
+		saveChanges={fakeSaveChanges} saveErrorHandler={fakeSaveErrorHandler} text="testing123" />);
 	
 	const originalEditButton = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EIEditButton");
 	ReactTestUtils.Simulate.click(originalEditButton);
@@ -51,7 +55,8 @@ test("EditableItem will display a textinput (with the given text), and save/canc
 
 test("When EditableItem is in edit mode, the cancel button will return to you to regular mode, without changing the text", () => {
 	
-	const item = ReactTestUtils.renderIntoDocument(<EditableItem saveChanges={fakeSaveChanges} text="testing123" />);
+	const item = ReactTestUtils.renderIntoDocument(<EditableItem 
+		saveChanges={fakeSaveChanges} saveErrorHandler={fakeSaveErrorHandler} text="testing123" />);
 	
 	//Enter edit mode
 	const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EIEditButton");
@@ -82,7 +87,8 @@ test("When EditableItem is in edit mode, the cancel button will return to you to
 
 test("When EditableItem is being saved, the save button will become disabled", () => {
 	
-	const item = ReactTestUtils.renderIntoDocument(<EditableItem saveChanges={fakeSaveChanges} text="testing123" />);
+	const item = ReactTestUtils.renderIntoDocument(<EditableItem 
+		saveChanges={fakeSaveChanges} saveErrorHandler={fakeSaveErrorHandler} text="testing123" />);
 	
 	//Enter edit mode
 	const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EIEditButton");
@@ -101,9 +107,10 @@ test("When EditableItem is being saved, the save button will become disabled", (
 
 test("When EditableItem is being saved, the saveChanges prop function will be called with the new text", () => {
 	
-	const mockSaveChanges = jest.fn();
+	const mockSaveChanges = jest.fn(() => Promise.resolve());
 	
-	const item = ReactTestUtils.renderIntoDocument(<EditableItem saveChanges={mockSaveChanges} text="testing123" />);
+	const item = ReactTestUtils.renderIntoDocument(<EditableItem 
+		saveChanges={mockSaveChanges} saveErrorHandler={fakeSaveErrorHandler} text="testing123" />);
 	
 	//Enter edit mode
 	const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EIEditButton");
@@ -121,18 +128,56 @@ test("When EditableItem is being saved, the saveChanges prop function will be ca
 	expect(mockSaveChanges).toHaveBeenCalledWith("test2");
 });
 
+test("When EditableItem is being saved, the saveErrorHandler prop function will be called if there was an error", async () => {
+	
+	//We are testing that something has happened only after an async function has finished.
+	//Sleeping is the best way I found to get around this
+	const sleep = (time) => {
+		return new Promise((resolve) => setTimeout(resolve, time));
+	}
+	
+	const mockSaveChanges = async () => {
+		return new Promise(() => {
+			throw "test";
+		});
+	};
+	const mockSaveErrorHandler = jest.fn();
+	
+	const item = ReactTestUtils.renderIntoDocument(<EditableItem 
+		saveChanges={mockSaveChanges} saveErrorHandler={mockSaveErrorHandler} text="testing123" />);
+	
+	//Enter edit mode
+	const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EIEditButton");
+	ReactTestUtils.Simulate.click(editButton);
+	
+	//Edit the text
+	const textInput = ReactTestUtils.findRenderedDOMComponentWithTag(item, "input");
+	ReactTestUtils.Simulate.change(textInput, { "target": { "value": "test2" }});
+	
+	//Click save
+	const saveButton = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EISaveButton");
+	ReactTestUtils.Simulate.click(saveButton);
+	
+	//Check has ran
+	sleep(100).then(() => {
+		expect(mockSaveErrorHandler).toHaveBeenCalled();
+	});
+});
+
 
 test("EditableItem will have add a maxLength attribute to the edit text box, of the value passed as textLengthLimit prop", () => {
 	
 	const item1 = ReactTestUtils.renderIntoDocument(
-		<EditableItem saveChanges={fakeSaveChanges} text="testing123" textLengthLimit={1} />
+		<EditableItem 
+			saveChanges={fakeSaveChanges} saveErrorHandler={fakeSaveErrorHandler} text="testing123" textLengthLimit={1} />
 	);
 	const editButton1 = ReactTestUtils.findRenderedDOMComponentWithClass(item1, "EIEditButton");
 	ReactTestUtils.Simulate.click(editButton1); //Enter edit mode
 	const textInput1 = ReactTestUtils.findRenderedDOMComponentWithClass(item1, "EITextInput");
 	
 	const item2 = ReactTestUtils.renderIntoDocument(
-		<EditableItem saveChanges={fakeSaveChanges} text="testing123" textLengthLimit={11} />
+		<EditableItem 
+			saveChanges={fakeSaveChanges} saveErrorHandler={fakeSaveErrorHandler} text="testing123" textLengthLimit={11} />
 	);
 	const editButton2 = ReactTestUtils.findRenderedDOMComponentWithClass(item2, "EIEditButton"); 
 	ReactTestUtils.Simulate.click(editButton2); //Enter edit mode
