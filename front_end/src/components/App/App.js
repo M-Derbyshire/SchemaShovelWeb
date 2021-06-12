@@ -44,27 +44,6 @@ class App extends Component
 		});
 	}
 	
-	setSelectedDatabaseIndex(index)
-	{
-		if(this.state.selectedDatabaseIndex !== index)
-		{
-			this.setState({ selectedDatabaseIndex: index });
-		}
-	}
-	
-	componentDidUpdate()
-	{
-		if(this.state.databaseList.length === 0 && this.state.apiAccessor && !this.state.apiAccessor.hasErrors())
-		{
-			this.state.apiAccessor.getDatabaseList()
-				.then((list) => {
-					this.setState({
-						databaseList: list
-					});
-				}); //Should not need to catch, as error handling handled by apiAccessor
-		}
-	}
-	
 	render()
 	{
 		const apiAccessor = this.state.apiAccessor;
@@ -75,14 +54,7 @@ class App extends Component
 					<h1>SchemaShovel Web</h1>
 				</header>
 				
-				<DatabaseSelection 
-					selectedDatabaseIndex={this.state.selectedDatabaseIndex} 
-					setSelectedDatabaseIndex={this.setSelectedDatabaseIndex.bind(this)} 
-					databaseList={this.state.databaseList}
-					updateDatabaseName={(apiAccessor) ? 
-										apiAccessor.updateDatabaseName.bind(apiAccessor) : 
-										undefined } 
-				/>
+				<DatabaseSelection apiAccessor={ this.state.apiAccessor } />
 			</div>
 		);
 	}

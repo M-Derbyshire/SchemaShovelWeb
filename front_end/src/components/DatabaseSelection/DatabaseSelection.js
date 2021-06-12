@@ -7,12 +7,30 @@ import DatabaseLoadOptions from '../DatabaseLoadOptions/DatabaseLoadOptions';
 
 class DatabaseSelection extends Component
 {
+	constructor(props)
+	{
+		super(props);
+		
+		this.state = {
+			databaseList: [],
+			selectedDatabaseIndex: -1
+		};
+	}
+	
+	setSelectedDatabaseIndex(index)
+	{
+		if(this.state.selectedDatabaseIndex !== index)
+		{
+			this.setState({ selectedDatabaseIndex: index });
+		}
+	}
+	
 	databaseListMapper(db)
 	{
 		const textLengthLimit = 100;
 		
-		const updateDatabaseName = (this.props.updateDatabaseName) ? 
-									this.props.updateDatabaseName :
+		const updateDatabaseName = (this.props.apiAccessor) ? 
+									this.props.apiAccessor.updateDatabaseName.bind(this.props.apiAccessor) :
 									() => {};
 		
 		return (
@@ -26,6 +44,19 @@ class DatabaseSelection extends Component
 		);
 	}
 	
+	componentDidUpdate()
+	{
+		if(this.state.databaseList.length === 0 && this.props.apiAccessor && !this.props.apiAccessor.hasErrors())
+		{
+			this.props.apiAccessor.getDatabaseList()
+				.then((list) => {
+					this.setState({
+						databaseList: list
+					});
+				}); //Should not need to catch, as error handling handled by apiAccessor
+		}
+	}
+	
 	render()
 	{
 		return (
@@ -33,24 +64,21 @@ class DatabaseSelection extends Component
 				<header>
 					<h1>Select a database schema below (or upload a new schema) to begin</h1>
 				</header>
-				<SelectableList selectedItemIndex={this.props.selectedDatabaseIndex} 
-					setSelectedItemIndex={this.props.setSelectedDatabaseIndex} 
-					isLoading={(this.props.databaseList.length === 0)}
+				<SelectableList selectedItemIndex={this.state.selectedDatabaseIndex} 
+					setSelectedItemIndex={this.setSelectedDatabaseIndex.bind(this)} 
+					isLoading={(this.state.databaseList.length === 0)}
 				>
-					{this.props.databaseList.map(this.databaseListMapper.bind(this))}
+					{this.state.databaseList.map(this.databaseListMapper.bind(this))}
 				</SelectableList>
 				<DatabaseLoadOptions loadSelectedDatabase={() => {}} 
-						selectedDatabaseIndex={this.props.selectedDatabaseIndex} />
+						selectedDatabaseIndex={this.state.selectedDatabaseIndex} />
 			</div>
 		);
 	}
 }
 
 DatabaseSelection.propTypes = {
-	selectedDatabaseIndex: PropTypes.number.isRequired,
-	setSelectedDatabaseIndex: PropTypes.func.isRequired,
-	databaseList: PropTypes.array.isRequired,
-	updateDatabaseName: PropTypes.func
+	apiAccessor: PropTypes.object
 };
 
 export default DatabaseSelection;
