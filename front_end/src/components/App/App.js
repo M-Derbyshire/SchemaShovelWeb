@@ -13,7 +13,8 @@ class App extends Component
 		this.state = {
 			selectedDatabaseIndex: -1,
 			apiSettings: null,
-			apiAccessor: null
+			apiAccessor: null,
+			databaseList: []
 		};
 	}
 	
@@ -51,6 +52,19 @@ class App extends Component
 		}
 	}
 	
+	componentDidUpdate()
+	{
+		if(this.state.databaseList.length === 0 && this.state.apiAccessor && !this.state.apiAccessor.hasErrors())
+		{
+			this.state.apiAccessor.getDatabaseList()
+				.then((list) => {
+					this.setState({
+						databaseList: list
+					});
+				}); //Should not need to catch, as error handling handled by apiAccessor
+		}
+	}
+	
 	render()
 	{
 		return (
@@ -61,7 +75,8 @@ class App extends Component
 				
 				<DatabaseSelection 
 					selectedDatabaseIndex={this.state.selectedDatabaseIndex} 
-					setSelectedDatabaseIndex={this.setSelectedDatabaseIndex.bind(this)} />
+					setSelectedDatabaseIndex={this.setSelectedDatabaseIndex.bind(this)} 
+					databaseList={this.state.databaseList} />
 			</div>
 		);
 	}
