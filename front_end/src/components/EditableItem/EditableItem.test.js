@@ -85,7 +85,7 @@ test("When EditableItem is in edit mode, the cancel button will return to you to
 	
 });
 
-test("When EditableItem is being saved, the save button and text box will become disabled", () => {
+test("When EditableItem is being saved, the save button and text box will become disabled, and the cancel button will not display", () => {
 	
 	const item = ReactTestUtils.renderIntoDocument(<EditableItem 
 		saveChanges={fakeSaveChanges} saveErrorHandler={fakeSaveErrorHandler} text="testing123" />);
@@ -94,18 +94,24 @@ test("When EditableItem is being saved, the save button and text box will become
 	const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EIEditButton");
 	ReactTestUtils.Simulate.click(editButton);
 	
-	//Check is enabled
+	//Check is enabled/shown
 	const saveButton = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EISaveButton");
 	const textInput = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EITextInput");
+	const cancelButton = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EICancelChangeButton");
 	
 	expect(saveButton).not.toBeDisabled();
 	expect(textInput).not.toBeDisabled();
+	expect(cancelButton).toBeTruthy();
 	
 	ReactTestUtils.Simulate.click(saveButton);
 	
-	//Check is disabled
+	const cancelButtonsEmpty = ReactTestUtils.scryRenderedDOMComponentsWithClass(item, "EICancelChangeButton");
+	
+	//Check is disabled/not rendered
 	expect(saveButton).toBeDisabled();
 	expect(textInput).toBeDisabled();
+	expect(cancelButtonsEmpty.length).toBe(0);
+	
 });
 
 test("When EditableItem is being saved, the saveChanges prop function will be called with the new text", () => {
