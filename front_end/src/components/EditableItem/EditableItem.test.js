@@ -1,5 +1,6 @@
 import EditableItem from './EditableItem';
 import ReactTestUtils from 'react-dom/test-utils';
+import sleep from '../testingHelpers/sleepFunc';
 
 const fakeSaveChanges = (x) => new Promise(() => {return true}, () => {return false});
 const fakeSaveErrorHandler = (err) => err;
@@ -139,12 +140,6 @@ test("When EditableItem is being saved, the saveChanges prop function will be ca
 
 test("When EditableItem is being saved, the saveErrorHandler prop function will be called if there was an error", async () => {
 	
-	//We are testing that something has happened only after an async function has finished.
-	//Sleeping is the best way I found to get around this
-	const sleep = (time) => {
-		return new Promise((resolve) => setTimeout(resolve, time));
-	}
-	
 	const mockSaveChanges = async () => {
 		return new Promise(() => {
 			throw "test";
@@ -168,6 +163,8 @@ test("When EditableItem is being saved, the saveErrorHandler prop function will 
 	ReactTestUtils.Simulate.click(saveButton);
 	
 	//Check has ran
+	//We are testing that something has happened only after an async function has finished.
+	//Sleeping is the best way I found to get around this
 	sleep(100).then(() => {
 		expect(mockSaveErrorHandler).toHaveBeenCalled();
 	});
