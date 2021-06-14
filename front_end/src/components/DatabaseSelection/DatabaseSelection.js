@@ -5,6 +5,15 @@ import SelectableList from '../SelectableList/SelectableList';
 import EditableItem from '../EditableItem/EditableItem';
 import DatabaseLoadOptions from '../DatabaseLoadOptions/DatabaseLoadOptions';
 
+/*
+	IMPORTANT
+	
+	Some of the functionality of this component (especially in reference to loading the database list 
+	after an update to the props) is not realistic to test at this time. Therefore, be cautious when changing
+	 this component.
+*/
+
+
 class DatabaseSelection extends Component
 {
 	constructor(props)
@@ -55,6 +64,11 @@ class DatabaseSelection extends Component
 					});
 				}); //Should not need to catch, as error handling handled by apiAccessor
 		}
+	}
+	
+	forceDidUpdateHandlerForTests()
+	{
+		this.componentDidUpdate();
 	}
 	
 	render()
