@@ -51,7 +51,7 @@ class EditableItem extends Component
 					savedText: this.state.currentText
 				});
 			})
-			.catch((err) => this.props.saveErrorHandler(err));
+			.catch((err) => {this.props.saveErrorHandler(err)});
 	}
 	
 	cancelChanges(e)

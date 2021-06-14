@@ -165,9 +165,9 @@ test("When EditableItem is being saved, the saveErrorHandler prop function will 
 	//Check has ran
 	//We are testing that something has happened only after an async function has finished.
 	//Sleeping is the best way I found to get around this
-	sleep(100).then(() => {
-		expect(mockSaveErrorHandler).toHaveBeenCalled();
-	});
+	await sleep(100);
+	
+	expect(mockSaveErrorHandler).toHaveBeenCalled();
 });
 
 
