@@ -3,3 +3,4 @@ spring.datasource.username=
 spring.datasource.password=
 spring.jpa.database-platform=org.hibernate.dialect.MySQLInnoDBDialect
 spring.jpa.hibernate.ddl-auto=none
+app.frontend-origin=http://localhost:3000
