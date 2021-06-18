@@ -13,8 +13,6 @@ test("hasErrors() will return true if there were errors", async () => {
 	
 	const api = new TestingSubclass("/");
 	
-	fetch.mockResponseOnce('{ "testProp": "testValue" }', { status: 404 });
-	
 	await api.addTestError("test");
 	
 	expect(api.hasErrors()).toBeTruthy();	
