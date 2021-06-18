@@ -46,8 +46,6 @@ class App extends Component
 	
 	render()
 	{
-		const apiAccessor = this.state.apiAccessor;
-		
 		return (
 			<div className="App">
 				<header>
