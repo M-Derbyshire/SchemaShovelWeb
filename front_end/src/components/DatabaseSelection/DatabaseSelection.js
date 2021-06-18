@@ -72,6 +72,7 @@ class DatabaseSelection extends Component
 				<SelectableList selectedItemIndex={this.state.selectedDatabaseIndex} 
 					setSelectedItemIndex={this.setSelectedDatabaseIndex.bind(this)} 
 					isLoading={(this.state.databaseList.length === 0)}
+					hasFailedToLoad={!!this.props.hasFailedToLoadDatabaseList}
 				>
 					{this.state.databaseList.map(this.databaseListMapper.bind(this))}
 				</SelectableList>
@@ -83,7 +84,8 @@ class DatabaseSelection extends Component
 }
 
 DatabaseSelection.propTypes = {
-	apiAccessor: PropTypes.object
+	apiAccessor: PropTypes.object,
+	hasFailedToLoadDatabaseList: PropTypes.bool
 };
 
 export default DatabaseSelection;

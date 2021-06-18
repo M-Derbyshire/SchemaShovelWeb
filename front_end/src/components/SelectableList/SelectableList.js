@@ -19,9 +19,21 @@ class SelectableList extends Component
 	
 	render()
 	{
-		const listContent = (!this.props.isLoading) ? 
-			React.Children.map(this.props.children, this.childMapper.bind(this)) : 
-			(<li className="loadingText" key={0}>Loading...</li>)
+		let listContent;
+		
+		if(this.props.hasFailedToLoad)
+		{
+			listContent = (<li className="infoText" key={0}>An error has occurred.</li>);
+		}
+		else if(this.props.isLoading)
+		{
+			listContent = (<li className="infoText" key={0}>Loading...</li>);
+		}
+		else
+		{
+			listContent = React.Children.map(this.props.children, this.childMapper.bind(this));
+		}
+		
 		
 		return (
 			<div className="SelectableList">
@@ -36,7 +48,8 @@ class SelectableList extends Component
 SelectableList.propTypes = {
 	selectedItemIndex: PropTypes.number,
 	setSelectedItemIndex: PropTypes.func.isRequired,
-	isLoading: PropTypes.bool.isRequired
+	isLoading: PropTypes.bool.isRequired,
+	hasFailedToLoad: PropTypes.bool.isRequired
 }
 
 export default SelectableList;

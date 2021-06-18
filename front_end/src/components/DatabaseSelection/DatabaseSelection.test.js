@@ -87,3 +87,14 @@ test("DatabaseSelection's SelectableList will be set to loading when there's no 
 	expect(li.textContent.toLowerCase()).toEqual(expect.stringContaining("loading"));
 });
 
+test("DatabaseSelection will pass the hasFailedToLoadDatabaseList prop down to the SelectableList.", () => {
+	
+	const databaseSelection = 
+			ReactTestUtils.renderIntoDocument(<DatabaseSelection hasFailedToLoadDatabaseList={true} />);
+	
+	const li = ReactTestUtils.findRenderedDOMComponentWithTag(databaseSelection, "li");
+	
+	//Wanted to check this specifically in the SelectableList, but you can't test the internals of an 
+	//inner component with ReactTestUtils.
+	expect(li.textContent.toLowerCase()).toEqual(expect.stringContaining("an error has occurred"));
+});

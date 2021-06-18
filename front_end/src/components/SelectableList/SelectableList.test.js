@@ -5,7 +5,10 @@ const fakeSetSelected = (i) => {};
 
 test("SelectableList will display all of its children elemenents, when not loading, but not the loading text", () => {
 	
-	const list = ReactTestUtils.renderIntoDocument(<SelectableList setSelectedItemIndex={fakeSetSelected} isLoading={false}>
+	const list = ReactTestUtils.renderIntoDocument(<SelectableList 
+			setSelectedItemIndex={fakeSetSelected} 
+			isLoading={false}
+			hasFailedToLoad={false}>
 		<span>1</span>
 		<span>2</span>
 		<span>3</span>
@@ -27,7 +30,7 @@ test("SelectableList will display all of its children elemenents, when not loadi
 test("SelectableList will display a span with loading text, but not the children, when isLoading prop is true", () => {
 	
 	const list = ReactTestUtils.renderIntoDocument(<SelectableList setSelectedItemIndex={fakeSetSelected} 
-			isLoading={true}>
+			isLoading={true} hasFailedToLoad={false}>
 		<span>1</span>
 		<span>2</span>
 		<span>3</span>
@@ -40,11 +43,30 @@ test("SelectableList will display a span with loading text, but not the children
 	expect(li.textContent.toLowerCase()).toEqual(expect.stringContaining("loading"));
 });
 
+test("SelectableList will display a span with error text, but not the children, when hasFailedToLoad prop is true", () => {
+	
+	const list = ReactTestUtils.renderIntoDocument(<SelectableList setSelectedItemIndex={fakeSetSelected} 
+			isLoading={false} hasFailedToLoad={true}>
+		<span>1</span>
+		<span>2</span>
+		<span>3</span>
+	</SelectableList>);
+	
+	const li = ReactTestUtils.findRenderedDOMComponentWithTag(list, "li");
+	const spans = ReactTestUtils.scryRenderedDOMComponentsWithTag(list, "span");
+	
+	expect(spans.length).toBe(0);
+	expect(li.textContent.toLowerCase()).toEqual(expect.stringContaining("an error has occurred"));
+});
+
 test("SelectableList will set the selected index when an item is clicked on", () => {
 	
 	const mockedSetSelected = jest.fn();
 	
-	const list = ReactTestUtils.renderIntoDocument(<SelectableList setSelectedItemIndex={mockedSetSelected} isLoading={false}>
+	const list = ReactTestUtils.renderIntoDocument(<SelectableList 
+			setSelectedItemIndex={mockedSetSelected} 
+			isLoading={false}
+			hasFailedToLoad={false}>
 		<span>1</span>
 		<span>2</span>
 		<span>3</span>
