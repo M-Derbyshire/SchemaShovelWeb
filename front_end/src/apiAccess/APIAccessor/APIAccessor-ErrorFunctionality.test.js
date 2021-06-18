@@ -1,13 +1,5 @@
 import APIAccessor from './APIAccessor';
 import TestingSubclass from './TestingSubclass';
-import fetchMock from "jest-fetch-mock";
-
-fetchMock.enableMocks();
-beforeEach(() => {
-	fetchMock.resetMocks();
-});
-
-
 
 test("hasErrors() will return true if there were errors", async () => {
 	
