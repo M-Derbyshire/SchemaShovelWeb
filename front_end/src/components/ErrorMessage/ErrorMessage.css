@@ -1,10 +1,12 @@
 .ErrorMessage {
 	display: block;
 	width: fit-content;
+	margin: 0.5em auto;
+	word-wrap: break-word;
+	
 	padding: 1em 2em;
-	margin: 0.5em;
 	color: rgb(105, 0, 0);
-	background-color: rgba(255, 0, 0, 0.582);
+	background-color: rgba(255, 0, 0, 0.829);
 	border: solid 2px rgb(146, 66, 66);
 	border-radius: 1em;
 	
