@@ -13,7 +13,9 @@ class DatabaseSelection extends Component
 		
 		this.state = {
 			databaseList: [],
-			selectedDatabaseIndex: -1
+			selectedDatabaseIndex: -1,
+			hasFailedToLoad: false,
+			isLoadingList: false
 		};
 	}
 	
@@ -39,10 +41,7 @@ class DatabaseSelection extends Component
 				key={db.id}
 				text={db.name} 
 				textLengthLimit={textLengthLimit} 
-				saveChanges={async (newName) => { 
-					const result = await updateDatabaseName(db.id, newName);
-					if(Object.keys(result).length === 0) throw new Error("Unable to update database name.");
-				}} 
+				saveChanges={async (newName) => await updateDatabaseName(db.id, newName)} 
 				saveErrorHandler={() => {}}
 			/>
 		);
@@ -50,14 +49,26 @@ class DatabaseSelection extends Component
 	
 	componentDidUpdate()
 	{
-		if(this.state.databaseList.length === 0 && this.props.apiAccessor && !this.props.applicationHasErrors)
+		if(this.state.databaseList.length === 0 && this.props.apiAccessor && 
+			!this.state.hasFailedToLoad && !this.state.isLoadingList)
 		{
 			this.props.apiAccessor.getDatabaseList()
 				.then((list) => {
 					this.setState({
-						databaseList: list
+						databaseList: list,
+						isLoadingList: false
 					});
-				}); //Should not need to catch, as error handling handled by apiAccessor
+				}).catch((err) => {
+					this.setState({
+						hasFailedToLoad: true,
+						isLoadingList: false
+					});
+				});
+			
+			//Stops the above being called twice
+			this.setState({
+				isLoadingList: true
+			});
 		}
 	}
 	
@@ -68,8 +79,7 @@ class DatabaseSelection extends Component
 	
 	render()
 	{
-		const hasFailedToLoad = (this.state.databaseList.length === 0 && !!this.props.applicationHasErrors);
-		const selectedDatabaseIndex = (hasFailedToLoad) ? -1 : this.state.selectedDatabaseIndex;
+		const selectedDatabaseIndex = (this.state.hasFailedToLoad) ? -1 : this.state.selectedDatabaseIndex;
 		
 		return (
 			<div className="DatabaseSelection">
@@ -79,7 +89,7 @@ class DatabaseSelection extends Component
 				<SelectableList selectedItemIndex={this.state.selectedDatabaseIndex} 
 					setSelectedItemIndex={this.setSelectedDatabaseIndex.bind(this)} 
 					isLoading={(this.state.databaseList.length === 0)}
-					hasFailedToLoad={hasFailedToLoad}
+					hasFailedToLoad={this.state.hasFailedToLoad}
 				>
 					{this.state.databaseList.map(this.databaseListMapper.bind(this))}
 				</SelectableList>
@@ -91,8 +101,7 @@ class DatabaseSelection extends Component
 }
 
 DatabaseSelection.propTypes = {
-	apiAccessor: PropTypes.object,
-	applicationHasErrors: PropTypes.bool
+	apiAccessor: PropTypes.object
 };
 
 export default DatabaseSelection;

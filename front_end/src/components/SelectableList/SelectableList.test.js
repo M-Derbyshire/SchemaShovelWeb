@@ -43,10 +43,10 @@ test("SelectableList will display a span with loading text, but not the children
 	expect(li.textContent.toLowerCase()).toEqual(expect.stringContaining("loading"));
 });
 
-test("SelectableList will display a span with error text, but not the children, when hasFailedToLoad prop is true", () => {
+test("SelectableList will display a span with error text, but not the children, when hasFailedToLoad (and isLoading) prop is true", () => {
 	
 	const list = ReactTestUtils.renderIntoDocument(<SelectableList setSelectedItemIndex={fakeSetSelected} 
-			isLoading={false} hasFailedToLoad={true}>
+			isLoading={true} hasFailedToLoad={true}>
 		<span>1</span>
 		<span>2</span>
 		<span>3</span>

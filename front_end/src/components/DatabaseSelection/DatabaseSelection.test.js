@@ -33,15 +33,14 @@ test("DatabaseSelection will load the database list, and pass it to the Selectab
 	expect(editableItemText.textContent).toEqual(testName);
 });
 
-test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method to database EditableItems, but within a method that will throw if an empty object is returned", async () => {
+test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method to database EditableItems", async () => {
 	
 	const testName = "testName";
 	const testID = 1;
 	const changedName = "testChange";
 	
 	const mockAPIAccessor = new MockAPIAccessor([
-		[ { id: testID, name: testName } ],
-		{}
+		[ { id: testID, name: testName } ]
 	]);
 	mockAPIAccessor.updateDatabaseName = jest.fn();
 	
@@ -64,12 +63,7 @@ test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method 
 	const saveButton = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelection, "EISaveButton");
 	ReactTestUtils.Simulate.click(saveButton);
 	
-	await sleep(100);
-	
-	const nowEIText = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelection, "EITextArea");
-	
 	expect(mockAPIAccessor.updateDatabaseName).toHaveBeenCalledWith(testID, changedName);
-	expect(nowEIText.textContent).toEqual(testName); //Not to have changed
 	
 });
 
@@ -94,10 +88,18 @@ test("DatabaseSelection's SelectableList will be set to loading when there's no 
 	expect(li.textContent.toLowerCase()).toEqual(expect.stringContaining("loading"));
 });
 
-test("DatabaseSelection will pass the applicationHasErrors prop down to the SelectableList, if the database list is empty.", () => {
+test("DatabaseSelection will pass the SelectableList hasFailedToLoad prop as true, if there are errors loading the list.", async () => {
 	
-	const databaseSelection = 
-			ReactTestUtils.renderIntoDocument(<DatabaseSelection applicationHasErrors={true} />);
+	const mockAPIAccessor = new MockAPIAccessor([]);
+	mockAPIAccessor.throwOnNextRequest();
+	
+	const databaseSelection = ReactTestUtils.renderIntoDocument(<DatabaseSelection apiAccessor={mockAPIAccessor} />);
+	
+	//trigger didUpdate handler, that should then trigger the load of the database list
+	databaseSelection._forceDidUpdateHandlerForTests();
+	
+	//We're dealing with asynchronous methods, so let it load
+	await sleep(100);
 	
 	const li = ReactTestUtils.findRenderedDOMComponentWithTag(databaseSelection, "li");
 	

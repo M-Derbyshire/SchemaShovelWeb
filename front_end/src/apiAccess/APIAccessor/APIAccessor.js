@@ -60,7 +60,11 @@ export default class APIAccessor
 	
 	handleErrors()
 	{
-		if(this.hasErrors()) this._onErrorCallback();
+		if(this.hasErrors())
+		{
+			this._onErrorCallback();
+			throw new Error("There was an error accessing the API. Use the getNextError() method for more details.");
+		}
 	}
 	
 	

@@ -108,8 +108,7 @@ class App extends Component
 					<h1>SchemaShovel Web</h1>
 				</header>
 				
-				<DatabaseSelection apiAccessor={ this.state.apiAccessor } 
-					applicationHasErrors={this.state.errorList.length > 0} />
+				<DatabaseSelection apiAccessor={ this.state.apiAccessor } />
 			</div>
 		);
 	}

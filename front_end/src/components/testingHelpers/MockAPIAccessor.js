@@ -6,6 +6,12 @@ export default class MockAPIAccessor
 	{
 		this._mockData = mockDataArray;
 		this._errors = [];
+		this._throwOnNextRequest = false;
+	}
+	
+	throwOnNextRequest()
+	{
+		this._throwOnNextRequest = true;
 	}
 	
 	addMockError(errorText)
@@ -27,6 +33,8 @@ export default class MockAPIAccessor
 	
 	_getNextMockData()
 	{
+		if(this._throwOnNextRequest) throw new Error("Mock error");
+		
 		if(this._mockData.length > 0)
 		{
 			return this._mockData.shift();
