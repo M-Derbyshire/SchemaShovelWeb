@@ -109,7 +109,7 @@ class App extends Component
 				</header>
 				
 				<DatabaseSelection apiAccessor={ this.state.apiAccessor } 
-					hasFailedToLoadDatabaseList={this.state.errorList.length > 0} />
+					applicationHasErrors={this.state.errorList.length > 0} />
 			</div>
 		);
 	}

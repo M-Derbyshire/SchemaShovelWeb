@@ -94,10 +94,10 @@ test("DatabaseSelection's SelectableList will be set to loading when there's no 
 	expect(li.textContent.toLowerCase()).toEqual(expect.stringContaining("loading"));
 });
 
-test("DatabaseSelection will pass the hasFailedToLoadDatabaseList prop down to the SelectableList, if the database list is empty.", () => {
+test("DatabaseSelection will pass the applicationHasErrors prop down to the SelectableList, if the database list is empty.", () => {
 	
 	const databaseSelection = 
-			ReactTestUtils.renderIntoDocument(<DatabaseSelection hasFailedToLoadDatabaseList={true} />);
+			ReactTestUtils.renderIntoDocument(<DatabaseSelection applicationHasErrors={true} />);
 	
 	const li = ReactTestUtils.findRenderedDOMComponentWithTag(databaseSelection, "li");
 	

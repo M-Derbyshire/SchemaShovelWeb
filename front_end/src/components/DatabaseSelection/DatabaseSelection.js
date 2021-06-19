@@ -50,7 +50,7 @@ class DatabaseSelection extends Component
 	
 	componentDidUpdate()
 	{
-		if(this.state.databaseList.length === 0 && this.props.apiAccessor && !this.props.hasFailedToLoadDatabaseList)
+		if(this.state.databaseList.length === 0 && this.props.apiAccessor && !this.props.applicationHasErrors)
 		{
 			this.props.apiAccessor.getDatabaseList()
 				.then((list) => {
@@ -68,7 +68,7 @@ class DatabaseSelection extends Component
 	
 	render()
 	{
-		const hasFailedToLoad = (this.state.databaseList.length === 0 && !!this.props.hasFailedToLoadDatabaseList);
+		const hasFailedToLoad = (this.state.databaseList.length === 0 && !!this.props.applicationHasErrors);
 		const selectedDatabaseIndex = (hasFailedToLoad) ? -1 : this.state.selectedDatabaseIndex;
 		
 		return (
@@ -92,7 +92,7 @@ class DatabaseSelection extends Component
 
 DatabaseSelection.propTypes = {
 	apiAccessor: PropTypes.object,
-	hasFailedToLoadDatabaseList: PropTypes.bool
+	applicationHasErrors: PropTypes.bool
 };
 
 export default DatabaseSelection;
