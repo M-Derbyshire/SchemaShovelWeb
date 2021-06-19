@@ -65,7 +65,7 @@ export default class JSONValidator
 	{
 		const SentenceStartItemName = this._getWordWithCapitalisedFirstLetter(itemName);
 		
-		if(item.hasOwnProperty(propName))
+		if(item.hasOwnProperty(propName) && item[propName])
 		{
 			if(!this._propertyIsOfType(item, propName, propType))
 				this._addError(`${SentenceStartItemName}'s ${propName} property at index ${itemIndex} is not a valid ${propType}.`);

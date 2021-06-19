@@ -102,7 +102,7 @@ export default class DatabaseJSONValidator extends JSONValidator
 			
 			this._validateSingleItem(column, index, "column", validProperties);
 			
-			if(column.hasOwnProperty("fkToTable") && !fkToTableRegex.test(column.fkToTable))
+			if(column.hasOwnProperty("fkToTable") && column.fkToTable && !fkToTableRegex.test(column.fkToTable))
 			{
 				this._addError(`Column at index ${index} has a misshapen fkToTable property value: ${column.fkToTable}`);
 			}

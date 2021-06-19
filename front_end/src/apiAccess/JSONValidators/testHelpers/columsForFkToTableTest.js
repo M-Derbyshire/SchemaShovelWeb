@@ -14,10 +14,19 @@ export default JSON.stringify({
 						description: "test"
 					},
 					{
-						//no description
 						name: "test",
 						description: "test",
 						fkToTable: "testTable.testColumn"
+					},
+					{
+						name: "test",
+						description: "test",
+						fkToTable: null
+					},
+					{
+						name: "test",
+						description: "test",
+						fkToTable: undefined
 					}
 				]
 			}

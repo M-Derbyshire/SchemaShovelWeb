@@ -124,7 +124,7 @@ test("Will find all errors with columns", () => {
 	
 });
 
-test("Will not create an error if a column does/doesn't have an fkToTable property", () => {
+test("Will not create an error if a column does/doesn't have an fkToTable property, or if it is null or undefined", () => {
 	
 	const validator = new DatabaseJSONValidator();
 	const validColumnsSchema = columsForFkToTableTest;
