@@ -43,18 +43,34 @@ class App extends Component
 		
 		this.setState({
 			apiSettings: settings,
-			apiAccessor: new APIAccessor(settings.apiBaseURL)
+			apiAccessor: new APIAccessor(settings.apiBaseURL, this.onErrorHandler.bind(this))
 		});
 	}
 	
 	
 	
-	onErrorHandler(errorText)
+	onErrorHandler(errorText = null)
 	{
-		console.error(errorText);
+		let newErrors = [];
+		
+		const apiAccessor = this.state.apiAccessor;
+		if(apiAccessor)
+		{
+			//APIAccessor will not contain the error once it's been retrieved
+			while(apiAccessor.hasErrors())
+			{
+				newErrors.push(apiAccessor.getNextError())
+			}
+		}
+		
+		if(errorText) 
+		{
+			console.error(errorText);
+			newErrors.push(errorText)
+		}
 		
 		this.setState({
-			errorList: [...this.state.errorList, errorText]
+			errorList: [...this.state.errorList, ...newErrors]
 		});
 	}
 	
@@ -90,7 +106,8 @@ class App extends Component
 					<h1>SchemaShovel Web</h1>
 				</header>
 				
-				<DatabaseSelection apiAccessor={ this.state.apiAccessor } />
+				<DatabaseSelection apiAccessor={ this.state.apiAccessor } 
+					hasFailedToLoadDatabaseList={this.state.errorList.length > 0} />
 			</div>
 		);
 	}

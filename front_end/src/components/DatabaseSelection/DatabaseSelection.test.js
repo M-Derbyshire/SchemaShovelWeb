@@ -23,7 +23,7 @@ test("DatabaseSelection will load the database list, and pass it to the Selectab
 	const databaseSelection = ReactTestUtils.renderIntoDocument(<DatabaseSelection apiAccessor={mockAPIAccessor} />);
 	
 	//trigger didUpdate handler, that should then trigger the load of the database list
-	databaseSelection.forceDidUpdateHandlerForTests();
+	databaseSelection._forceDidUpdateHandlerForTests();
 	
 	//We're dealing with asynchronous methods, so let it load
 	await sleep(100);
@@ -47,7 +47,7 @@ test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method 
 	const databaseSelection = ReactTestUtils.renderIntoDocument(<DatabaseSelection apiAccessor={mockAPIAccessor} />);
 	
 	//trigger didUpdate handler, that should then trigger the load of the database list
-	databaseSelection.forceDidUpdateHandlerForTests();
+	databaseSelection._forceDidUpdateHandlerForTests();
 	
 	//We're dealing with asynchronous methods, so let it load
 	await sleep(100);

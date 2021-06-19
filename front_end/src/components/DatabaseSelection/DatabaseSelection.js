@@ -46,7 +46,7 @@ class DatabaseSelection extends Component
 	
 	componentDidUpdate()
 	{
-		if(this.state.databaseList.length === 0 && this.props.apiAccessor && !this.props.apiAccessor.hasErrors())
+		if(this.state.databaseList.length === 0 && this.props.apiAccessor && !this.props.hasFailedToLoadDatabaseList)
 		{
 			this.props.apiAccessor.getDatabaseList()
 				.then((list) => {
@@ -57,13 +57,16 @@ class DatabaseSelection extends Component
 		}
 	}
 	
-	forceDidUpdateHandlerForTests()
+	_forceDidUpdateHandlerForTests()
 	{
 		this.componentDidUpdate();
 	}
 	
 	render()
 	{
+		const hasFailedToLoad = (this.state.databaseList.length === 0 && !!this.props.hasFailedToLoadDatabaseList);
+		const selectedDatabaseIndex = (hasFailedToLoad) ? -1 : this.state.selectedDatabaseIndex;
+		
 		return (
 			<div className="DatabaseSelection">
 				<header>
@@ -72,12 +75,12 @@ class DatabaseSelection extends Component
 				<SelectableList selectedItemIndex={this.state.selectedDatabaseIndex} 
 					setSelectedItemIndex={this.setSelectedDatabaseIndex.bind(this)} 
 					isLoading={(this.state.databaseList.length === 0)}
-					hasFailedToLoad={!!this.props.hasFailedToLoadDatabaseList}
+					hasFailedToLoad={hasFailedToLoad}
 				>
 					{this.state.databaseList.map(this.databaseListMapper.bind(this))}
 				</SelectableList>
 				<DatabaseLoadOptions loadSelectedDatabase={() => {}} 
-						selectedDatabaseIndex={this.state.selectedDatabaseIndex} />
+						selectedDatabaseIndex={selectedDatabaseIndex} />
 			</div>
 		);
 	}
