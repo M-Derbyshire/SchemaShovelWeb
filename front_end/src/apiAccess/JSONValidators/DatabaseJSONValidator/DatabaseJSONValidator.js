@@ -96,7 +96,7 @@ export default class DatabaseJSONValidator extends JSONValidator
 			{ name: "fkToTable", type: "string", optional: true }
 		];
 		
-		const fkToTableRegex = /[^\.]+\.[^\.]+/;
+		const fkToTableRegex = /[^.]+\.[^.]+/;
 		
 		columns.forEach((column, index) => {
 			
