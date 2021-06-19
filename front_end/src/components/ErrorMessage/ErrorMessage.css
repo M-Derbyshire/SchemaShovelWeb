@@ -1,14 +1,33 @@
 .ErrorMessage {
 	display: block;
 	width: fit-content;
-	padding: 1em;
+	padding: 1em 2em;
 	margin: 0.5em;
 	color: rgb(105, 0, 0);
 	background-color: rgba(255, 0, 0, 0.582);
 	border: solid 2px rgb(146, 66, 66);
 	border-radius: 1em;
+	
+	/* Need this, as the closing X is position absolute */
+	position: relative;
 }
 
 .ErrorMessage .ErrorMessagePrefix {
 	font-weight: bold;
+}
+
+.ErrorMessage .ErrorMessageCloseBtn {
+	position: absolute;
+	top: 0.25em;
+	right: 0.5em;
+	
+	cursor: pointer;
+	
+	color: rgb(105, 0, 0);
+	border-width: 0;
+	background-color: rgba(0, 0, 0, 0);
+	padding: 1px;
+	width: 1em;
+	height: 1.1em;
+	line-height: 0;
 }

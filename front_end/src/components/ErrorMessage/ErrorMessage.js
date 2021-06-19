@@ -8,6 +8,7 @@ class ErrorMessage extends Component
 	{
 		return (
 			<div className="ErrorMessage">
+				<button className="ErrorMessageCloseBtn" onClick={this.props.closeButtonOnClick}>x</button>
 				<span className="ErrorMessagePrefix">Error: </span>{this.props.errorText}
 			</div>
 		);
@@ -15,7 +16,8 @@ class ErrorMessage extends Component
 }
 
 ErrorMessage.propTypes = {
-	errorText: PropTypes.string.isRequired
+	errorText: PropTypes.string.isRequired,
+	closeButtonOnClick: PropTypes.func.isRequired
 };
 
 export default ErrorMessage;
