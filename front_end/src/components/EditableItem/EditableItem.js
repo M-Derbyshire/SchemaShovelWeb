@@ -51,7 +51,14 @@ class EditableItem extends Component
 					savedText: this.state.currentText
 				});
 			})
-			.catch((err) => {this.props.saveErrorHandler(err)});
+			.catch((err) => {
+				this.setState({
+					isSavingChanges: false,
+					isInEditMode: false,
+					currentText: this.state.savedText
+				});
+				this.props.saveErrorHandler(err);
+			});
 	}
 	
 	cancelChanges(e)
@@ -69,7 +76,7 @@ class EditableItem extends Component
 	{
 		//If we are in editing mode, things need to be displayed differently
 		const textElem = (!this.state.isInEditMode) ? 
-							(<span className="EIStaticText">{this.state.currentText}</span>) :
+							(<span className="EIStaticText">{this.state.savedText}</span>) :
 							(<input className="EITextInput" type="text" value={this.state.currentText} 
 								onChange={(e) => this.textChange(e)} 
 								disabled={this.state.isSavingChanges}

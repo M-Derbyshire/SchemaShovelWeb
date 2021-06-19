@@ -2,7 +2,7 @@ import EditableItem from './EditableItem';
 import ReactTestUtils from 'react-dom/test-utils';
 import sleep from '../testingHelpers/sleepFunc';
 
-const fakeSaveChanges = (x) => new Promise(() => {return true}, () => {return false});
+const fakeSaveChanges = (x) => new Promise(() => {return true}, (e) => {throw e});
 const fakeSaveErrorHandler = (err) => err;
 
 test("EditableItem will display the given text as a text node (not in an input) when not in edit mode", () => {
@@ -138,7 +138,7 @@ test("When EditableItem is being saved, the saveChanges prop function will be ca
 	expect(mockSaveChanges).toHaveBeenCalledWith("test2");
 });
 
-test("When EditableItem is being saved, the saveErrorHandler prop function will be called if there was an error", async () => {
+test("When EditableItem is being saved, the saveErrorHandler prop function will be called if there was an error, and the text will return to original value (in static mode)", async () => {
 	
 	const mockSaveChanges = async () => {
 		return new Promise(() => {
@@ -146,9 +146,10 @@ test("When EditableItem is being saved, the saveErrorHandler prop function will 
 		});
 	};
 	const mockSaveErrorHandler = jest.fn();
+	const originalText = "test1";
 	
 	const item = ReactTestUtils.renderIntoDocument(<EditableItem 
-		saveChanges={mockSaveChanges} saveErrorHandler={mockSaveErrorHandler} text="testing123" />);
+		saveChanges={mockSaveChanges} saveErrorHandler={mockSaveErrorHandler} text={originalText} />);
 	
 	//Enter edit mode
 	const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EIEditButton");
@@ -167,7 +168,13 @@ test("When EditableItem is being saved, the saveErrorHandler prop function will 
 	//Sleeping is the best way I found to get around this
 	await sleep(100);
 	
+	const staticTextComp = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EIStaticText");
+	const saveButtonsNow =  ReactTestUtils.scryRenderedDOMComponentsWithClass(item, "EISaveButton");
+	
 	expect(mockSaveErrorHandler).toHaveBeenCalled();
+	
+	expect(staticTextComp.textContent).toEqual(originalText);
+	expect(saveButtonsNow.length).toBe(0);
 });
 
 

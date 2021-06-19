@@ -33,14 +33,15 @@ test("DatabaseSelection will load the database list, and pass it to the Selectab
 	expect(editableItemText.textContent).toEqual(testName);
 });
 
-test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method to database EditableItems", async () => {
+test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method to database EditableItems, but within a method that will throw if an empty object is returned", async () => {
 	
 	const testName = "testName";
 	const testID = 1;
 	const changedName = "testChange";
 	
 	const mockAPIAccessor = new MockAPIAccessor([
-		[ { id: testID, name: testName } ]
+		[ { id: testID, name: testName } ],
+		{}
 	]);
 	mockAPIAccessor.updateDatabaseName = jest.fn();
 	
@@ -63,7 +64,13 @@ test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method 
 	const saveButton = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelection, "EISaveButton");
 	ReactTestUtils.Simulate.click(saveButton);
 	
+	await sleep(100);
+	
+	const nowEIText = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelection, "EITextArea");
+	
 	expect(mockAPIAccessor.updateDatabaseName).toHaveBeenCalledWith(testID, changedName);
+	expect(nowEIText.textContent).toEqual(testName); //Not to have changed
+	
 });
 
 test("DatabaseSelection will render a single DatabaseLoadOptions component", () => {

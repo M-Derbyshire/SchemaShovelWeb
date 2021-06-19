@@ -29,8 +29,9 @@ class DatabaseSelection extends Component
 	{
 		const textLengthLimit = 100;
 		
-		const updateDatabaseName = (this.props.apiAccessor) ? 
-									this.props.apiAccessor.updateDatabaseName.bind(this.props.apiAccessor) :
+		const apiAccessor = this.props.apiAccessor;
+		const updateDatabaseName = (apiAccessor) ? 
+									apiAccessor.updateDatabaseName.bind(apiAccessor) :
 									() => {};
 		
 		return (
@@ -38,7 +39,10 @@ class DatabaseSelection extends Component
 				key={db.id}
 				text={db.name} 
 				textLengthLimit={textLengthLimit} 
-				saveChanges={async (newName) => await updateDatabaseName(db.id, newName)} 
+				saveChanges={async (newName) => { 
+					const result = await updateDatabaseName(db.id, newName);
+					if(Object.keys(result).length === 0) throw new Error("Unable to update database name.");
+				}} 
 				saveErrorHandler={() => {}}
 			/>
 		);
