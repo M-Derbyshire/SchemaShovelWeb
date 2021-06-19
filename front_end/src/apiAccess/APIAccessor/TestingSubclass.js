@@ -2,9 +2,9 @@ import APIAccessor from '../APIAccessor/APIAccessor';
 
 export default class TestingSubclass extends APIAccessor
 {
-	constructor(path)
+	constructor(path, mockErrorCallback)
 	{
-		super(path);
+		super(path, mockErrorCallback);
 	}
 	
 	addTestError(errorText)

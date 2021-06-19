@@ -1,5 +1,4 @@
 import APIAccessor from './APIAccessor';
-import TestingSubclass from './TestingSubclass';
 import fetchMock from "jest-fetch-mock";
 
 const base_url = "/testAPI";
@@ -9,10 +8,11 @@ beforeEach(() => {
 	fetchMock.resetMocks();
 });
 
+const mockErrorCallback = ()=>{};
 
 test("getDatabaseList() will access the database list from the correct URL, and return it", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	fetch.mockResponseOnce('[{ "id": 1, "name": "test1" }]');
 	
 	const result = await api.getDatabaseList();
@@ -25,7 +25,7 @@ test("getDatabaseList() will access the database list from the correct URL, and 
 
 test("getDatabaseList() will return an empty array if there were errors, and raise them", async () => {
 	
-	const api = new APIAccessor("/");
+	const api = new APIAccessor("/", mockErrorCallback);
 	fetch.mockResponses(
 		['[{ "id": 1, "name": "test1" }]', { status: 404 }],
 		['not valid JSON', { status: 200 }]
@@ -48,7 +48,7 @@ test("getDatabaseList() will return an empty array if there were errors, and rai
 
 test("getDatabaseList() will return an empty array, and raise an error, if the JSON was not an array", async () => {
 	
-	const api = new APIAccessor("/");
+	const api = new APIAccessor("/", mockErrorCallback);
 	fetch.mockResponseOnce('{ "id": 1, "name": "test1" }');
 	
 	const result = await api.getDatabaseList();
@@ -61,7 +61,7 @@ test("getDatabaseList() will return an empty array, and raise an error, if the J
 
 test("getDatabaseList() will use a JSONValidator to validate the returned JSON", async () => {
 	
-	const api = new APIAccessor("/");
+	const api = new APIAccessor("/", mockErrorCallback);
 	fetch.mockResponseOnce('[{ "notValidProp": "test1" }]');
 	
 	const result = await api.getDatabaseList();
@@ -77,7 +77,7 @@ test("getDatabaseList() will use a JSONValidator to validate the returned JSON",
 
 test("getDatabaseByID() will return the database object, from the right URL", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	const id = 1;
 	fetch.mockResponseOnce('{ "id": 1, "name": "test1", "schemas": [] }');
 	
@@ -90,7 +90,7 @@ test("getDatabaseByID() will return the database object, from the right URL", as
 
 test("getDatabaseByID() will return an empty object if there were errors, and raise them", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	fetch.mockResponses(
 		['{ "id": 1, "name": "test1", "schemas": [] }', { status: 404 }],
 		['not valid JSON'] 
@@ -111,7 +111,7 @@ test("getDatabaseByID() will return an empty object if there were errors, and ra
 
 test("getDatabaseByID() will return an empty object, and raise an error, if the returned JSON was an array", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	fetch.mockResponseOnce('[{ "id": 1, "name": "test1", "schemas": [] }]');
 	
 	const result = await api.getDatabaseByID(0);
@@ -122,7 +122,7 @@ test("getDatabaseByID() will return an empty object, and raise an error, if the 
 
 test("getDatabaseByID() will use a JSONValidator to validate the returned JSON", async () => {
 	
-	const api = new APIAccessor("/");
+	const api = new APIAccessor("/", mockErrorCallback);
 	fetch.mockResponseOnce('{ "notValidProp": "test1" }');
 	
 	const result = await api.getDatabaseByID(0);
@@ -137,7 +137,7 @@ test("getDatabaseByID() will use a JSONValidator to validate the returned JSON",
 
 test("createDatabase() will return a new DB object, after having sent the correct data to the correct path", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	const name = "test1";
 	
 	fetch.mockResponseOnce(`{ "id": 1, "name": "${name}", "schemas": [] }`);
@@ -158,7 +158,7 @@ test("createDatabase() will return a new DB object, after having sent the correc
 
 test("createDatabase() will use a JSONValidator, and raise an error (returning an empty object), if the passed in JSON was invalid", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	fetch.mockResponseOnce(`{ "id": 1, "name": "test", "schemas": [] }`); //correct, so won't cause an error
 	
 	const newDB = `{ "name": "badTest" }`; //No schemas array
@@ -170,7 +170,7 @@ test("createDatabase() will use a JSONValidator, and raise an error (returning a
 
 test("createDatabase() will return an empty object, and raise an error, if the result JSON was an array", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	fetch.mockResponseOnce('[{ "id": 1, "name": "test", "schemas": [] }]');
 	
 	const newDB = `{ "name": "${name}", "schemas": [] }`;
@@ -182,7 +182,7 @@ test("createDatabase() will return an empty object, and raise an error, if the r
 
 test("createDatabase() will return an empty object, and raise errors, if there were any", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	fetch.mockResponses(
 		['{ "id": 1, "name": "test", "schemas": [] }', { status: 404 }],
 		['not valid JSON'] 
@@ -204,7 +204,7 @@ test("createDatabase() will return an empty object, and raise errors, if there w
 
 test("createDatabase() will use a JSONValidator to validate the returned JSON", async () => {
 	
-	const api = new APIAccessor("/");
+	const api = new APIAccessor("/", mockErrorCallback);
 	fetch.mockResponseOnce('{ "notValidProp": "test1" }');
 	
 	const newDB = `{ "name": "${name}", "schemas": [] }`;
@@ -221,7 +221,7 @@ test("createDatabase() will use a JSONValidator to validate the returned JSON", 
 
 test("updateDatabaseName() will return the new DB object, after having sent the correct data to the correct path", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	const newName = "testChange";
 	const dbID = 1
 	
@@ -243,7 +243,7 @@ test("updateDatabaseName() will return the new DB object, after having sent the 
 
 test("updateDatabaseName() will return an empty object, and raise an error, if the given name was not a string", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	fetch.mockResponseOnce('{ "id": 1, "name": "test", "schemas": [] }');
 	
 	const result = await api.updateDatabaseName(0, true);
@@ -254,7 +254,7 @@ test("updateDatabaseName() will return an empty object, and raise an error, if t
 
 test("updateDatabaseName() will return an empty object, and raise an error, if the result JSON was an array", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	fetch.mockResponseOnce('[{ "id": 1, "name": "test", "schemas": [] }]');
 	
 	const result = await api.updateDatabaseName(0, "test");
@@ -265,7 +265,7 @@ test("updateDatabaseName() will return an empty object, and raise an error, if t
 
 test("updateDatabaseName() will return an empty object, and raise errors, if there were any", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	fetch.mockResponses(
 		['{ "id": 1, "name": "test", "schemas": [] }', { status: 404 }],
 		['not valid JSON'] 
@@ -286,7 +286,7 @@ test("updateDatabaseName() will return an empty object, and raise errors, if the
 
 test("updateDatabaseName() will use a JSONValidator to validate the returned JSON", async () => {
 	
-	const api = new APIAccessor("/");
+	const api = new APIAccessor("/", mockErrorCallback);
 	fetch.mockResponseOnce('{ "notValidProp": "test1" }');
 	
 	const result = await api.updateDatabaseName(0, "test");
@@ -299,7 +299,7 @@ test("updateDatabaseName() will use a JSONValidator to validate the returned JSO
 
 test("deleteDatabase() will return true if the database was successfully deleted", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	fetch.mockResponseOnce('', { status: 200 });
 	
 	expect(await api.deleteDatabase(0)).toBeTruthy();
@@ -307,7 +307,7 @@ test("deleteDatabase() will return true if the database was successfully deleted
 
 test("deleteDatabase() will return false, and raise an error, if there was an error", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	fetch.mockResponseOnce('', { status: 404 });
 	
 	expect(await api.deleteDatabase(0)).toBeFalsy();
@@ -316,7 +316,7 @@ test("deleteDatabase() will return false, and raise an error, if there was an er
 
 test("deleteDatabase() will call the API with the correct path", async () => {
 	
-	const api = new APIAccessor(base_url);
+	const api = new APIAccessor(base_url, mockErrorCallback);
 	const id = 1;
 	
 	fetch.mockResponseOnce('', { status: 200 });
