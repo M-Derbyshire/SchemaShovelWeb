@@ -1,0 +1,14 @@
+.ErrorMessage {
+	display: block;
+	width: fit-content;
+	padding: 1em;
+	margin: 0.5em;
+	color: rgb(105, 0, 0);
+	background-color: rgba(255, 0, 0, 0.582);
+	border: solid 2px rgb(146, 66, 66);
+	border-radius: 1em;
+}
+
+.ErrorMessage .ErrorMessagePrefix {
+	font-weight: bold;
+}
