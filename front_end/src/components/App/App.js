@@ -59,7 +59,9 @@ class App extends Component
 			//APIAccessor will not contain the error once it's been retrieved
 			while(apiAccessor.hasErrors())
 			{
-				newErrors.push(apiAccessor.getNextError())
+				const nextError = apiAccessor.getNextError();
+				console.error(nextError);
+				newErrors.push(nextError);
 			}
 		}
 		
