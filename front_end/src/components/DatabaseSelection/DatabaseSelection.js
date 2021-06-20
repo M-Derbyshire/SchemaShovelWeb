@@ -27,6 +27,23 @@ class DatabaseSelection extends Component
 		}
 	}
 	
+	async deleteDatabaseAndRemoveFromList(id)
+	{
+		try
+		{
+			await this.props.apiAccessor.deleteDatabase(id);
+			
+			this.setState({
+				selectedDatabaseIndex: -1,
+				databaseList: this.state.databaseList.filter((db) => db.id !== id)
+			});
+		}
+		catch(err)
+		{
+			//Error display handled by App
+		}
+	}
+	
 	databaseListMapper(db)
 	{
 		const textLengthLimit = 100;
@@ -80,6 +97,8 @@ class DatabaseSelection extends Component
 	render()
 	{
 		const selectedDatabaseIndex = (this.state.hasFailedToLoad) ? -1 : this.state.selectedDatabaseIndex;
+		const selectedDatabaseID = 
+			(selectedDatabaseIndex < 0) ? -1 : this.state.databaseList[selectedDatabaseIndex].id;
 		
 		return (
 			<div className="DatabaseSelection">
@@ -93,8 +112,9 @@ class DatabaseSelection extends Component
 				>
 					{this.state.databaseList.map(this.databaseListMapper.bind(this))}
 				</SelectableList>
-				<DatabaseListOptions loadSelectedDatabase={() => {}} 
-						selectedDatabaseIndex={selectedDatabaseIndex} />
+				<DatabaseListOptions 
+					deleteSelectedDatabase={async () => await this.deleteDatabaseAndRemoveFromList(selectedDatabaseID).bind(this)} 
+					selectedDatabaseID={selectedDatabaseID} />
 			</div>
 		);
 	}

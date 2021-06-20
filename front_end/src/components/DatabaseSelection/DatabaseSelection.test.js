@@ -33,7 +33,7 @@ test("DatabaseSelection will load the database list, and pass it to the Selectab
 	expect(editableItemText.textContent).toEqual(testName);
 });
 
-test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method to database EditableItems", async () => {
+test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method to EditableItems", async () => {
 	
 	const testName = "testName";
 	const testID = 1;
@@ -73,8 +73,34 @@ test("DatabaseSelection will render a single DatabaseListOptions component", () 
 	
 	const DatabaseListOptions = 
 		ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelection, "DatabaseListOptions");
-	
+		
 	expect(ReactTestUtils.isDOMComponent(DatabaseListOptions)).toBeTruthy();
+});
+
+test("DatabaseSelection will pass the deleteSelectedDatabase func to the DatabaseListOptions", async () => {
+	
+	const mockAPIAccessor = new MockAPIAccessor([
+		[ { id: 1, name: "testName" }, { id: 2, name: "testName" }, { id: 3, name: "testName" } ]
+	]);
+	mockAPIAccessor.deleteDatabase = jest.fn();
+	
+	const databaseSelection = ReactTestUtils.renderIntoDocument(<DatabaseSelection apiAccessor={mockAPIAccessor} />);
+	
+	//trigger didUpdate handler, that should then trigger the load of the database list
+	databaseSelection._forceDidUpdateHandlerForTests();
+	
+	//We're dealing with asynchronous methods, so let it load
+	await sleep(100);
+	
+	const dbLiItems = ReactTestUtils.scryRenderedDOMComponentsWithTag(databaseSelection, "li");
+	ReactTestUtils.Simulate.click(dbLiItems[1]);
+	
+	//This means id passed in should be 2
+	
+	const deleteButton = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelection, "deleteDatabaseButton");
+	ReactTestUtils.Simulate.click(deleteButton);
+	
+	expect(mockAPIAccessor.deleteDatabase).toHaveBeenCalledWith(2);
 });
 
 test("DatabaseSelection's SelectableList will be set to loading when there's no database data loaded.", () => {
