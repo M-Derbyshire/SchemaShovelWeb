@@ -4,21 +4,38 @@ import PropTypes from 'prop-types';
 
 class DatabaseListOptions extends Component
 {	
-	async _deleteSelectedDatabase()
+	constructor(props)
 	{
-		try
-		{
-			await this.props.deleteSelectedDatabase();
-		}
-		catch(err)
-		{
-			//Error display handled by App
-		}
+		super(props);
+		
+		this.state = {
+			isDeleting: false
+		};
+	}
+	
+	_deleteSelectedDatabase()
+	{
+		this.setState({
+			isDeleting: true
+		}, async () => {
+			try
+			{
+				await this.props.deleteSelectedDatabase();
+			}
+			catch(err)
+			{
+				//Error display handled by App
+			}
+			
+			this.setState({
+				isDeleting: false
+			})
+		});
 	}
 	
 	render()
 	{
-		const loadAndDeleteDisabled = (this.props.selectedDatabaseID < 0);
+		const loadAndDeleteDisabled = (this.props.selectedDatabaseID < 0 || this.state.isDeleting);
 		
 		return (
 			<div className="DatabaseListOptions">
@@ -30,11 +47,13 @@ class DatabaseListOptions extends Component
 				
 				<button className="deleteDatabaseButton" 
 						disabled={loadAndDeleteDisabled}
-						onClick={async () => await this._deleteSelectedDatabase()}>
-					Delete Database
+						onClick={() => this._deleteSelectedDatabase()}>
+					{(this.state.isDeleting) ? "Deleting..." : "Delete Database"}
 				</button>
 				
-				<button className="addNewDatabaseButton" onClick={() => {}}>
+				<button className="addNewDatabaseButton" 
+						onClick={() => {}}
+						disabled={this.state.isDeleting}>
 					Add New Database
 				</button>
 			</div>

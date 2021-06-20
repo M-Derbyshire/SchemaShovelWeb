@@ -113,7 +113,7 @@ class DatabaseSelection extends Component
 					{this.state.databaseList.map(this.databaseListMapper.bind(this))}
 				</SelectableList>
 				<DatabaseListOptions 
-					deleteSelectedDatabase={async () => await this.deleteDatabaseAndRemoveFromList(selectedDatabaseID).bind(this)} 
+					deleteSelectedDatabase={async () => await this.deleteDatabaseAndRemoveFromList.apply(this, [selectedDatabaseID])} 
 					selectedDatabaseID={selectedDatabaseID} />
 			</div>
 		);
