@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import './DatabaseLoadOptions.css';
+import './DatabaseListOptions.css';
 import PropTypes from 'prop-types';
 
-class DatabaseLoadOptions extends Component
+class DatabaseListOptions extends Component
 {
 	
 	
 	render()
 	{
 		return (
-			<div className="DatabaseLoadOptions">
+			<div className="DatabaseListOptions">
 				<button className="loadDatabaseButton" disabled={this.props.selectedDatabaseIndex < 0}
 					onClick={() => this.props.loadSelectedDatabase()}>
 				Load Database</button>
@@ -21,9 +21,9 @@ class DatabaseLoadOptions extends Component
 	}
 }
 
-DatabaseLoadOptions.propTypes = {
+DatabaseListOptions.propTypes = {
 	loadSelectedDatabase: PropTypes.func.isRequired,
 	selectedDatabaseIndex: PropTypes.number.isRequired,
 };
 
-export default DatabaseLoadOptions;
+export default DatabaseListOptions;

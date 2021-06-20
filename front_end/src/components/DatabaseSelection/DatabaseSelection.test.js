@@ -67,14 +67,14 @@ test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method 
 	
 });
 
-test("DatabaseSelection will render a single DatabaseLoadOptions component", () => {
+test("DatabaseSelection will render a single DatabaseListOptions component", () => {
 	
 	const databaseSelection = ReactTestUtils.renderIntoDocument(<DatabaseSelection />);
 	
-	const databaseLoadOptions = 
-		ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelection, "DatabaseLoadOptions");
+	const DatabaseListOptions = 
+		ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelection, "DatabaseListOptions");
 	
-	expect(ReactTestUtils.isDOMComponent(databaseLoadOptions)).toBeTruthy();
+	expect(ReactTestUtils.isDOMComponent(DatabaseListOptions)).toBeTruthy();
 });
 
 test("DatabaseSelection's SelectableList will be set to loading when there's no database data loaded.", () => {

@@ -3,7 +3,7 @@ import './DatabaseSelection.css'
 import PropTypes from 'prop-types';
 import SelectableList from '../SelectableList/SelectableList';
 import EditableItem from '../EditableItem/EditableItem';
-import DatabaseLoadOptions from '../DatabaseLoadOptions/DatabaseLoadOptions';
+import DatabaseListOptions from '../DatabaseListOptions/DatabaseListOptions';
 
 class DatabaseSelection extends Component
 {
@@ -93,7 +93,7 @@ class DatabaseSelection extends Component
 				>
 					{this.state.databaseList.map(this.databaseListMapper.bind(this))}
 				</SelectableList>
-				<DatabaseLoadOptions loadSelectedDatabase={() => {}} 
+				<DatabaseListOptions loadSelectedDatabase={() => {}} 
 						selectedDatabaseIndex={selectedDatabaseIndex} />
 			</div>
 		);
