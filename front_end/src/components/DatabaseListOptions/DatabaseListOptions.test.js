@@ -102,3 +102,28 @@ test("DatabaseListOptions will disable the create/load/delete buttons after pres
 	expect(createButton).not.toBeDisabled();
 	expect(loadButton).not.toBeDisabled();
 });
+
+test("DatabaseListOptions will re-enable its buttons after an exception is thrown during database deletion", async () => {
+	
+	const mockDeleteSelectedDatabase = jest.fn().mockImplementation(() => {
+		throw new Error('Test error');
+	});
+	
+	const options = ReactTestUtils.renderIntoDocument(
+		<DatabaseListOptions
+			deleteSelectedDatabase={mockDeleteSelectedDatabase}
+			selectedDatabaseID={1}/>
+	);
+	const deleteButton = ReactTestUtils.findRenderedDOMComponentWithClass(options, "deleteDatabaseButton");
+	const createButton = ReactTestUtils.findRenderedDOMComponentWithClass(options, "addNewDatabaseButton");
+	const loadButton = ReactTestUtils.findRenderedDOMComponentWithClass(options, "loadDatabaseButton");
+	
+	ReactTestUtils.Simulate.click(deleteButton);
+	
+	//We're dealing with asynchronous methods, so let it load
+	await sleep(100);
+	
+	expect(deleteButton).not.toBeDisabled();
+	expect(createButton).not.toBeDisabled();
+	expect(loadButton).not.toBeDisabled();
+});
