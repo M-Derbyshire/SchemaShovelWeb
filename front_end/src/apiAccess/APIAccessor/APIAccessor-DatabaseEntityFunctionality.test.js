@@ -23,14 +23,6 @@ test("getDatabaseList() will access the database list from the correct URL, and 
 	expect(result[0].name).toBe("test1");
 });
 
-test("getDatabaseList() will use a JSONValidator to validate the returned JSON", async () => {
-	
-	const api = new APIAccessor("/", mockErrorCallback);
-	fetch.mockResponseOnce('[{ "notValidProp": "test1" }]');
-	
-	await expect(async () => await api.getDatabaseList()).rejects.toThrow();
-});
-
 
 
 test("getDatabaseByID() will return the database object, from the right URL", async () => {
@@ -44,14 +36,6 @@ test("getDatabaseByID() will return the database object, from the right URL", as
 	expect(fetch).toHaveBeenCalledWith(base_url + "/databases/" + id, {});
 	expect(Array.isArray(result)).toBeFalsy();
 	expect(result.name).toBe("test1");
-});
-
-test("getDatabaseByID() will use a JSONValidator to validate the returned JSON", async () => {
-	
-	const api = new APIAccessor("/", mockErrorCallback);
-	fetch.mockResponseOnce('{ "notValidProp": "test1" }');
-	
-	await expect(async () => await api.getDatabaseByID(0)).rejects.toThrow();
 });
 
 
@@ -77,17 +61,6 @@ test("createDatabase() will return a new DB object, after having sent the correc
 		},
 		body: newDB
 	});
-});
-
-test("createDatabase() will use a JSONValidator to validate the returned JSON", async () => {
-	
-	const api = new APIAccessor("/", mockErrorCallback);
-	fetch.mockResponseOnce('{ "notValidProp": "test1" }');
-	
-	const newDB = `{ "name": "${name}", "schemas": [] }`;
-	await expect(async () => await api.createDatabase(newDB)).rejects.toThrow();
-	
-	expect(api.hasErrors()).toBeTruthy();
 });
 
 

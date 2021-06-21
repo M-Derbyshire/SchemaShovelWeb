@@ -165,7 +165,7 @@ test("createDatabase() will throw/raise errors, if there were any", async () => 
 	expect(mockErrorCallback).toHaveBeenCalled();
 });
 
-test("createDatabase() will use a JSONValidator, and throw/raise an error, if the passed in JSON was invalid", async () => {
+test("createDatabase() will throw/raise an error, if the passed in JSON was invalid", async () => {
 	
 	const api = new APIAccessor(base_url, mockErrorCallback);
 	fetch.mockResponseOnce(`{ "id": 1, "name": "test", "schemas": [] }`); //correct, so won't cause an error
@@ -230,16 +230,6 @@ test("updateDatabaseName() will throw/raise an error, if the result JSON was an 
 	
 	expect(api.hasErrors()).toBeTruthy();
 	expect(mockErrorCallback).toHaveBeenCalled();
-});
-
-test("updateDatabaseName() will use a JSONValidator to validate the returned JSON", async () => {
-	
-	const api = new APIAccessor("/", mockErrorCallback);
-	fetch.mockResponseOnce('{ "notValidProp": "test1" }');
-	
-	await expect(async () => await api.updateDatabaseName(0, "test")).rejects.toThrow();
-	
-	expect(api.hasErrors()).toBeTruthy();
 });
 
 test("updateDatabaseName() will not throw or call the error callback if there's no error", async () => {
@@ -344,17 +334,6 @@ test("updateEntityDescription() will throw/raise an error, if the result JSON wa
 	
 	const api = new APIAccessor(base_url, mockErrorCallback);
 	fetch.mockResponseOnce('[{ "id": 1, "description": "test" }]');
-	
-	await expect(async () => await api.updateEntityDescription(entityRouteName, 1, testNewDesc)).rejects.toThrow();
-	
-	expect(api.hasErrors()).toBeTruthy();
-	expect(mockErrorCallback).toHaveBeenCalled();
-});
-
-test("updateEntityDescription() will use a JSONValidator to validate the returned JSON", async () => {
-	
-	const api = new APIAccessor("/", mockErrorCallback);
-	fetch.mockResponseOnce('{ "notValidProp": "test1" }');
 	
 	await expect(async () => await api.updateEntityDescription(entityRouteName, 1, testNewDesc)).rejects.toThrow();
 	
