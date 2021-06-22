@@ -96,6 +96,8 @@ class DatabaseSelection extends Component
 	
 	componentDidMount()
 	{
+		//This is more useful for integration tests, 
+		//as in reality, the apiAccess probably hasn't been passed yet
 		this.startDatabaseListRetrieval();
 	}
 	
