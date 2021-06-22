@@ -64,7 +64,7 @@ class DatabaseSelection extends Component
 		);
 	}
 	
-	componentDidUpdate()
+	startDatabaseListRetrieval()
 	{
 		if(this.state.databaseList.length === 0 && this.props.apiAccessor && 
 			!this.state.hasFailedToLoad && !this.state.isLoadingList)
@@ -89,9 +89,14 @@ class DatabaseSelection extends Component
 		}
 	}
 	
-	_forceDidUpdateHandlerForTests()
+	componentDidUpdate()
 	{
-		this.componentDidUpdate();
+		this.startDatabaseListRetrieval();
+	}
+	
+	componentDidMount()
+	{
+		this.startDatabaseListRetrieval();
 	}
 	
 	render()
@@ -121,7 +126,8 @@ class DatabaseSelection extends Component
 }
 
 DatabaseSelection.propTypes = {
-	apiAccessor: PropTypes.object
+	apiAccessor: PropTypes.object,
+	forceDidUpdateHandlerForTests: PropTypes.func
 };
 
 export default DatabaseSelection;
