@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './DatabaseListOptions.css';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 class DatabaseListOptions extends Component
@@ -41,7 +42,7 @@ class DatabaseListOptions extends Component
 			<div className="DatabaseListOptions">
 				<button className="loadDatabaseButton" 
 						disabled={loadAndDeleteDisabled}
-						onClick={() => {}}>
+						onClick={() => this.props.history.push(`/view/${this.props.selectedDatabaseID}`)}>
 					Load Database
 				</button>
 				
@@ -52,7 +53,7 @@ class DatabaseListOptions extends Component
 				</button>
 				
 				<button className="addNewDatabaseButton" 
-						onClick={() => {}}
+						onClick={() => this.props.history.push("/create")}
 						disabled={this.state.isDeleting}>
 					Add New Database
 				</button>
@@ -63,7 +64,7 @@ class DatabaseListOptions extends Component
 
 DatabaseListOptions.propTypes = {
 	deleteSelectedDatabase: PropTypes.func.isRequired, //Should be async
-	selectedDatabaseID: PropTypes.number.isRequired, //Should be -1 if nothing selected
+	selectedDatabaseID: PropTypes.number.isRequired //Should be -1 if nothing selected
 };
 
-export default DatabaseListOptions;
+export default withRouter(DatabaseListOptions);

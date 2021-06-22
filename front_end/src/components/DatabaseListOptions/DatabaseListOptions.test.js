@@ -1,5 +1,6 @@
 import DatabaseListOptions from './DatabaseListOptions';
 import ReactTestUtils from 'react-dom/test-utils';
+import { MemoryRouter, Route } from 'react-router-dom';
 import sleep from '../testingHelpers/sleepFunc';
 
 const fakeDeletedSelectedDatabase = () => {}
@@ -7,9 +8,11 @@ const fakeDeletedSelectedDatabase = () => {}
 test("DatabaseListOptions will create buttons for loading, deleting and adding databases", () => {
 	
 	const options = ReactTestUtils.renderIntoDocument(
-		<DatabaseListOptions
-			deleteSelectedDatabase={fakeDeletedSelectedDatabase}
-			selectedDatabaseID={0}/>
+		<MemoryRouter>
+			<DatabaseListOptions
+				deleteSelectedDatabase={fakeDeletedSelectedDatabase}
+				selectedDatabaseID={0}/>
+		</MemoryRouter>
 	);
 	
 	const loadButtons = ReactTestUtils.scryRenderedDOMComponentsWithClass(options, "loadDatabaseButton");
@@ -24,25 +27,31 @@ test("DatabaseListOptions will create buttons for loading, deleting and adding d
 test("DatabaseListOptions will disable it's load and delete buttons, if selected ID is less than 0", () => {
 	
 	const options1 = ReactTestUtils.renderIntoDocument(
-		<DatabaseListOptions
-			deleteSelectedDatabase={fakeDeletedSelectedDatabase}
-			selectedDatabaseID={-1}/>
+		<MemoryRouter>
+			<DatabaseListOptions
+				deleteSelectedDatabase={fakeDeletedSelectedDatabase}
+				selectedDatabaseID={-1}/>
+		</MemoryRouter>
 	);
 	const loadButton1 = ReactTestUtils.findRenderedDOMComponentWithClass(options1, "loadDatabaseButton");
 	const deleteButton1 = ReactTestUtils.findRenderedDOMComponentWithClass(options1, "deleteDatabaseButton");
 	
 	const options2 = ReactTestUtils.renderIntoDocument(
-		<DatabaseListOptions
-			deleteSelectedDatabase={fakeDeletedSelectedDatabase}
-			selectedDatabaseID={-2}/>
+		<MemoryRouter>
+			<DatabaseListOptions
+				deleteSelectedDatabase={fakeDeletedSelectedDatabase}
+				selectedDatabaseID={-2}/>
+		</MemoryRouter>
 	);
 	const loadButton2 = ReactTestUtils.findRenderedDOMComponentWithClass(options2, "loadDatabaseButton");
 	const deleteButton2 = ReactTestUtils.findRenderedDOMComponentWithClass(options2, "deleteDatabaseButton");
 	
 	const options3 = ReactTestUtils.renderIntoDocument(
-		<DatabaseListOptions
-			deleteSelectedDatabase={fakeDeletedSelectedDatabase}
-			selectedDatabaseID={-52}/>
+		<MemoryRouter>
+			<DatabaseListOptions
+				deleteSelectedDatabase={fakeDeletedSelectedDatabase}
+				selectedDatabaseID={-52}/>
+		</MemoryRouter>
 	);
 	const loadButton3 = ReactTestUtils.findRenderedDOMComponentWithClass(options3, "loadDatabaseButton");
 	const deleteButton3 = ReactTestUtils.findRenderedDOMComponentWithClass(options3, "deleteDatabaseButton");
@@ -61,9 +70,11 @@ test("DatabaseListOptions will run the function passed as the deleteSelectedData
 	const mockDeleteSelectedDatabase = jest.fn();
 	
 	const options = ReactTestUtils.renderIntoDocument(
-		<DatabaseListOptions
-			deleteSelectedDatabase={mockDeleteSelectedDatabase}
-			selectedDatabaseID={1}/>
+		<MemoryRouter>
+			<DatabaseListOptions
+				deleteSelectedDatabase={mockDeleteSelectedDatabase}
+				selectedDatabaseID={1}/>
+		</MemoryRouter>
 	);
 	const deleteButton = ReactTestUtils.findRenderedDOMComponentWithClass(options, "deleteDatabaseButton");
 	
@@ -78,9 +89,11 @@ test("DatabaseListOptions will disable the create/load/delete buttons after pres
 	const mockDeleteSelectedDatabase = jest.fn();
 	
 	const options = ReactTestUtils.renderIntoDocument(
-		<DatabaseListOptions
-			deleteSelectedDatabase={mockDeleteSelectedDatabase}
-			selectedDatabaseID={1}/>
+		<MemoryRouter>
+			<DatabaseListOptions
+				deleteSelectedDatabase={mockDeleteSelectedDatabase}
+				selectedDatabaseID={1}/>
+		</MemoryRouter>
 	);
 	const deleteButton = ReactTestUtils.findRenderedDOMComponentWithClass(options, "deleteDatabaseButton");
 	const createButton = ReactTestUtils.findRenderedDOMComponentWithClass(options, "addNewDatabaseButton");
@@ -110,9 +123,11 @@ test("DatabaseListOptions will re-enable its buttons after an exception is throw
 	});
 	
 	const options = ReactTestUtils.renderIntoDocument(
-		<DatabaseListOptions
-			deleteSelectedDatabase={mockDeleteSelectedDatabase}
-			selectedDatabaseID={1}/>
+		<MemoryRouter>
+			<DatabaseListOptions
+				deleteSelectedDatabase={mockDeleteSelectedDatabase}
+				selectedDatabaseID={1}/>
+		</MemoryRouter>
 	);
 	const deleteButton = ReactTestUtils.findRenderedDOMComponentWithClass(options, "deleteDatabaseButton");
 	const createButton = ReactTestUtils.findRenderedDOMComponentWithClass(options, "addNewDatabaseButton");
@@ -126,4 +141,26 @@ test("DatabaseListOptions will re-enable its buttons after an exception is throw
 	expect(deleteButton).not.toBeDisabled();
 	expect(createButton).not.toBeDisabled();
 	expect(loadButton).not.toBeDisabled();
+});
+
+test("DatabaseListOptions will route to /create when the add database button is pressed", () => {
+	
+	let testHistory, testLocation;
+	const options = ReactTestUtils.renderIntoDocument(
+		<MemoryRouter>
+			<DatabaseListOptions deleteSelectedDatabase={()=>{}} selectedDatabaseID={1}/>
+			<Route path="*" render={({ history, location }) => {
+				testHistory = history;
+				testLocation = location;
+				return null;
+			}}/>
+		</MemoryRouter>
+	);
+	
+	expect(testLocation.pathname).not.toBe("/create");
+	
+	const createButton = ReactTestUtils.findRenderedDOMComponentWithClass(options, "addNewDatabaseButton");
+	ReactTestUtils.Simulate.click(createButton);
+	
+	expect(testLocation.pathname).toBe("/create");
 });

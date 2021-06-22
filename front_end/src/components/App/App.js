@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import APIAccessor from '../../apiAccess/APIAccessor/APIAccessor';
 import DatabaseSelection from '../DatabaseSelection/DatabaseSelection';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
@@ -99,16 +100,22 @@ class App extends Component
 	{
 		return (
 			<div className="App">
-				
-				<ErrorDisplay>
-					{this.state.errorList.map(this.errorMessageMapper.bind(this))}
-				</ErrorDisplay>
-				
-				<header>
-					<h1>SchemaShovel Web</h1>
-				</header>
-				
-				<DatabaseSelection apiAccessor={ this.state.apiAccessor } />
+				<BrowserRouter>
+					<ErrorDisplay>
+						{this.state.errorList.map(this.errorMessageMapper.bind(this))}
+					</ErrorDisplay>
+					
+					<header>
+						<h1>SchemaShovel Web</h1>
+					</header>
+					
+					<Switch>
+						<Route path="/">
+							<DatabaseSelection apiAccessor={ this.state.apiAccessor } />
+						</Route>
+					</Switch>
+					
+				</BrowserRouter>
 			</div>
 		);
 	}
