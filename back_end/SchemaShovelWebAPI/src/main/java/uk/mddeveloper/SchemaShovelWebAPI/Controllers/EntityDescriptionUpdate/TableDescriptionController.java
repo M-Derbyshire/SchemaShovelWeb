@@ -13,16 +13,18 @@ import uk.mddeveloper.SchemaShovelWebAPI.Repositories.TableRepository;
 
 @RestController
 @RequestMapping("/api/v1/tables")
-public class TableDescriptionController extends DescriptionUpdateSuperController<Table> {
+public class TableDescriptionController {
 	
 	@Autowired
 	TableRepository repo;
+	DescribableDescriptionUpdater<Table> descriptionUpdater = 
+			new DescribableDescriptionUpdater<Table>();
 	
 	@PatchMapping("/update_description/{id}")
 	DescriptionOnlyHelperModel updateDescription(@RequestBody DescriptionOnlyHelperModel newDescription, @PathVariable Long id) 
 			throws RecordNotFoundException, RuntimeException, Throwable
 	{	
-		return updateDescriptionUsingProvidedRepo(newDescription, id, repo);
+		return descriptionUpdater.updateDescriptionWithGivenRepo(newDescription, id, repo);
 	}
 	
 }
