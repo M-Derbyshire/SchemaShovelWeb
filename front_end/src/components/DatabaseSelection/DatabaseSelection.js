@@ -128,8 +128,7 @@ class DatabaseSelection extends Component
 }
 
 DatabaseSelection.propTypes = {
-	apiAccessor: PropTypes.object,
-	forceDidUpdateHandlerForTests: PropTypes.func
+	apiAccessor: PropTypes.object
 };
 
 export default DatabaseSelection;
