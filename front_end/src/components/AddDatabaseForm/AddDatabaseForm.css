@@ -1,0 +1,28 @@
+.AddDatabaseForm {
+	background-color: white;
+	border: solid 2px #666666;
+	padding: 1rem;
+	width: fit-content;
+	min-width: 60vw;
+	min-height: 60vh;
+}
+
+.AddDatabaseForm .infoText {
+	display: block;
+	text-align: center;
+	font-size: x-large;
+	font-weight: bold;
+	color: #666;
+}
+
+.AddDatabaseForm .databaseSchemaNameInput {
+	width: 100%;
+	box-sizing: border-box;
+	font-size: large;
+}
+
+
+.AddDatabaseForm .databaseSchemaSubmit, .AddDatabaseForm .databaseSchemaCancel {
+	font-size: large;
+	margin-right: 0.5em;
+}
