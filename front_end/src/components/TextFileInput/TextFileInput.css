@@ -1,0 +1,14 @@
+.TextFileInput
+{
+	width: 100%;
+	box-sizing: border-box;
+	margin: 1em auto;
+}
+
+.TextFileInput .TextFileTextArea {
+	width: 100%;
+	height: 15em;
+	box-sizing: border-box;
+	font-size: large;
+	resize: none;
+}
