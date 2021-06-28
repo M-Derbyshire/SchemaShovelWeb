@@ -58,15 +58,26 @@ class AddDatabaseForm extends Component
 						className="databaseSchemaNameInput" 
 						placeholder="Database Schema Name" 
 						value={this.state.dbName}
-						onChange={this.onDBNameChangeHandler.bind(this)} />
+						onChange={this.onDBNameChangeHandler.bind(this)}
+						disabled={!!this.props.disabled} />
 					
 					<TextFileInput 
 						onErrorHandler={this.props.onErrorHandler}
 						setFileText={this.setJSONText.bind(this)}
-						fileText={this.state.dbJSON} />
+						fileText={this.state.dbJSON}
+						disabled={!!this.props.disabled} />
 					
-					<input className="databaseSchemaSubmit" type="submit" value="Add Database Schema" />
-					<button className="databaseSchemaCancel" onClick={this.cancelHandler.bind(this)}>Cancel</button>
+					<input 
+						className="databaseSchemaSubmit" 
+						type="submit" 
+						value="Add Database Schema"
+						disabled={!!this.props.disabled} />
+					<button 
+						className="databaseSchemaCancel" 
+						onClick={this.cancelHandler.bind(this)}
+						disabled={!!this.props.disabled} >
+							Cancel
+					</button>
 				</form>
 			);
 		}
@@ -85,7 +96,8 @@ AddDatabaseForm.propTypes = {
 	
 	onErrorHandler: PropTypes.func.isRequired,
 	onCancelHandler: PropTypes.func.isRequired,
-	isLoading: PropTypes.bool
+	isLoading: PropTypes.bool,
+	disabled: PropTypes.bool
 };
 
 export default AddDatabaseForm;

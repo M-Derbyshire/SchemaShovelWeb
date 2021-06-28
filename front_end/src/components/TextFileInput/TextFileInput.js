@@ -36,13 +36,15 @@ class TextFileInput extends Component
 					className="TextFileTextArea"
 					placeholder="Schema JSON" 
 					onChange={this.textAreaOnChange.bind(this)} 
-					value={textAreaValue}>
+					value={textAreaValue}
+					disabled={!!this.props.disabled} >
 				</textarea>
 				
 				<input
 					type="file"
 					className="TextFileFileInput"
-					onChange={this.fileInputOnChange.bind(this)} />
+					onChange={this.fileInputOnChange.bind(this)}
+					disabled={!!this.props.disabled} />
 			</div>
 		);
 	}
@@ -51,7 +53,8 @@ class TextFileInput extends Component
 TextFileInput.propTypes = {
 	fileText: PropTypes.string,
 	setFileText: PropTypes.func.isRequired,
-	onErrorHandler: PropTypes.func.isRequired //Should be a function that takes the error text
+	onErrorHandler: PropTypes.func.isRequired, //Should be a function that takes the error text
+	disabled: PropTypes.bool
 };
 
 export default TextFileInput;
