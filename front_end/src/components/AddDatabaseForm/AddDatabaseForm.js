@@ -18,7 +18,7 @@ class AddDatabaseForm extends Component
 	onSubmitHandler(e)
 	{
 		e.preventDefault();
-		this.props.formOnSubmit();
+		this.props.formOnSubmit(this.state.dbName, this.state.dbJSON);
 	}
 	
 	cancelHandler(e)
@@ -59,23 +59,23 @@ class AddDatabaseForm extends Component
 						placeholder="Database Schema Name" 
 						value={this.state.dbName}
 						onChange={this.onDBNameChangeHandler.bind(this)}
-						disabled={!!this.props.disabled} />
+						disabled={this.props.disabled} />
 					
 					<TextFileInput 
 						onErrorHandler={this.props.onErrorHandler}
 						setFileText={this.setJSONText.bind(this)}
 						fileText={this.state.dbJSON}
-						disabled={!!this.props.disabled} />
+						disabled={this.props.disabled} />
 					
 					<input 
 						className="databaseSchemaSubmit" 
 						type="submit" 
 						value="Add Database Schema"
-						disabled={!!this.props.disabled} />
+						disabled={this.props.disabled} />
 					<button 
 						className="databaseSchemaCancel" 
 						onClick={this.cancelHandler.bind(this)}
-						disabled={!!this.props.disabled} >
+						disabled={this.props.disabled} >
 							Cancel
 					</button>
 				</form>
