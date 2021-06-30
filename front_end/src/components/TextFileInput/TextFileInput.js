@@ -12,23 +12,21 @@ class TextFileInput extends Component
 	fileInputOnChange(e)
 	{
 		const fileReader = new FileReader();
-		fileReader.onload = (fileReadEvent) => {
-			try
-			{
-				this.props.setFileText(fileReadEvent.target.result);
-			}
-			catch(err)
-			{
-				this.props.onErrorHandler(err.message);
-			}
-		};
+		fileReader.onload = (fileReadEvent) => this.props.setFileText(fileReadEvent.target.result);
 		
-		fileReader.readAsText(e.target.files[0]);
+		try
+		{
+			fileReader.readAsText(e.target.files[0]);
+		}
+		catch(err)
+		{
+			this.props.onErrorHandler(err.message);
+		}
 	}
 	
 	render()
 	{
-		const textAreaValue = (!!this.props.fileText) ? this.props.fileText : "";
+		const textAreaValue = (this.props.fileText) ? this.props.fileText : "";
 		
 		return (
 			<div className="TextFileInput">
@@ -37,14 +35,14 @@ class TextFileInput extends Component
 					placeholder="Schema JSON" 
 					onChange={this.textAreaOnChange.bind(this)} 
 					value={textAreaValue}
-					disabled={!!this.props.disabled} >
+					disabled={this.props.disabled} >
 				</textarea>
 				
 				<input
 					type="file"
 					className="TextFileFileInput"
 					onChange={this.fileInputOnChange.bind(this)}
-					disabled={!!this.props.disabled} />
+					disabled={this.props.disabled} />
 			</div>
 		);
 	}
