@@ -91,7 +91,7 @@ export default class DatabaseEntityAccessor
 				body: newDB
 			};
 			
-			[dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases", settings);
+			[dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases/", settings);
 		}
 		catch(duringCreationError)
 		{

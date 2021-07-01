@@ -53,7 +53,7 @@ test("createDatabase() will return a new DB object, after having sent the correc
 	const result = await api.createDatabase(newDB);
 	
 	expect(result.name).toBe(name);
-	expect(fetch).toHaveBeenCalledWith(base_url + "/databases", {
+	expect(fetch).toHaveBeenCalledWith(base_url + "/databases/", {
 		method: "POST",
 		headers: {
 			'Accept': 'application/json',
