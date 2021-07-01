@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import APIAccessor from '../../apiAccess/APIAccessor/APIAccessor';
 import DatabaseSelection from '../DatabaseSelection/DatabaseSelection';
+import DatabaseAddition from '../DatabaseAddition/DatabaseAddition';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import ErrorDisplay from '../ErrorDisplay/ErrorDisplay';
 
@@ -110,6 +111,13 @@ class App extends Component
 					</header>
 					
 					<Switch>
+						
+						<Route exact path="/create">
+							<DatabaseAddition 
+								apiAccessor= { this.state.apiAccessor }
+								onErrorHandler={this.onErrorHandler.bind(this)} />
+						</Route>
+						
 						<Route path="/">
 							<DatabaseSelection apiAccessor={ this.state.apiAccessor } />
 						</Route>
