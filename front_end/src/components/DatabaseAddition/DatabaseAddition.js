@@ -57,7 +57,8 @@ class DatabaseAddition extends Component
 					onErrorHandler={this.props.onErrorHandler} 
 					onCancelHandler={this.onCancelHandler.bind(this)} 
 					isLoading={isLoading}
-					disabled={isDisabled} />
+					disabled={isDisabled}
+					isSaving={this.state.isCreating} />
 			</div>
 		);
 	}

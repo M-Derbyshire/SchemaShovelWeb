@@ -143,3 +143,31 @@ test("AddDatabaseForm will display and set (onChanges) the database JSON test", 
 	ReactTestUtils.Simulate.change(textarea, { "target": { "value": "1" }});
 	expect(textarea.value).toBe("1");
 });
+
+test("AddDatabaseForm will set the add database schema button's text to 'Saving...' if isSaving prop is true", () => {
+	
+	const dbFormSavingTrue = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
+		formOnSubmit={fakeFormOnSubmit}
+		onErrorHandler={fakeOnErrorHandler}
+		onCancelHandler={fakeOnCancelHandler}
+		isSaving={true} />);
+	
+	const dbFormSavingFalse = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
+		formOnSubmit={fakeFormOnSubmit}
+		onErrorHandler={fakeOnErrorHandler}
+		onCancelHandler={fakeOnCancelHandler}
+		isSaving={false} />);
+	
+	const dbFormSavingUndefined = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
+		formOnSubmit={fakeFormOnSubmit}
+		onErrorHandler={fakeOnErrorHandler}
+		onCancelHandler={fakeOnCancelHandler} />);
+	
+	const submitButtonSavingTrue = ReactTestUtils.findRenderedDOMComponentWithClass(dbFormSavingTrue, "databaseSchemaSubmit");
+	const submitButtonSavingFalse = ReactTestUtils.findRenderedDOMComponentWithClass(dbFormSavingFalse, "databaseSchemaSubmit");
+	const submitButtonSavingUndefined = ReactTestUtils.findRenderedDOMComponentWithClass(dbFormSavingUndefined, "databaseSchemaSubmit");
+	
+	expect(submitButtonSavingTrue.value).toBe("Saving...");
+	expect(submitButtonSavingFalse.value).not.toBe("Saving...");
+	expect(submitButtonSavingUndefined.value).not.toBe("Saving...");
+});

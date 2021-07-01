@@ -70,7 +70,7 @@ class AddDatabaseForm extends Component
 					<input 
 						className="databaseSchemaSubmit" 
 						type="submit" 
-						value="Add Database Schema"
+						value={(this.props.isSaving) ? "Saving..." : "Add Database Schema"}
 						disabled={this.props.disabled} />
 					<button 
 						className="databaseSchemaCancel" 
@@ -97,7 +97,8 @@ AddDatabaseForm.propTypes = {
 	onErrorHandler: PropTypes.func.isRequired,
 	onCancelHandler: PropTypes.func.isRequired,
 	isLoading: PropTypes.bool,
-	disabled: PropTypes.bool
+	disabled: PropTypes.bool,
+	isSaving: PropTypes.bool
 };
 
 export default AddDatabaseForm;
