@@ -30,7 +30,7 @@ class DatabaseListOptions extends Component
 			
 			this.setState({
 				isDeleting: false
-			})
+			});
 		});
 	}
 	
