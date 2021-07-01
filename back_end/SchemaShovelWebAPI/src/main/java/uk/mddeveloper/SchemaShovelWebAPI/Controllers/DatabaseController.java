@@ -105,25 +105,38 @@ public class DatabaseController {
 		
 		try
 		{
-			newDatabase = databaseRepo.save(newDatabase);
+			//This goes over the schemas/tables multiple times,
+			//but this allows us to save on calls to the database.
+			
+			newDatabase = databaseRepo.saveAndFlush(newDatabase);
 			
 			
-			//Save the inner objects (there are multiple levels to this)
 			for(Schema schema : newDatabase.getSchemas())
 			{
 				schema.setDatabase(newDatabase);
-				schema = schemaRepo.save(schema);
-				
+			}
+			newDatabase.setSchemas(schemaRepo.saveAll(newDatabase.getSchemas()));
+			
+			
+			for(Schema schema : newDatabase.getSchemas())
+			{
 				for(Table table : schema.getTables())
 				{
 					table.setSchema(schema);
-					table = tableRepo.save(table);
-					
+				}
+				schema.setTables(tableRepo.saveAll(schema.getTables()));
+			}
+			
+			
+			for(Schema schema : newDatabase.getSchemas())
+			{
+				for(Table table : schema.getTables())
+				{
 					for(Column column : table.getColumns())
 					{
 						column.setTable(table);
-						columnRepo.save(column);
 					}
+					columnRepo.saveAll(table.getColumns());
 				}
 			}
 			
@@ -156,7 +169,7 @@ public class DatabaseController {
 			database = databaseRepo.findById(id).orElseThrow(() -> new RecordNotFoundException());
 			database.setName(newDatabase.getName());
 			
-			database = databaseRepo.save(database);
+			database = databaseRepo.saveAndFlush(database);
 		}
 		catch(RecordNotFoundException e)
 		{
