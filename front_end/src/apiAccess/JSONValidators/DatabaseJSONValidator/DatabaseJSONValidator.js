@@ -56,7 +56,7 @@ export default class DatabaseJSONValidator extends JSONValidator
 	{
 		const validProperties = [
 			{ name: "name", type: "string" },
-			{ name: "description", type: "string" },
+			{ name: "description", type: "string", canBeEmptyString: true },
 			{ name: "tables", type: "array" }
 		];
 		
@@ -74,7 +74,7 @@ export default class DatabaseJSONValidator extends JSONValidator
 	{
 		const validProperties = [
 			{ name: "name", type: "string" },
-			{ name: "description", type: "string" },
+			{ name: "description", type: "string", canBeEmptyString: true },
 			{ name: "columns", type: "array" }
 		];
 		
@@ -92,7 +92,7 @@ export default class DatabaseJSONValidator extends JSONValidator
 	{
 		const validProperties = [
 			{ name: "name", type: "string" },
-			{ name: "description", type: "string" },
+			{ name: "description", type: "string", canBeEmptyString: true },
 			{ name: "fkToTable", type: "string", optional: true }
 		];
 		

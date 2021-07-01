@@ -40,7 +40,7 @@ export default class JSONValidator
 	{
 		validProperties.forEach((prop) => {
 			const optional = (prop.hasOwnProperty("optional") && prop.optional);
-			this._validateProperty(item, itemIndex, itemName, prop.name, prop.type, optional);
+			this._validateProperty(item, itemIndex, itemName, prop.name, prop.type, optional, prop.canBeEmptyString);
 		});
 	}
 	
@@ -61,14 +61,18 @@ export default class JSONValidator
 	//itemName could be "schema"/"table"/"column"/etc
 	//propType for arrays is just "array"
 	//optional determines if the object doesn't have to have this property
-	_validateProperty(item, itemIndex, itemName, propName, propType, optional = false)
+	_validateProperty(item, itemIndex, itemName, propName, propType, optional = false, canBeEmptyString = false)
 	{
 		const SentenceStartItemName = this._getWordWithCapitalisedFirstLetter(itemName);
 		
-		if(item.hasOwnProperty(propName) && item[propName])
+		if(item.hasOwnProperty(propName) && (item[propName] || (canBeEmptyString && (typeof item[propName] === "string" || item[propName] instanceof String))))
 		{
 			if(!this._propertyIsOfType(item, propName, propType))
 				this._addError(`${SentenceStartItemName}'s ${propName} property at index ${itemIndex} is not a valid ${propType}.`);
+		}
+		else if(!canBeEmptyString && item[propName] === "")
+		{
+			this._addError(`${SentenceStartItemName} at index ${itemIndex} has an empty string as a ${propName} property.`);
 		}
 		else if(!optional)
 		{

@@ -6,6 +6,15 @@ import badTables from '../testHelpers/badTablesJSON';
 import badColumns from '../testHelpers/badColumnJSON';
 import columsForFkToTableTest from '../testHelpers/columsForFkToTableTest';
 
+import emptyNameJSON from '../testHelpers/emptyStringJSONs/emptyNameJSON';
+import emptyNameSchemJSON from '../testHelpers/emptyStringJSONs/emptyNameSchemJSON';
+import emptyNameTabJSON from '../testHelpers/emptyStringJSONs/emptyNameTabJSON';
+import emptyNameColJSON from '../testHelpers/emptyStringJSONs/emptyNameColJSON';
+import emptyFKColJSON from '../testHelpers/emptyStringJSONs/emptyFKColJSON';
+import emptyDescSchemJSON from '../testHelpers/emptyStringJSONs/emptyDescSchemJSON';
+import emptyDescTabJSON from '../testHelpers/emptyStringJSONs/emptyDescTabJSON';
+import emptyDescColJSON from '../testHelpers/emptyStringJSONs/emptyDescColJSON';
+
 
 test("Will return true from validateJSON if no errors", () => {
 	
@@ -130,5 +139,45 @@ test("Will not create an error if a column does/doesn't have an fkToTable proper
 	const validColumnsSchema = columsForFkToTableTest;
 	
 	validator.validateJSON(validColumnsSchema);
+	expect(validator.hasErrors()).toBeFalsy();
+});
+
+
+
+
+test("Will allow empty strings for descriptions, but not for fkToTable or names", () => {
+	
+	const validator = new DatabaseJSONValidator();
+	const clearAllErrors = () => {
+		while(validator.hasErrors())
+		{
+			validator.getNextError();
+		}
+	};
+	
+	validator.validateJSON(emptyNameJSON);
+	expect(validator.hasErrors()).toBeTruthy();
+	clearAllErrors();
+	validator.validateJSON(emptyNameSchemJSON);
+	expect(validator.hasErrors()).toBeTruthy();
+	clearAllErrors();
+	validator.validateJSON(emptyNameTabJSON);
+	expect(validator.hasErrors()).toBeTruthy();
+	clearAllErrors();
+	validator.validateJSON(emptyNameColJSON);
+	expect(validator.hasErrors()).toBeTruthy();
+	clearAllErrors();
+	
+	validator.validateJSON(emptyFKColJSON);
+	expect(validator.hasErrors()).toBeTruthy();
+	clearAllErrors();
+	
+	validator.validateJSON(emptyDescSchemJSON);
+	expect(validator.hasErrors()).toBeFalsy();
+	clearAllErrors();
+	validator.validateJSON(emptyDescTabJSON);
+	expect(validator.hasErrors()).toBeFalsy();
+	clearAllErrors();
+	validator.validateJSON(emptyDescColJSON);
 	expect(validator.hasErrors()).toBeFalsy();
 });
