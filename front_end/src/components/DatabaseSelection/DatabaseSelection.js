@@ -7,6 +7,11 @@ import DatabaseListOptions from '../DatabaseListOptions/DatabaseListOptions';
 
 class DatabaseSelection extends Component
 {
+	//Used if the user leaves changes route, but a promise is still unresolved.
+	//The promise will try to setState an unmounted component, so this can stop it.
+	//This can't be held in state, as it won't get set in componentWillUnount
+	_isMounted: boolean = false;
+	
 	constructor(props)
 	{
 		super(props);
@@ -71,12 +76,12 @@ class DatabaseSelection extends Component
 		{
 			this.props.apiAccessor.getDatabaseList()
 				.then((list) => {
-					this.setState({
+					if(this._isMounted) this.setState({
 						databaseList: list,
 						isLoadingList: false
 					});
 				}).catch((err) => {
-					this.setState({
+					if(this._isMounted) this.setState({
 						hasFailedToLoad: true,
 						isLoadingList: false
 					});
@@ -99,6 +104,12 @@ class DatabaseSelection extends Component
 		//This is more useful for integration tests, 
 		//as in reality, the apiAccess probably hasn't been passed yet
 		this.startDatabaseListRetrieval();
+		this._isMounted = true;
+	}
+	
+	componentWillUnmount()
+	{
+		this._isMounted = false;
 	}
 	
 	render()
