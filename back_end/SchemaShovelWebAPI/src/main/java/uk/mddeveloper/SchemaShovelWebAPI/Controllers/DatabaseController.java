@@ -45,7 +45,7 @@ public class DatabaseController {
 	
 	//Retrieval methods
 	
-	@GetMapping("/")
+	@GetMapping("")
 	List<DatabaseNameIdProjection> getAll() throws InternalServerErrorException
 	{
 		List<DatabaseNameIdProjection> results;
@@ -98,7 +98,7 @@ public class DatabaseController {
 	
 	//Create/update methods
 	
-	@PostMapping("/")
+	@PostMapping("")
 	Database create(@RequestBody Database newDatabase) 
 			throws UnprocessableEntityException, InternalServerErrorException
 	{

@@ -17,7 +17,7 @@ test("getDatabaseList() will access the database list from the correct URL, and 
 	
 	const result = await api.getDatabaseList();
 	
-	expect(fetch).toHaveBeenCalledWith(base_url + "/databases/", {});
+	expect(fetch).toHaveBeenCalledWith(base_url + "/databases", {});
 	
 	expect(result[0].id).toBe(1);
 	expect(result[0].name).toBe("test1");
@@ -53,7 +53,7 @@ test("createDatabase() will return a new DB object, after having sent the correc
 	const result = await api.createDatabase(newDB);
 	
 	expect(result.name).toBe(name);
-	expect(fetch).toHaveBeenCalledWith(base_url + "/databases/", {
+	expect(fetch).toHaveBeenCalledWith(base_url + "/databases", {
 		method: "POST",
 		headers: {
 			'Accept': 'application/json',

@@ -32,7 +32,7 @@ export default class DatabaseEntityAccessor
 	{
 		try
 		{
-			const [dbListText, dbList] = await this._getJSONFromAPI(this._baseURL + "/databases/");
+			const [dbListText, dbList] = await this._getJSONFromAPI(this._baseURL + "/databases");
 			
 			this._validateIDAndNameJSON(dbListText);
 			
@@ -91,7 +91,7 @@ export default class DatabaseEntityAccessor
 				body: newDB
 			};
 			
-			[dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases/", settings);
+			[dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases", settings);
 		}
 		catch(duringCreationError)
 		{
