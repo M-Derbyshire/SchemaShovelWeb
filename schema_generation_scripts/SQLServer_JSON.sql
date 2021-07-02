@@ -93,7 +93,7 @@ STUFF((
 	ORDER BY s.id
 	FOR XML PATH('')
 ), 1, 1, '') + 
-']';
+']' AS Generated_JSON;
 
 
 
