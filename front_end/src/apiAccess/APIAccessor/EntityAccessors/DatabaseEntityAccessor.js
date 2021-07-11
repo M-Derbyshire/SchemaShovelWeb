@@ -188,7 +188,11 @@ export default class DatabaseEntityAccessor
 	{
 		if(!validator.validateJSON(jsonText))
 		{
-			throw new Error(validator.getNextError());
+			const firstError = validator.getNextError();
+			
+			while(validator.hasErrors()) validator.getNextError();
+			
+			throw new Error(firstError);
 		}
 	}
 }

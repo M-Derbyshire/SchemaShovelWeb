@@ -61,7 +61,11 @@ export default class DescribableEntityAccessor
 	{
 		if(!this._validator.validateJSON(jsonText))
 		{
-			throw new Error(this._validator.getNextError());
+			const firstError = this._validator.getNextError();
+			
+			while(this._validator.hasErrors()) this._validator.getNextError();
+			
+			throw new Error(firstError);
 		}
 	}
 }
