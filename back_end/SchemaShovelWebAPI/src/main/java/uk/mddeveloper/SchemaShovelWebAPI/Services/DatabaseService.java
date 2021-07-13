@@ -167,7 +167,7 @@ public class DatabaseService {
 			}
 			else
 			{
-				throw new RecordNotFoundException("Error while deleting record: The database record does not exist.");
+				throw new RecordNotFoundException("The database record does not exist.");
 			}
 		}
 		catch(RuntimeException e)
