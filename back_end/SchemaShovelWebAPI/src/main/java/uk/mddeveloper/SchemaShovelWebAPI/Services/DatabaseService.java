@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -88,7 +89,7 @@ public class DatabaseService {
 	}
 	
 	
-	
+	@Transactional
 	public Database create(@RequestBody Database newDatabase) 
 			throws UnprocessableEntityException, InternalServerErrorException
 	{
@@ -129,7 +130,6 @@ public class DatabaseService {
 					columnRepo.saveAll(table.getColumns());
 				}
 			}
-			
 			
 			return newDatabase;	
 		}
