@@ -2,7 +2,6 @@ package uk.mddeveloper.SchemaShovelWebAPI.Services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,18 +25,20 @@ import uk.mddeveloper.SchemaShovelWebAPI.Repositories.Projections.DatabaseNameId
 @Service
 public class DatabaseService {
 	
-	@Autowired
 	DatabaseRepository databaseRepo;
-	
-	@Autowired
 	SchemaRepository schemaRepo;
-	
-	@Autowired
 	TableRepository tableRepo;
-	
-	@Autowired
 	ColumnRepository columnRepo;
 	
+	
+	public DatabaseService(DatabaseRepository databaseRepo, SchemaRepository schemaRepo, 
+			TableRepository tableRepo, ColumnRepository columnRepo)
+	{
+		this.databaseRepo = databaseRepo;
+		this.schemaRepo = schemaRepo;
+		this.tableRepo = tableRepo;
+		this.columnRepo = columnRepo;
+	}
 	
 	
 	public List<DatabaseNameIdProjection> getAll() throws InternalServerErrorException

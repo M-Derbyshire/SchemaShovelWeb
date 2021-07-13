@@ -2,8 +2,6 @@ package uk.mddeveloper.SchemaShovelWebAPI.Controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,14 +15,7 @@ import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.BadRequestExcept
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.InternalServerErrorException;
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.RecordNotFoundException;
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.UnprocessableEntityException;
-import uk.mddeveloper.SchemaShovelWebAPI.Models.Column;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Database;
-import uk.mddeveloper.SchemaShovelWebAPI.Models.Schema;
-import uk.mddeveloper.SchemaShovelWebAPI.Models.Table;
-import uk.mddeveloper.SchemaShovelWebAPI.Repositories.ColumnRepository;
-import uk.mddeveloper.SchemaShovelWebAPI.Repositories.DatabaseRepository;
-import uk.mddeveloper.SchemaShovelWebAPI.Repositories.SchemaRepository;
-import uk.mddeveloper.SchemaShovelWebAPI.Repositories.TableRepository;
 import uk.mddeveloper.SchemaShovelWebAPI.Repositories.Projections.DatabaseNameIdProjection;
 import uk.mddeveloper.SchemaShovelWebAPI.Services.DatabaseService;
 
@@ -32,8 +23,12 @@ import uk.mddeveloper.SchemaShovelWebAPI.Services.DatabaseService;
 @RequestMapping("/api/v1/databases")
 public class DatabaseController {
 	
-	@Autowired
 	DatabaseService databaseService;
+	
+	public DatabaseController(DatabaseService databaseService)
+	{
+		this.databaseService = databaseService;
+	}
 	
 	//Retrieval methods
 	

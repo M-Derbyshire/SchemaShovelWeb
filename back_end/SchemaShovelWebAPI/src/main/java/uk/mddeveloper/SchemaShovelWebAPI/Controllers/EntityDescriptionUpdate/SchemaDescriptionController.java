@@ -1,6 +1,5 @@
 package uk.mddeveloper.SchemaShovelWebAPI.Controllers.EntityDescriptionUpdate;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,11 +14,15 @@ import uk.mddeveloper.SchemaShovelWebAPI.Repositories.SchemaRepository;
 @RequestMapping("/api/v1/schemas")
 public class SchemaDescriptionController {
 	
-	@Autowired
 	SchemaRepository repo;
-	
-	@Autowired
 	DescribableDescriptionUpdater<Schema> descriptionUpdater;
+	
+	public SchemaDescriptionController(SchemaRepository repo, 
+			DescribableDescriptionUpdater<Schema> descriptionUpdater)
+	{
+		this.repo = repo;
+		this.descriptionUpdater = descriptionUpdater;
+	}
 
 	
 	@PatchMapping("/update_description/{id}")
