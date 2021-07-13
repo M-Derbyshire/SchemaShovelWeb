@@ -2,18 +2,20 @@ package uk.mddeveloper.SchemaShovelWebAPI.Controllers.EntityDescriptionUpdate;
 
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Component;
 
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.InternalServerErrorException;
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.RecordNotFoundException;
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.UnprocessableEntityException;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.IDescribable;
 
+@Component
 public class DescribableDescriptionUpdater<T extends IDescribable> {
 
 
 	//Initially the repo was being set on the class, but as it's autowired in the
 	//controllers, this became more complicated then it needed to be (even in their
-	//constructors, the repo was still null). So just passinf here.
+	//constructors, the repo was still null). So just passing here.
 	DescriptionOnlyHelperModel updateDescriptionWithGivenRepo(
 			DescriptionOnlyHelperModel newDescription, 
 			Long id,

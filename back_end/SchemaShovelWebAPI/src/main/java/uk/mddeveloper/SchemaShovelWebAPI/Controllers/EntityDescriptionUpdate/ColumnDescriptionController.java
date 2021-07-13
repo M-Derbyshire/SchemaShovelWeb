@@ -17,8 +17,9 @@ public class ColumnDescriptionController {
 	
 	@Autowired
 	ColumnRepository repo;
-	DescribableDescriptionUpdater<Column> descriptionUpdater = 
-			new DescribableDescriptionUpdater<Column>();
+	
+	@Autowired
+	DescribableDescriptionUpdater<Column> descriptionUpdater;
 	
 	@PatchMapping("/update_description/{id}")
 	DescriptionOnlyHelperModel updateDescription(@RequestBody DescriptionOnlyHelperModel newDescription, @PathVariable Long id) 

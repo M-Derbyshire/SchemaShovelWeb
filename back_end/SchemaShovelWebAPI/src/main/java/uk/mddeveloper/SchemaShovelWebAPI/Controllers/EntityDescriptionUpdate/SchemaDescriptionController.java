@@ -17,8 +17,9 @@ public class SchemaDescriptionController {
 	
 	@Autowired
 	SchemaRepository repo;
-	DescribableDescriptionUpdater<Schema> descriptionUpdater = 
-			new DescribableDescriptionUpdater<Schema>();
+	
+	@Autowired
+	DescribableDescriptionUpdater<Schema> descriptionUpdater;
 
 	
 	@PatchMapping("/update_description/{id}")

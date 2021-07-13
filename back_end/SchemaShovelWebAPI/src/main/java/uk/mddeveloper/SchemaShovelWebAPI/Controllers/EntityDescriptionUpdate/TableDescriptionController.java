@@ -17,8 +17,9 @@ public class TableDescriptionController {
 	
 	@Autowired
 	TableRepository repo;
-	DescribableDescriptionUpdater<Table> descriptionUpdater = 
-			new DescribableDescriptionUpdater<Table>();
+	
+	@Autowired
+	DescribableDescriptionUpdater<Table> descriptionUpdater;
 	
 	@PatchMapping("/update_description/{id}")
 	DescriptionOnlyHelperModel updateDescription(@RequestBody DescriptionOnlyHelperModel newDescription, @PathVariable Long id) 
