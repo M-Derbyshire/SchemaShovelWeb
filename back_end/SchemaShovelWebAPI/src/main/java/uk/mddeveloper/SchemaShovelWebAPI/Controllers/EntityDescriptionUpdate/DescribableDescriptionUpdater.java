@@ -31,7 +31,11 @@ public class DescribableDescriptionUpdater<T extends IDescribable> {
 		{
 			IDescribable entity = (IDescribable) repo.findById(id).orElseThrow(() -> new RecordNotFoundException());
 			
-			entity.setDescription(newDescription.getDescription());
+			String newDescString = newDescription.getDescription();
+			if(newDescString == null) 
+				throw new UnprocessableEntityException("The provided JSON did not contain a valid description property.");
+			
+			entity.setDescription(newDescString);
 			
 			entity = repo.save((T) entity);
 			
