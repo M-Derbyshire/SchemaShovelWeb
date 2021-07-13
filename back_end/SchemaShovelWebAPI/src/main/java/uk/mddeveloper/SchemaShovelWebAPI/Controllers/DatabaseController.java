@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.BadRequestException;
-import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.InternalServerErrorException;
-import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.RecordNotFoundException;
-import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.UnprocessableEntityException;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.BadRequestException;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.InternalServerErrorException;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.RecordNotFoundException;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.UnprocessableEntityException;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Database;
 import uk.mddeveloper.SchemaShovelWebAPI.Repositories.Projections.DatabaseNameIdProjection;
 import uk.mddeveloper.SchemaShovelWebAPI.Services.DatabaseService;

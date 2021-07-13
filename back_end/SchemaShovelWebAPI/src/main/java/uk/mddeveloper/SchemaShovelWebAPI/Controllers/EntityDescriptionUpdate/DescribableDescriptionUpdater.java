@@ -1,21 +1,25 @@
 package uk.mddeveloper.SchemaShovelWebAPI.Controllers.EntityDescriptionUpdate;
 
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
-import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.InternalServerErrorException;
-import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.RecordNotFoundException;
-import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.UnprocessableEntityException;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.HttpStatusExceptionFactory;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.InternalServerErrorException;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.RecordNotFoundException;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.UnprocessableEntityException;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.IDescribable;
 
 @Component
 public class DescribableDescriptionUpdater<T extends IDescribable> {
-
-
-	//Initially the repo was being set on the class, but as it's autowired in the
-	//controllers, this became more complicated then it needed to be (even in their
-	//constructors, the repo was still null). So just passing here.
+	
+	HttpStatusExceptionFactory httpStatusExceptionFactory;
+	
+	public DescribableDescriptionUpdater(HttpStatusExceptionFactory exFactory)
+	{
+		this.httpStatusExceptionFactory = exFactory;
+	}
+	
+	
 	DescriptionOnlyHelperModel updateDescriptionWithGivenRepo(
 			DescriptionOnlyHelperModel newDescription, 
 			Long id,
@@ -34,21 +38,9 @@ public class DescribableDescriptionUpdater<T extends IDescribable> {
 			newDescription.setId(id);
 			return newDescription;
 		}
-		catch(RecordNotFoundException e)
-		{
-			throw e;
-		}
-		catch(InvalidDataAccessApiUsageException e)
-		{
-			throw new UnprocessableEntityException();
-		}
 		catch(RuntimeException e)
 		{
-			if(e instanceof UnprocessableEntityException || e instanceof RecordNotFoundException)
-			{
-				throw e;
-			}
-			throw new InternalServerErrorException();
+			throw httpStatusExceptionFactory.createHttpStatusException(e);
 		}
 	}
 	

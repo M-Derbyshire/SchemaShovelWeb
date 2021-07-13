@@ -2,16 +2,16 @@ package uk.mddeveloper.SchemaShovelWebAPI.Services;
 
 import java.util.List;
 
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.BadRequestException;
-import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.InternalServerErrorException;
-import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.RecordNotFoundException;
-import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.UnprocessableEntityException;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.BadRequestException;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.HttpStatusExceptionFactory;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.InternalServerErrorException;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.RecordNotFoundException;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.UnprocessableEntityException;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Column;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Database;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Schema;
@@ -30,14 +30,18 @@ public class DatabaseService {
 	TableRepository tableRepo;
 	ColumnRepository columnRepo;
 	
+	HttpStatusExceptionFactory httpStatusExceptionFactory;
 	
-	public DatabaseService(DatabaseRepository databaseRepo, SchemaRepository schemaRepo, 
-			TableRepository tableRepo, ColumnRepository columnRepo)
+	
+	public DatabaseService(HttpStatusExceptionFactory exFactory, DatabaseRepository databaseRepo, 
+			SchemaRepository schemaRepo, TableRepository tableRepo, ColumnRepository columnRepo)
 	{
 		this.databaseRepo = databaseRepo;
 		this.schemaRepo = schemaRepo;
 		this.tableRepo = tableRepo;
 		this.columnRepo = columnRepo;
+		
+		this.httpStatusExceptionFactory = exFactory;
 	}
 	
 	
@@ -68,22 +72,9 @@ public class DatabaseService {
 		{
 			result = databaseRepo.findById(id).orElseThrow(() -> new RecordNotFoundException());
 		}
-		catch(RecordNotFoundException e)
-		{
-			throw e;
-		}
-		catch(InvalidDataAccessApiUsageException e)
-		{
-			throw new UnprocessableEntityException();
-		}
 		catch(RuntimeException e)
 		{
-			if(e instanceof UnprocessableEntityException || e instanceof RecordNotFoundException)
-			{
-				throw e;
-			}
-			
-			throw new InternalServerErrorException();
+			throw httpStatusExceptionFactory.createHttpStatusException(e);
 		}
 		
 		return result;
@@ -134,17 +125,9 @@ public class DatabaseService {
 			
 			return newDatabase;	
 		}
-		catch(InvalidDataAccessApiUsageException e)
-		{
-			throw new UnprocessableEntityException();
-		}
 		catch(RuntimeException e)
 		{
-			if(e instanceof UnprocessableEntityException)
-			{
-				throw e;
-			}
-			throw new InternalServerErrorException();
+			throw httpStatusExceptionFactory.createHttpStatusException(e);
 		}
 	}
 	
@@ -162,21 +145,9 @@ public class DatabaseService {
 			
 			database = databaseRepo.saveAndFlush(database);
 		}
-		catch(RecordNotFoundException e)
-		{
-			throw e;
-		}
-		catch(InvalidDataAccessApiUsageException e)
-		{
-			throw new UnprocessableEntityException();
-		}
 		catch(RuntimeException e)
 		{
-			if(e instanceof UnprocessableEntityException || e instanceof RecordNotFoundException)
-			{
-				throw e;
-			}
-			throw new InternalServerErrorException();
+			throw httpStatusExceptionFactory.createHttpStatusException(e);
 		}
 		
 		return database;
@@ -196,24 +167,12 @@ public class DatabaseService {
 			}
 			else
 			{
-				throw new RecordNotFoundException();
+				throw new RecordNotFoundException("Error while deleting record: The database record does not exist.");
 			}
-		}
-		catch(RecordNotFoundException e)
-		{
-			throw e;
-		}
-		catch(InvalidDataAccessApiUsageException e)
-		{
-			throw new UnprocessableEntityException();
 		}
 		catch(RuntimeException e)
 		{
-			if(e instanceof UnprocessableEntityException || e instanceof RecordNotFoundException)
-			{
-				throw e;
-			}
-			throw new InternalServerErrorException();
+			throw httpStatusExceptionFactory.createHttpStatusException(e);
 		}
 	}
 }

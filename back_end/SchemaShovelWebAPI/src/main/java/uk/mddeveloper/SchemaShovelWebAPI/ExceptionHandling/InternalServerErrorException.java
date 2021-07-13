@@ -1,4 +1,4 @@
-package uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions;
+package uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Exceptions.RecordNotFoundException;
+import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.RecordNotFoundException;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Table;
 import uk.mddeveloper.SchemaShovelWebAPI.Repositories.TableRepository;
 
