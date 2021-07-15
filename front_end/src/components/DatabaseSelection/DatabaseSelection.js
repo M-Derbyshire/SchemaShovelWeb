@@ -17,10 +17,9 @@ class DatabaseSelection extends Component
 		super(props);
 		
 		this.state = {
-			databaseList: [],
+			databaseList: null, //Should be set to null when considered "not yet loaded"
 			selectedDatabaseIndex: -1,
-			hasFailedToLoad: false,
-			isLoadingList: false
+			hasFailedToLoad: false
 		};
 	}
 	
@@ -71,26 +70,19 @@ class DatabaseSelection extends Component
 	
 	startDatabaseListRetrieval()
 	{
-		if(this.state.databaseList.length === 0 && this.props.apiAccessor && 
-			!this.state.hasFailedToLoad && !this.state.isLoadingList)
+		if(this.state.databaseList === null && this.props.apiAccessor && !this.state.hasFailedToLoad)
 		{
 			this.props.apiAccessor.getDatabaseList()
 				.then((list) => {
 					if(this._isMounted) this.setState({
-						databaseList: list,
-						isLoadingList: false
+						databaseList: list
 					});
 				}).catch((err) => {
 					if(this._isMounted) this.setState({
 						hasFailedToLoad: true,
-						isLoadingList: false
+						databaseList: null
 					});
 				});
-			
-			//Stops the above being called twice
-			this.setState({
-				isLoadingList: true
-			});
 		}
 	}
 	
@@ -110,6 +102,7 @@ class DatabaseSelection extends Component
 	componentWillUnmount()
 	{
 		this._isMounted = false;
+		this._databaseList = null;
 	}
 	
 	render()
@@ -118,6 +111,9 @@ class DatabaseSelection extends Component
 		const selectedDatabaseID = 
 			(selectedDatabaseIndex < 0) ? -1 : this.state.databaseList[selectedDatabaseIndex].id;
 		
+		const listChildren = 
+			(!this.state.databaseList) ? "" : this.state.databaseList.map(this.databaseListMapper.bind(this));
+		
 		return (
 			<div className="DatabaseSelection">
 				<header>
@@ -125,10 +121,10 @@ class DatabaseSelection extends Component
 				</header>
 				<SelectableList selectedItemIndex={this.state.selectedDatabaseIndex} 
 					setSelectedItemIndex={this.setSelectedDatabaseIndex.bind(this)} 
-					isLoading={(this.state.databaseList.length === 0)}
+					isLoading={(!this.state.hasFailedToLoad && !this.state.databaseList)}
 					hasFailedToLoad={this.state.hasFailedToLoad}
 				>
-					{this.state.databaseList.map(this.databaseListMapper.bind(this))}
+					{listChildren}
 				</SelectableList>
 				<DatabaseListOptions 
 					deleteSelectedDatabase={async () => await this.deleteDatabaseAndRemoveFromList.apply(this, [selectedDatabaseID])} 
