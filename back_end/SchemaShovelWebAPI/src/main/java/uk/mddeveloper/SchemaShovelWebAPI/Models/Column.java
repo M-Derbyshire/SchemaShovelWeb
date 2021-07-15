@@ -1,17 +1,23 @@
 package uk.mddeveloper.SchemaShovelWebAPI.Models;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @javax.persistence.Table(name = "\"Column\"")
-public class Column implements IDescribable {
+public class Column implements IDescribable, INameable {
 	
 	public Column() {}
 	
@@ -28,8 +34,19 @@ public class Column implements IDescribable {
 	@JsonIgnore
 	private Table table;
 	
-	@javax.persistence.Column(name = "foreignKeyToSchemaTableName", nullable = true)
-	private String fkToTable;
+	
+	//Provide a JSON fkToTableId property
+	@javax.persistence.Column(name = "foreignKeyToTableID", nullable = true)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "foreign_key_to_table_id", nullable = true)
+	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
+    @JsonProperty("fkToTableId")
+	private Table fkToTable;
+	
+	
+	@Transient
+	private String fkToTableStr;
 	
 	
 	
@@ -67,13 +84,19 @@ public class Column implements IDescribable {
 		this.table = table;
 	}
 
-	public String getFkToTable() {
+	public String getFkToTableStr() {
+		return fkToTableStr;
+	}
+
+	public void setFkToTableStr(String fkToTableStr) {
+		this.fkToTableStr = fkToTableStr;
+	}
+	
+	public Table getFkToTable() {
 		return fkToTable;
 	}
 
-	public void setFkToTable(String fkToTable) {
+	public void setFkToTable(Table fkToTable) {
 		this.fkToTable = fkToTable;
 	}
-	
-	
 }

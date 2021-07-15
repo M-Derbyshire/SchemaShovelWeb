@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @javax.persistence.Table(name = "\"Table\"")
-public class Table implements IDescribable {
+public class Table implements IDescribable, INameable {
 	
 	public Table() {}
 	

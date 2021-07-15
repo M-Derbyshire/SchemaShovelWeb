@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 
 @Entity
 @javax.persistence.Table(name = "\"database\"")
-public class Database {
+public class Database implements INameable {
 	
 	public Database() {}
 	
