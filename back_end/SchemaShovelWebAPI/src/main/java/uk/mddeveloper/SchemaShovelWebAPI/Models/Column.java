@@ -38,7 +38,7 @@ public class Column implements IDescribable, INameable {
 	
 	
 	//Provide a JSON fkToTableId property
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@ManyToOne(optional = true)
     @JoinColumn(name = "foreign_key_to_table_id", nullable = true)
 	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
