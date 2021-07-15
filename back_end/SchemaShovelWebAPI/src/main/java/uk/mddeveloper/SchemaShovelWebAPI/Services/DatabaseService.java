@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import uk.mddeveloper.SchemaShovelWebAPI.Components.DatbaseEntityIdentifier.DatbaseEntityIdentifier;
 import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.BadRequestException;
 import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.HttpStatusExceptionFactory;
 import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.InternalServerErrorException;
@@ -31,9 +32,11 @@ public class DatabaseService {
 	ColumnRepository columnRepo;
 	
 	HttpStatusExceptionFactory httpStatusExceptionFactory;
+	DatbaseEntityIdentifier databaseEntityIdentifier;
 	
 	
-	public DatabaseService(HttpStatusExceptionFactory exFactory, DatabaseRepository databaseRepo, 
+	public DatabaseService(HttpStatusExceptionFactory exFactory, 
+			DatbaseEntityIdentifier databaseEntityIdentifier, DatabaseRepository databaseRepo, 
 			SchemaRepository schemaRepo, TableRepository tableRepo, ColumnRepository columnRepo)
 	{
 		this.databaseRepo = databaseRepo;
@@ -42,6 +45,7 @@ public class DatabaseService {
 		this.columnRepo = columnRepo;
 		
 		this.httpStatusExceptionFactory = exFactory;
+		this.databaseEntityIdentifier = databaseEntityIdentifier;
 	}
 	
 	
@@ -118,6 +122,13 @@ public class DatabaseService {
 					for(Column column : table.getColumns())
 					{
 						column.setTable(table);
+						
+						if(column.getFkToTableStr() != null)
+						{
+							column.setFkToTable(databaseEntityIdentifier.getTableAtPath(
+									newDatabase.getSchemas(), 
+									column.getFkToTableStr()));
+						}
 					}
 					columnRepo.saveAll(table.getColumns());
 				}

@@ -6,16 +6,18 @@ import SingleItemJSONValidator from '../SingleItemJSONValidator/SingleItemJSONVa
 export default class DatabaseJSONValidator extends JSONValidator
 {
 	//Should the validator make sure the database record has an ID property?
-	constructor(shouldHaveIDProperty = true)
+	constructor(isJSONFromAPI = true)
 	{
 		super();
+		
+		this.isJSONFromAPI = isJSONFromAPI;
 		
 		const validProperties = [
 			{ name: "name", type: "string" },
 			{ name: "schemas", type: "array" }
 		];
 		
-		if(shouldHaveIDProperty) validProperties.push({ name: "id", type: "number" });
+		if(isJSONFromAPI) validProperties.push({ name: "id", type: "number" });
 		
 		this._singleItemValidator = new SingleItemJSONValidator(validProperties);
 	}
@@ -92,9 +94,14 @@ export default class DatabaseJSONValidator extends JSONValidator
 	{
 		const validProperties = [
 			{ name: "name", type: "string" },
-			{ name: "description", type: "string", canBeEmptyString: true },
-			{ name: "fkToTable", type: "string", optional: true }
+			{ name: "description", type: "string", canBeEmptyString: true }
 		];
+		
+		if(this.isJSONFromAPI)
+			validProperties.push({ name: "fkToTableId", type: "number", optional: true });
+		else
+			validProperties.push({ name: "fkToTableStr", type: "string", optional: true });
+		
 		
 		const fkToTableRegex = /[^.]+\.[^.]+/;
 		
@@ -102,9 +109,10 @@ export default class DatabaseJSONValidator extends JSONValidator
 			
 			this._validateSingleItem(column, index, "column", validProperties);
 			
-			if(column.hasOwnProperty("fkToTable") && column.fkToTable && !fkToTableRegex.test(column.fkToTable))
+			if(!this.isJSONFromAPI && column.hasOwnProperty("fkToTableStr") && column.fkToTableStr 
+				&& !fkToTableRegex.test(column.fkToTableStr))
 			{
-				this._addError(`Column at index ${index} has a misshapen fkToTable property value: ${column.fkToTable}`);
+				this._addError(`Column at index ${index} has a misshapen fkToTable property value: ${column.fkToTableStr}`);
 			}
 		});
 	}

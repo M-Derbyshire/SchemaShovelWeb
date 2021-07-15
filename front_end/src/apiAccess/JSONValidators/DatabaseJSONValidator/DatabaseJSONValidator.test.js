@@ -3,7 +3,8 @@ import DatabaseJSONValidator from './DatabaseJSONValidator';
 import checkValidatorErrorCount from '../testHelpers/checkValidatorErrorCount';
 import badSchemas from '../testHelpers/badSchemasJSON';
 import badTables from '../testHelpers/badTablesJSON';
-import badColumns from '../testHelpers/badColumnJSON';
+import badUserColumns from '../testHelpers/badUserColumnJSON';
+import badApiColumns from '../testHelpers/badApiColumnJSON';
 import columsForFkToTableTest from '../testHelpers/columsForFkToTableTest';
 
 import emptyNameJSON from '../testHelpers/emptyStringJSONs/emptyNameJSON';
@@ -119,18 +120,22 @@ test("Will find all errors with tables", () => {
 	checkValidatorErrorCount(validator, errorCount);
 });
 
-// See '../testHelpers/badColumnJSON'
-test("Will find all errors with columns", () => {
+// See '../testHelpers/badUserColumnJSON' and '../testHelpers/badApiColumnJSON'
+test("Will find all errors with columns (expecting fkToTableStr field if from user, and fkToTableId if from API)", () => {
 	
-	const validator = new DatabaseJSONValidator();
+	const fromUserValidator = new DatabaseJSONValidator(false);
+	const fromApiValidator = new DatabaseJSONValidator();
 	
-	const invalidColumnsSchemas = badColumns.json;
-	const errorCount = badColumns.errorCount;
+	const invalidUserColumnsSchemas = badUserColumns.json;
+	const invalidApiColumnsSchemas = badApiColumns.json;
+	const userErrorCount = badUserColumns.errorCount;
+	const apiErrorCount = badApiColumns.errorCount;
 	
-	validator.validateJSON(invalidColumnsSchemas);
+	fromUserValidator.validateJSON(invalidUserColumnsSchemas);
+	fromApiValidator.validateJSON(invalidApiColumnsSchemas);
 	
-	checkValidatorErrorCount(validator, errorCount);
-	
+	checkValidatorErrorCount(fromUserValidator, userErrorCount);
+	checkValidatorErrorCount(fromApiValidator, apiErrorCount);
 });
 
 test("Will not create an error if a column does/doesn't have an fkToTable property, or if it is null or undefined", () => {
@@ -145,9 +150,9 @@ test("Will not create an error if a column does/doesn't have an fkToTable proper
 
 
 
-test("Will allow empty strings for descriptions, but not for fkToTable or names", () => {
+test("Will allow empty strings for descriptions, but not for fkToTableStr or names", () => {
 	
-	const validator = new DatabaseJSONValidator();
+	const validator = new DatabaseJSONValidator(false);
 	const clearAllErrors = () => {
 		while(validator.hasErrors())
 		{

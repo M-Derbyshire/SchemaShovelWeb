@@ -1,5 +1,5 @@
 export default {
-	errorCount: 10,
+	errorCount: 8,
 	json: JSON.stringify({
 		id: 1,
 		name: "test",
@@ -13,31 +13,25 @@ export default {
 					columns: [
 						{
 							//No name
-							fkToTable: "testTable.testColumn",
+							fkToTableId: 0,
 							description: "test"
 						},
 						{
 							//no description
 							name: "test",
-							fkToTable: "testTable.testColumn"
-						},
-						{
-							//badly formatted fkToTable
-							name: "test",
-							description: "test",
-							fkToTable: "columnNameWithoutTable"
+							fkToTableId: 0
 						},
 						{
 							//Incorrect types 1
 							name: true,
 							description: 2,
-							fkToTable: 1.5
+							fkToTableId: "test.test"
 						},
 						{
 							//Incorrect types 1
 							name: 1,
-							description: false,
-							fkToTable: {}
+							description: true,
+							fkToTableId: {}
 						}
 					]
 				}

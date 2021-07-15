@@ -12,7 +12,9 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
@@ -36,16 +38,17 @@ public class Column implements IDescribable, INameable {
 	
 	
 	//Provide a JSON fkToTableId property
-	@javax.persistence.Column(name = "foreignKeyToTableID", nullable = true)
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "foreign_key_to_table_id", nullable = true)
 	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
     @JsonProperty("fkToTableId")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Table fkToTable;
 	
 	
 	@Transient
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String fkToTableStr;
 	
 	
@@ -84,6 +87,7 @@ public class Column implements IDescribable, INameable {
 		this.table = table;
 	}
 
+	@JsonIgnore
 	public String getFkToTableStr() {
 		return fkToTableStr;
 	}

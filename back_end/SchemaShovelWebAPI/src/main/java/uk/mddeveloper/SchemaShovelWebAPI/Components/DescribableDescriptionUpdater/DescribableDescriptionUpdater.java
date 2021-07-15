@@ -1,4 +1,4 @@
-package uk.mddeveloper.SchemaShovelWebAPI.Controllers.EntityDescriptionUpdate;
+package uk.mddeveloper.SchemaShovelWebAPI.Components.DescribableDescriptionUpdater;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class DescribableDescriptionUpdater<T extends IDescribable> {
 	}
 	
 	
-	DescriptionOnlyHelperModel updateDescriptionWithGivenRepo(
+	public DescriptionOnlyHelperModel updateDescriptionWithGivenRepo(
 			DescriptionOnlyHelperModel newDescription, 
 			Long id,
 			JpaRepository<T, Long> repo

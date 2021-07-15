@@ -1,4 +1,4 @@
-package uk.mddeveloper.SchemaShovelWebAPI.Controllers.EntityDescriptionUpdate;
+package uk.mddeveloper.SchemaShovelWebAPI.Components.DescribableDescriptionUpdater;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

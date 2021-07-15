@@ -11,7 +11,7 @@ export default JSON.stringify({
 				columns: [
 					{
 						name: "col",
-						fkToTable: "",
+						fkToTableStr: "",
 						description: "test"
 					}
 				]

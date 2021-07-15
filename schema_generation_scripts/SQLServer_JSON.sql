@@ -49,7 +49,7 @@ SELECT
 	
 	-- Now add FK_to values for schema and table (if this is an FK).
 	IIF(referenced_table.name IS NOT NULL, 
-		'"fkToTable": "' + referenced_schema.name + '.' + referenced_table.name + '", ', '') + 
+		'"fkToTableStr": "' + referenced_schema.name + '.' + referenced_table.name + '", ', '') + 
 	
 	'"description": ""}' AS [JSON]
 INTO #columnJSON
