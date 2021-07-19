@@ -59,13 +59,15 @@ class AddDatabaseForm extends Component
 						placeholder="Database Schema Name" 
 						value={this.state.dbName}
 						onChange={this.onDBNameChangeHandler.bind(this)}
-						disabled={this.props.disabled} />
+						disabled={this.props.disabled}
+						required />
 					
 					<TextFileInput 
 						onErrorHandler={this.props.onErrorHandler}
 						setFileText={this.setJSONText.bind(this)}
 						fileText={this.state.dbJSON}
-						disabled={this.props.disabled} />
+						disabled={this.props.disabled}
+						required={true} />
 					
 					<input 
 						className="databaseSchemaSubmit" 

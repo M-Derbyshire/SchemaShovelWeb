@@ -35,7 +35,8 @@ class TextFileInput extends Component
 					placeholder="Schema JSON" 
 					onChange={this.textAreaOnChange.bind(this)} 
 					value={textAreaValue}
-					disabled={this.props.disabled} >
+					disabled={this.props.disabled}
+					required={this.props.required} >
 				</textarea>
 				
 				<input
@@ -52,7 +53,8 @@ TextFileInput.propTypes = {
 	fileText: PropTypes.string,
 	setFileText: PropTypes.func.isRequired,
 	onErrorHandler: PropTypes.func.isRequired, //Should be a function that takes the error text
-	disabled: PropTypes.bool
+	disabled: PropTypes.bool,
+	required: PropTypes.bool
 };
 
 export default TextFileInput;
