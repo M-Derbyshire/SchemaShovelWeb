@@ -43,6 +43,11 @@ class AddDatabaseForm extends Component
 	
 	render()
 	{
+		//This boolean shouldn't be needed, as the dbName and dbJSON inputs are marked as required.
+		//However, it is up to the browser to control that, so just making sure. (in case of future 
+		//dev mistake removing the required properties)
+		const disableSubmitButton = (this.props.disabled || !this.state.dbName || !this.state.dbJSON);
+		
 		let formContent;
 		
 		if(this.props.isLoading)
@@ -73,7 +78,7 @@ class AddDatabaseForm extends Component
 						className="databaseSchemaSubmit" 
 						type="submit" 
 						value={(this.props.isSaving) ? "Saving..." : "Add Database Schema"}
-						disabled={this.props.disabled} />
+						disabled={disableSubmitButton} />
 					<button 
 						className="databaseSchemaCancel" 
 						onClick={this.cancelHandler.bind(this)}

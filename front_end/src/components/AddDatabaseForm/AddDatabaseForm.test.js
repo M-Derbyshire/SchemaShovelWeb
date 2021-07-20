@@ -76,16 +76,6 @@ test("AddDatabaseForm fill disable its name input, and buttons, based on the dis
 	expect(nameInputDisabledFalse).not.toBeDisabled();
 	expect(nameInputDisabledTrue).toBeDisabled();
 	
-	const submitDisabledUndefined = 
-		ReactTestUtils.findRenderedDOMComponentWithClass(dbFormDisabledUndefined, "databaseSchemaSubmit");
-	const submitDisabledFalse = 
-		ReactTestUtils.findRenderedDOMComponentWithClass(dbFormDisabledFalse, "databaseSchemaSubmit");
-	const submitDisabledTrue = 
-		ReactTestUtils.findRenderedDOMComponentWithClass(dbFormDisabledTrue, "databaseSchemaSubmit");
-	expect(submitDisabledUndefined).not.toBeDisabled();
-	expect(submitDisabledFalse).not.toBeDisabled();
-	expect(submitDisabledTrue).toBeDisabled();
-	
 	const cancelDisabledUndefined = 
 		ReactTestUtils.findRenderedDOMComponentWithClass(dbFormDisabledUndefined, "databaseSchemaCancel");
 	const cancelDisabledFalse = 
@@ -95,6 +85,29 @@ test("AddDatabaseForm fill disable its name input, and buttons, based on the dis
 	expect(cancelDisabledUndefined).not.toBeDisabled();
 	expect(cancelDisabledFalse).not.toBeDisabled();
 	expect(cancelDisabledTrue).toBeDisabled();
+	
+	
+	//Submit will be disabled if the inputs are disabled, as per a test later in this file
+	ReactTestUtils.Simulate.change(nameInputDisabledUndefined, { target: { value: "test" } });
+	ReactTestUtils.Simulate.change(nameInputDisabledFalse, { target: { value: "test" } });
+	
+	const textAreaDisabledUndefined = 
+		ReactTestUtils.findRenderedDOMComponentWithTag(dbFormDisabledUndefined, "textarea");
+	const textAreaDisabledFalse = 
+		ReactTestUtils.findRenderedDOMComponentWithTag(dbFormDisabledFalse, "textarea");
+	
+	ReactTestUtils.Simulate.change(textAreaDisabledUndefined, { target: { value: "test" } });
+	ReactTestUtils.Simulate.change(textAreaDisabledFalse, { target: { value: "test" } });
+	
+	const submitDisabledUndefined = 
+		ReactTestUtils.findRenderedDOMComponentWithClass(dbFormDisabledUndefined, "databaseSchemaSubmit");
+	const submitDisabledFalse = 
+		ReactTestUtils.findRenderedDOMComponentWithClass(dbFormDisabledFalse, "databaseSchemaSubmit");
+	const submitDisabledTrue = 
+		ReactTestUtils.findRenderedDOMComponentWithClass(dbFormDisabledTrue, "databaseSchemaSubmit");
+	expect(submitDisabledUndefined).not.toBeDisabled();
+	expect(submitDisabledFalse).not.toBeDisabled();
+	expect(submitDisabledTrue).toBeDisabled();
 });
 
 
@@ -170,4 +183,27 @@ test("AddDatabaseForm will set the add database schema button's text to 'Saving.
 	expect(submitButtonSavingTrue.value).toBe("Saving...");
 	expect(submitButtonSavingFalse.value).not.toBe("Saving...");
 	expect(submitButtonSavingUndefined.value).not.toBe("Saving...");
+});
+
+test("AddDatabaseForm will disable it's submit button if inputfields are empty, then enable once both are populated", () => {
+	
+	const dbForm = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
+		formOnSubmit={fakeFormOnSubmit}
+		onErrorHandler={fakeOnErrorHandler}
+		onCancelHandler={fakeOnCancelHandler} />);
+	
+	const nameInput = ReactTestUtils.findRenderedDOMComponentWithClass(dbForm, "databaseSchemaNameInput");
+	const jsonInput = ReactTestUtils.findRenderedDOMComponentWithTag(dbForm, "textarea");
+	
+	const submitButton = ReactTestUtils.findRenderedDOMComponentWithClass(dbForm, "databaseSchemaSubmit");
+	
+	expect(submitButton).toBeDisabled();
+	
+	ReactTestUtils.Simulate.change(nameInput, { target: { value: "test" } });
+	
+	expect(submitButton).toBeDisabled();
+	
+	ReactTestUtils.Simulate.change(jsonInput, { target: { value: "test" } });
+	
+	expect(submitButton).not.toBeDisabled();
 });
