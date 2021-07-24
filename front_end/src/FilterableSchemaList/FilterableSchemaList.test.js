@@ -58,8 +58,8 @@ test("FilterableSchemaList getFilteredList will filter table results (case-insen
 	const expectedNoDesc = tableFilterData.expectedResultWithoutDescriptions;
 	const expectedWithDesc = tableFilterData.expectedResultWithDescriptions;
 	
-	const matchesNoDesc = filtList.getFilteredList("", "match", "").tables;
-	const matchesWithDesc = filtList.getFilteredList("", "match", "", true).tables;
+	const matchesNoDesc = filtList.getFilteredList("", "match", "").childEntities;
+	const matchesWithDesc = filtList.getFilteredList("", "match", "", true).childEntities;
 	
 	matchesNoDesc.forEach(matchTable => expect(expectedNoDesc.includes(matchTable.id)).toBeTruthy());
 	expect(matchesNoDesc.length).toBe(expectedNoDesc.length);
@@ -76,8 +76,8 @@ test("FilterableSchemaList getFilteredList will filter table results (case-insen
 	const expectedNoDesc = columnFilterData.expectedResultWithoutDescriptions;
 	const expectedWithDesc = columnFilterData.expectedResultWithDescriptions;
 	
-	const matchesNoDesc = filtList.getFilteredList("", "", "match").tables.columns;
-	const matchesWithDesc = filtList.getFilteredList("", "", "match", true).tables.columns;
+	const matchesNoDesc = filtList.getFilteredList("", "", "match").childEntities.childEntities;
+	const matchesWithDesc = filtList.getFilteredList("", "", "match", true).childEntities.childEntities;
 	
 	matchesNoDesc.forEach(matchColumn => expect(expectedNoDesc.includes(matchColumn.id)).toBeTruthy());
 	expect(matchesNoDesc.length).toBe(expectedNoDesc.length);
@@ -109,13 +109,31 @@ test("FilterableSchemaList getFilteredList will filter different entity results 
 		
 		entityTest(schema);
 		
-		schema.tables.forEach(table => {
+		schema.childEntities.forEach(table => {
 			entityTest(table);
-			table.columns.forEach(column => entityTest(column));
+			table.childEntities.forEach(column => entityTest(column));
 		});
 	});
 });
 
+
+test("FilterableSchemaList getFilteredList change 'tables' and 'columns' property names to 'childEntities' ", () => {
+	
+	const propertyName = "childEntities";
+	const filtList = new FilterableSchemaList(propertyAdditionData.fullList, "", "", "");
+	
+	const matches = filtList.getFilteredList("match", "match", "match");
+	
+	matches.forEach(schema => {
+		expect(schema).toHaveProperty(propertyName);
+		expect(schema).not.toHaveProperty("tables");
+		
+		schema[propertyName].forEach(table => {
+			expect(table).toHaveProperty(propertyName);
+			expect(table).not.toHaveProperty("columns");
+		});
+	});
+});
 
 
 test("FilterableSchemaList getFilteredList will add an isMatch property to all entities", () => {
@@ -127,9 +145,9 @@ test("FilterableSchemaList getFilteredList will add an isMatch property to all e
 	
 	matches.forEach(schema => {
 		expect(schema).toHaveProperty(propertyName);
-		schema.tables.forEach(table => {
+		schema.childEntities.forEach(table => {
 			expect(table).toHaveProperty(propertyName);
-			table.columns.forEach(column => expect(column).toHaveProperty(propertyName));
+			table.childEntities.forEach(column => expect(column).toHaveProperty(propertyName));
 		});
 	});
 });
@@ -161,12 +179,12 @@ test.each([
 		
 		expect(schema[propertyName]).toEqual(schemaColor);
 		
-		schema.tables.forEach(table => {
+		schema.childEntities.forEach(table => {
 			expect(table).toHaveProperty(propertyName);
 			
 			expect(table[propertyName]).toEqual(tableColor);
 			
-			table.columns.forEach(column => {
+			table.childEntities.forEach(column => {
 				expect(column).toHaveProperty(propertyName);
 				expect(column[propertyName]).toEqual(columnColor);
 			});
@@ -192,7 +210,7 @@ test("FilterableSchemaList getForeignKeysToTable will return an array to destruc
 		expect(fkToTableData.expectMatchSchemaIDs).includes(schema.id);
 		expect(schema.isMatch).toBeFalsy();
 		
-		schema.tables.forEach(table => {
+		schema.childEntities.forEach(table => {
 			expect(fkToTableData.expectMatchTableIDs).includes(table.id);
 			expect(table.isMatch).toBeTruthy();
 			returnedTableIDs.push(table.id);
