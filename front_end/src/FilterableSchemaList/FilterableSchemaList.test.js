@@ -10,23 +10,20 @@ import fkToTableData from './testingHelpers/fkToTableData';
 
 test.each([
 	[
-		["test1"],
 		"#FF0000",
 		"#00FF00",
 		"#0000FF"
 	],
 	[
-		["test2"],
 		"#FFFFFF",
 		"#000000",
 		"#AAAAAA"
 	],
-])("FilterableSchemaList constructor will set the full list and colors, and getters will return them", 
-	(fullList, schemaColor, tableColor, columnColor) => {
+])("FilterableSchemaList constructor will set the colors, and getters will return them", 
+	(schemaColor, tableColor, columnColor) => {
 	
-	const filtList = new FilterableSchemaList(fullList, schemaColor, tableColor, columnColor);
+	const filtList = new FilterableSchemaList([], schemaColor, tableColor, columnColor);
 	
-	expect(filtList.getFullList()).toEqual(fullList);
 	expect(filtList.schemaColor).toEqual(schemaColor);
 	expect(filtList.tableColor).toEqual(tableColor);
 	expect(filtList.columnColor).toEqual(columnColor);
@@ -117,12 +114,12 @@ test("FilterableSchemaList getFilteredList will filter different entity results 
 });
 
 
-test("FilterableSchemaList getFilteredList change 'tables' and 'columns' property names to 'childEntities' ", () => {
+test("FilterableSchemaList will change 'tables' and 'columns' property names to 'childEntities' ", () => {
 	
 	const propertyName = "childEntities";
 	const filtList = new FilterableSchemaList(propertyAdditionData.fullList, "", "", "");
 	
-	const matches = filtList.getFilteredList("match", "match", "match");
+	const matches = filtList.getFullList();
 	
 	matches.forEach(schema => {
 		expect(schema).toHaveProperty(propertyName);
@@ -136,12 +133,12 @@ test("FilterableSchemaList getFilteredList change 'tables' and 'columns' propert
 });
 
 
-test("FilterableSchemaList getFilteredList will add an isMatch property to all entities", () => {
+test("FilterableSchemaList will add an isMatch property to all entities", () => {
 	
 	const propertyName = "isMatch";
 	const filtList = new FilterableSchemaList(propertyAdditionData.fullList, "", "", "");
 	
-	const matches = filtList.getFilteredList("match", "match", "match");
+	const matches = filtList.getFullList();
 	
 	matches.forEach(schema => {
 		expect(schema).toHaveProperty(propertyName);
@@ -165,14 +162,14 @@ test.each([
 		"#000000",
 		"#AAAAAA"
 	],
-])("FilterableSchemaList getFilteredList will add a colour property, with the correct color, to all entities", 
+])("FilterableSchemaList will add a colour property, with the correct color, to all entities", 
 	(schemaColor, tableColor, columnColor) => {
 	
 	const propertyName = "color";
 	
 	const filtList = new FilterableSchemaList(propertyAdditionData.fullList, schemaColor, tableColor, columnColor);
 	
-	const matches = filtList.getFilteredList("match", "match", "match");
+	const matches = filtList.getFullList();
 	
 	matches.forEach(schema => {
 		expect(schema).toHaveProperty(propertyName);
