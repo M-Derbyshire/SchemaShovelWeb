@@ -3,7 +3,7 @@ export default {
 		{
 			id: 0,
 			name: "aMatchingName",
-			description: "aMatchingDescription",
+			description: "aDescription",
 			tables: [
 				{
 					id: 0,

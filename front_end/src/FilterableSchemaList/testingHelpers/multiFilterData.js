@@ -3,13 +3,13 @@ export default {
 		{
 			id: 0,
 			name: "notTheSchemaYoureLookingFor",
-			description: "butWillBeDisplayedAnywayAsInnerEntitiesMatch",
+			description: "butWillBeDisplayedAnywayAsInnerEntities",
 			isMatch: false,
 			tables: [
 				{
 					id: 1,
 					name: "notTheTableYoureLookingFor",
-					description: "butWillBeDisplayedAnywayAsInnerEntitiesMatch",
+					description: "butWillBeDisplayedAnywayAsInnerEntities",
 					isMatch: false,
 					columns: [
 						{
@@ -38,7 +38,7 @@ export default {
 		{
 			id: 5,
 			name: "notTheSchemaYoureLookingFor",
-			description: "butWillBeDisplayedAnywayAsInnerEntitiesMatch",
+			description: "butWillBeDisplayedAnywayAsInnerEntities",
 			isMatch: false,
 			tables: [
 				{

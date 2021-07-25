@@ -34,8 +34,8 @@ test.each([
 test("FilterableSchemaList getFilteredList will filter schema results (case-insensitive), both with and without matching descriptions", () => {
 	
 	const filtList = new FilterableSchemaList(schemaFilterData.fullList, "", "", "");
-	const expectedNoDesc = schemaFilterData.expectedResultWithoutDescriptions;
-	const expectedWithDesc = schemaFilterData.expectedResultWithDescriptions;
+	const expectedNoDesc = schemaFilterData.expectedIDsWithoutDescriptions;
+	const expectedWithDesc = schemaFilterData.expectedIDsWithDescriptions;
 	
 	const matchesNoDesc = filtList.getFilteredList("match", "", "");
 	const matchesWithDesc = filtList.getFilteredList("match", "", "", true);
@@ -52,11 +52,11 @@ test("FilterableSchemaList getFilteredList will filter schema results (case-inse
 test("FilterableSchemaList getFilteredList will filter table results (case-insensitive), both with and without matching descriptions", () => {
 	
 	const filtList = new FilterableSchemaList(tableFilterData.fullList, "", "", "");
-	const expectedNoDesc = tableFilterData.expectedResultWithoutDescriptions;
-	const expectedWithDesc = tableFilterData.expectedResultWithDescriptions;
+	const expectedNoDesc = tableFilterData.expectedIDsWithoutDescriptions;
+	const expectedWithDesc = tableFilterData.expectedIDsWithDescriptions;
 	
-	const matchesNoDesc = filtList.getFilteredList("", "match", "").childEntities;
-	const matchesWithDesc = filtList.getFilteredList("", "match", "", true).childEntities;
+	const matchesNoDesc = filtList.getFilteredList("", "match", "")[0].childEntities;
+	const matchesWithDesc = filtList.getFilteredList("", "match", "", true)[0].childEntities;
 	
 	matchesNoDesc.forEach(matchTable => expect(expectedNoDesc.includes(matchTable.id)).toBeTruthy());
 	expect(matchesNoDesc.length).toBe(expectedNoDesc.length);
@@ -67,20 +67,29 @@ test("FilterableSchemaList getFilteredList will filter table results (case-insen
 
 
 // See ./testingHelpers/columnFilterData
-test("FilterableSchemaList getFilteredList will filter table results (case-insensitive), both with and without matching descriptions", () => {
+test("FilterableSchemaList getFilteredList will filter column results (case-insensitive), both with and without matching descriptions", () => {
 	
 	const filtList = new FilterableSchemaList(columnFilterData.fullList, "", "", "");
-	const expectedNoDesc = columnFilterData.expectedResultWithoutDescriptions;
-	const expectedWithDesc = columnFilterData.expectedResultWithDescriptions;
+	const expectedNoDesc = columnFilterData.expectedIDsWithoutDescriptions;
+	const expectedWithDesc = columnFilterData.expectedIDsWithDescriptions;
 	
-	const matchesNoDesc = filtList.getFilteredList("", "", "match").childEntities.childEntities;
-	const matchesWithDesc = filtList.getFilteredList("", "", "match", true).childEntities.childEntities;
+	const matchTablesNoDesc = filtList.getFilteredList("", "", "match")[0].childEntities;
+	const matchTablesWithDesc = 
+		filtList.getFilteredList("", "", "match", true)[0].childEntities;
 	
-	matchesNoDesc.forEach(matchColumn => expect(expectedNoDesc.includes(matchColumn.id)).toBeTruthy());
-	expect(matchesNoDesc.length).toBe(expectedNoDesc.length);
+	matchTablesNoDesc.forEach(matchTable => {
+		expect(matchTable.childEntities.length).toBe(expectedNoDesc.length);
+		matchTable.childEntities.forEach(
+			matchColumn => expect(expectedNoDesc.includes(matchColumn.id)).toBeTruthy()
+		);
+	});
 	
-	matchesWithDesc.forEach(matchColumn => expect(expectedWithDesc.includes(matchColumn.id)).toBeTruthy());
-	expect(matchesWithDesc.length).toBe(expectedWithDesc.length);
+	matchTablesWithDesc.forEach(matchTable => {
+		expect(matchTable.childEntities.length).toBe(expectedWithDesc.length);
+		matchTable.childEntities.forEach(
+			matchColumn => expect(expectedWithDesc.includes(matchColumn.id)).toBeTruthy()
+		);
+	});
 });
 
 
