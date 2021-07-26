@@ -7,6 +7,10 @@ import multiFilterData from './testingHelpers/multiFilterData';
 import propertyAdditionData from './testingHelpers/propertyAdditionData';
 import fkToTableData from './testingHelpers/fkToTableData';
 
+import noNameData from './testingHelpers/errorHandlingData/noNameData';
+import noDescriptionData from './testingHelpers/errorHandlingData/noDescriptionData';
+import noChildrenData from './testingHelpers/errorHandlingData/noChildrenData';
+
 
 test.each([
 	[
@@ -27,6 +31,34 @@ test.each([
 	expect(filtList.schemaColor).toEqual(schemaColor);
 	expect(filtList.tableColor).toEqual(tableColor);
 	expect(filtList.columnColor).toEqual(columnColor);
+});
+
+
+test.each([
+	[noNameData.schemaTest],
+	[noNameData.tableTest],
+	[noNameData.columnTest],
+	[noDescriptionData.schemaTest],
+	[noDescriptionData.tableTest],
+	[noDescriptionData.columnTest],
+	[noChildrenData.noTablesPropTest],
+	[noChildrenData.noColumnsPropTest],
+	[noChildrenData.tablesNotArrayTest],
+	[noChildrenData.columnsNotArrayTest]
+])("FilterableSchemaList constructor will throw an error if there are missing required properties (name/description/tables/columns) in a list item", (listData) => {
+	
+	let errText; //We can't assert within the catch block, so instead setting this outside of it.
+	
+	expect(() => {
+		try {
+			new FilterableSchemaList(listData, "", "", "");
+		} catch (err) {
+			errText = err.message;
+			throw err;
+		}
+	}).toThrow();
+	
+	expect(errText.toLowerCase()).toEqual(expect.stringContaining("error while"));
 });
 
 
@@ -224,4 +256,12 @@ test("FilterableSchemaList getForeignKeysToTable will return an array to destruc
 	});
 	
 	expect(fkToTableData.expectMatchTableIDs.length).toEqual(returnedTableIDs.length);
+});
+
+test("FilterableSchemaList getForeignKeysToTable will throw an error if it cannot find the target table", () => {
+	
+	const filtList = new FilterableSchemaList(fkToTableData.fullList, "", "", "");
+	
+	expect(() => filtList.getForeignKeysToTable(fkToTableData.targetTableID + 1000)).toThrow();
+	
 });
