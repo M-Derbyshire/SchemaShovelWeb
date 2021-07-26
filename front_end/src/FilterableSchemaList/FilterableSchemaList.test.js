@@ -11,6 +11,7 @@ import noNameData from './testingHelpers/errorHandlingData/noNameData';
 import noDescriptionData from './testingHelpers/errorHandlingData/noDescriptionData';
 import noChildrenData from './testingHelpers/errorHandlingData/noChildrenData';
 
+const errorTextMustContain = "error while";
 
 test.each([
 	[
@@ -58,7 +59,7 @@ test.each([
 		}
 	}).toThrow();
 	
-	expect(errText.toLowerCase()).toEqual(expect.stringContaining("error while"));
+	expect(errText.toLowerCase()).toEqual(expect.stringContaining(errorTextMustContain));
 });
 
 
@@ -261,7 +262,20 @@ test("FilterableSchemaList getForeignKeysToTable will return an array to destruc
 test("FilterableSchemaList getForeignKeysToTable will throw an error if it cannot find the target table", () => {
 	
 	const filtList = new FilterableSchemaList(fkToTableData.fullList, "", "", "");
+	let errText; //Can't assert in catch block below
 	
-	expect(() => filtList.getForeignKeysToTable(fkToTableData.targetTableID + 1000)).toThrow();
+	expect(() => {
+		try
+		{
+			filtList.getForeignKeysToTable(fkToTableData.targetTableID + 1000);
+		}
+		catch(err)
+		{
+			errText = err.message;
+			throw err;
+		}
+	}).toThrow();
+	
+	expect(errText.toLowerCase()).toEqual(expect.stringContaining(errorTextMustContain));
 	
 });
