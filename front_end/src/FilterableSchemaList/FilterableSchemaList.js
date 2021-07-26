@@ -20,15 +20,38 @@ export default class FilterableSchemaList {
 	
 	_reshapeEntities(schemaList)
 	{
-		return schemaList.map((schema) => {
+		return schemaList.map((schema, index) => {
+			
+			//Will throw if anything is missing
+			this._throwIfEntityMissingRequiredProperties(schema, [
+				"name",
+				"description",
+				"tables"
+			], "schema", index);
+			
+			this._throwIfEntityChildListIsNotArray(schema, "tables", "schema", index);
 			
 			const newSchema = {...schema};
 			
 			newSchema.childEntities = newSchema.tables.map((table) => {
 				
+				this._throwIfEntityMissingRequiredProperties(table, [
+					"name",
+					"description",
+					"columns"
+				], "table", index);
+				
+				this._throwIfEntityChildListIsNotArray(table, "columns", "table", index);
+				
 				const newTable = {...table};
 				newTable.childEntities = newTable.columns.map(
-					(column) => this._addNewPropertiesToEntity({...column}, this._columnColor)
+					(column) => {
+						this._throwIfEntityMissingRequiredProperties(column, [
+							"name",
+							"description"
+						], "column", index);
+						return this._addNewPropertiesToEntity({...column}, this._columnColor);
+					}
 				);
 				
 				delete newTable.columns;
@@ -42,6 +65,20 @@ export default class FilterableSchemaList {
 			
 			return newSchema;
 		});
+	}
+	
+	_throwIfEntityMissingRequiredProperties(entity, propNames, entityType, index)
+	{
+		propNames.forEach(propName => {
+			if(!entity.hasOwnProperty(propName)) 
+				throw new Error(`Error while processing list of schemas: at index ${index} in the schema array, there is a ${entityType} that did not include the '${propName}' property`);
+		});
+	}
+	
+	_throwIfEntityChildListIsNotArray(entity, childListName, entityType, index)
+	{
+		if(!Array.isArray(entity[childListName]))
+			throw new Error(`Error while processing list of schemas: at index ${index} in the schema array, there is a '${childListName}' property of a ${entityType} that was not an array`);
 	}
 	
 	_addNewPropertiesToEntity(entity, color, isMatch = false)
@@ -176,6 +213,9 @@ export default class FilterableSchemaList {
 				else
 					return matchingSchemas;
 		}, []);
+		
+		if(!targetTable)
+			throw new Error(`Error while searching for foreign keys to a table: the target table does not exist`);
 		
 		return [targetTable, filteredList];
 	}
