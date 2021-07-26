@@ -213,11 +213,11 @@ test("FilterableSchemaList getForeignKeysToTable will return an array to destruc
 	let returnedTableIDs = [];
 	
 	matchingSchemas.forEach(schema => {
-		expect(fkToTableData.expectMatchSchemaIDs).includes(schema.id);
+		expect(fkToTableData.expectMatchSchemaIDs.includes(schema.id)).toBeTruthy();
 		expect(schema.isMatch).toBeFalsy();
 		
 		schema.childEntities.forEach(table => {
-			expect(fkToTableData.expectMatchTableIDs).includes(table.id);
+			expect(fkToTableData.expectMatchTableIDs.includes(table.id)).toBeTruthy();
 			expect(table.isMatch).toBeTruthy();
 			returnedTableIDs.push(table.id);
 		});

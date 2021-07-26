@@ -145,8 +145,38 @@ export default class FilterableSchemaList {
 	
 	
 	
-	getForeignKeysToTable(tableID)
+	getForeignKeysToTable(targetTableID)
 	{
+		let targetTable;
 		
+		const filteredList = this._fullList.reduce((matchingSchemas, schema) => {
+			
+			const newSchema = {...schema};
+			
+			newSchema.childEntities = schema.childEntities.reduce((matchingTables, table) => {
+				
+				if(table.id === targetTableID)
+				{
+					targetTable = table;
+					return matchingTables;
+				}
+				
+				const fkColumns = table.childEntities.filter(
+					column => (column.hasOwnProperty("fkToTableId") && column.fkToTableId === targetTableID)
+				);
+				
+				if(fkColumns.length > 0)
+					return [...matchingTables, {...table, isMatch: true}];
+				else
+					return matchingTables;
+			}, []);
+			
+			if(newSchema.childEntities.length > 0)
+					return [...matchingSchemas, newSchema];
+				else
+					return matchingSchemas;
+		}, []);
+		
+		return [targetTable, filteredList];
 	}
 }

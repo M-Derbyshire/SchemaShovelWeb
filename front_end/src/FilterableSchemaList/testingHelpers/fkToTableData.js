@@ -2,8 +2,8 @@ export default {
 	
 	targetTableID: 0,
 	
-	expectMatchSchemaIDs: [1],
-	expectMatchTableIDs: [1],
+	expectMatchSchemaIDs: [1, 2],
+	expectMatchTableIDs: [1, 2, 3],
 	
 	fullList: [
 		
@@ -40,6 +40,39 @@ export default {
 							fkToTableId: 0
 						}
 					]
+				},
+				{
+					id: 2,
+					name: "matchingTable",
+					description: "aTable",
+					columns: [
+						{
+							id: 2,
+							name: "aMatchingColumn",
+							description: "aColumn",
+							fkToTableId: 0
+						}
+					]
+				}
+			]
+		},
+		{
+			id: 2,
+			name: "matchingSchema",
+			description: "aSchema",
+			tables: [
+				{
+					id: 3,
+					name: "matchingTable",
+					description: "aTable",
+					columns: [
+						{
+							id: 3,
+							name: "aMatchingColumn",
+							description: "aColumn",
+							fkToTableId: 0
+						}
+					]
 				}
 			]
 		},
@@ -47,29 +80,29 @@ export default {
 		
 		//Tables that won't
 		{
-			id: 2,
+			id: 3,
 			name: "aSchema",
 			description: "aSchema",
 			tables: [
 				{
-					id: 2,
+					id: 4,
 					name: "aTable",
 					description: "aTable",
 					columns: [
 						{
-							id: 2,
+							id: 4,
 							name: "aColumn",
 							description: "aColumn"
 						}
 					]
 				},
 				{
-					id: 3,
+					id: 5,
 					name: "aTable",
 					description: "aTable",
 					columns: [
 						{
-							id: 3,
+							id: 5,
 							name: "aColumn",
 							description: "aColumn",
 							fkToTableId: 2
