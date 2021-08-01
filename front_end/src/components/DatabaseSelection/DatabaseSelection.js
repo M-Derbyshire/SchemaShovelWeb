@@ -55,7 +55,7 @@ class DatabaseSelection extends Component
 		const apiAccessor = this.props.apiAccessor;
 		const updateDatabaseName = (apiAccessor) ? 
 									apiAccessor.updateDatabaseName.bind(apiAccessor) :
-									() => {};
+									async () => {};
 		
 		return (
 			<EditableItem 
