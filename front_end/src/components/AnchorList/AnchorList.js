@@ -34,7 +34,7 @@ AnchorList.propTypes = {
 	//each anchorObject should have 2 properties: 
 	// - label: the text to display in the anchor tag.
 	// - anchor: the ID of the element to anchor to (don't include the # character)
-	anchorObjects: PropTypes.array
+	anchorObjects: PropTypes.array.isRequired
 };
 
 export default AnchorList;
