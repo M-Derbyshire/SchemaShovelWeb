@@ -50,7 +50,7 @@ class DatabaseSelection extends Component
 	
 	databaseListMapper(db)
 	{
-		const textLengthLimit = 100;
+		const textLengthLimit = 45;
 		
 		const apiAccessor = this.props.apiAccessor;
 		const updateDatabaseName = (apiAccessor) ? 
