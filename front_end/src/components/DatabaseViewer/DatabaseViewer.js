@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './DatabaseViewer.css';
+import { withRouter } from 'react-router-dom';
 
 class DatabaseViewer extends Component
 {
@@ -83,6 +84,7 @@ class DatabaseViewer extends Component
 		return (
 			<div className="DatabaseViewer">
 				<header>
+					<button onClick={this.returnToMenu.bind(this)}>Main Menu</button>
 					<h1>{titleText}</h1>
 				</header>
 			</div>
@@ -94,4 +96,4 @@ DatabaseViewer.propTypes = {
 	apiAccessor: PropTypes.object
 };
 
-export default DatabaseViewer;
+export default withRouter(DatabaseViewer);
