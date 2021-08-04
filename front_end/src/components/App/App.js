@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import APIAccessor from '../../apiAccess/APIAccessor/APIAccessor';
 import DatabaseSelection from '../DatabaseSelection/DatabaseSelection';
 import DatabaseAddition from '../DatabaseAddition/DatabaseAddition';
+import DatabaseViewer from '../DatabaseViewer/DatabaseViewer';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import ErrorDisplay from '../ErrorDisplay/ErrorDisplay';
 
@@ -25,7 +26,7 @@ class App extends Component
 	
 	componentDidMount()
 	{
-		this.loadAPISettings("settings.json");
+		this.loadAPISettings(`${process.env.PUBLIC_URL}/settings.json`);
 	}
 	
 	loadAPISettings(path)
@@ -116,6 +117,10 @@ class App extends Component
 							<DatabaseAddition 
 								apiAccessor= { this.state.apiAccessor }
 								onErrorHandler={this.onErrorHandler.bind(this)} />
+						</Route>
+						
+						<Route path="/view/:id">
+							<DatabaseViewer apiAccessor= { this.state.apiAccessor } />
 						</Route>
 						
 						<Route path="/">
