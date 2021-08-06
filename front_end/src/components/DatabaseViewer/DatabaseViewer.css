@@ -1,18 +1,19 @@
 .DatabaseViewer header {
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
 	border: solid 2px #666666;
 	background-color: white;
 	padding: 0.25rem;
 	margin: auto 0.5rem;
 }
 
-.DatabaseViewer header * {
+.DatabaseViewer .dbViewerHeaderRow {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 0.25rem;
 	margin: auto 1rem;
 }
 
 .DatabaseViewer header button {
-	margin: 5px;
+	margin: 5px 1rem 0 0;
 	font-size: large;
 }
