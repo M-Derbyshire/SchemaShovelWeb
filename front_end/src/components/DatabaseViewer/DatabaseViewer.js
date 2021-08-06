@@ -58,7 +58,7 @@ class DatabaseViewer extends Component
 					if(this._isMounted) this.setState({
 						hasFailedToLoad: true,
 						dbName: null,
-						dbSchemas: []
+						dbSchemas: new FilterableSchemaList([], schemaColor, tableColor, columnColor)
 					});
 				});
 		}
