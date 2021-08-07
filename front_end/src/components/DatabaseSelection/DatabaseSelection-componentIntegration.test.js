@@ -89,7 +89,7 @@ test.each([
 	ReactTestUtils.Simulate.click(editButton); //Enter edit mode
 	const textInput = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "EITextInput");
 	
-	expect(textInput.getAttribute("maxLength")).toBe(lengthLimit.toString())
+	expect(textInput.getAttribute("maxLength")).toBe(lengthLimit.toString());
 });
 
 test("DatabaseSelection will pass the deleteSelectedDatabase func to the DatabaseListOptions", async () => {
