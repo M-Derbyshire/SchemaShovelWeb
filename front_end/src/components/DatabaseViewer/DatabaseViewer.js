@@ -24,9 +24,9 @@ class DatabaseViewer extends Component
 			dbName: null,
 			dbSchemas: new FilterableSchemaList([], schemaColor, tableColor, columnColor),
 			hasFailedToLoad: false,
-			schemaColor: "#ff0000",
-			tableColor: "#00ff00",
-			columnColor: "#0000ff"
+			schemaColor: schemaColor,
+			tableColor: tableColor,
+			columnColor: columnColor
 		};
 	}
 	
