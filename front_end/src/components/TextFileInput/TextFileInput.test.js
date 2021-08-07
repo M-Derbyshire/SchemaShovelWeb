@@ -19,31 +19,22 @@ test("TextFileInput will disable its inputs if the disabled prop is true.", () =
 	expect(fileinput).toBeDisabled();
 });
 
-test("TextFileInput will not disable its inputs if the disabled prop is false, or undefined.", () => {
+test.each([
+	[false],
+	[undefined]
+])("TextFileInput will not disable its inputs if the disabled prop is false, or undefined.", (isDisabled) => {
 	
-	const textfileinputWithFalse = ReactTestUtils.renderIntoDocument(<TextFileInput 
+	const textfileinput = ReactTestUtils.renderIntoDocument(<TextFileInput 
 		setFileText={fakeSetFileText} 
 		onErrorHandler={fakeErrorHandler}
-		disabled={false} />);
+		disabled={isDisabled} />);
 	
-	const textfileinputWithUndefined = ReactTestUtils.renderIntoDocument(<TextFileInput 
-		setFileText={fakeSetFileText} 
-		onErrorHandler={fakeErrorHandler} />);
+	const textarea = ReactTestUtils.findRenderedDOMComponentWithTag(textfileinput, "textarea");
+	const fileinput = 
+		ReactTestUtils.findRenderedDOMComponentWithClass(textfileinput, "TextFileFileInput");
 	
-	const textareaWithFalse = ReactTestUtils.findRenderedDOMComponentWithTag(textfileinputWithFalse, "textarea");
-	const fileinputWithFalse = 
-		ReactTestUtils.findRenderedDOMComponentWithClass(textfileinputWithFalse, "TextFileFileInput");
-	
-	const textareaWithUndefined = 
-		ReactTestUtils.findRenderedDOMComponentWithTag(textfileinputWithUndefined, "textarea");
-	const fileinputWithUndefined = 
-		ReactTestUtils.findRenderedDOMComponentWithClass(textfileinputWithUndefined, "TextFileFileInput");
-	
-	expect(textareaWithFalse).not.toBeDisabled();
-	expect(fileinputWithFalse).not.toBeDisabled();
-	expect(textareaWithUndefined).not.toBeDisabled();
-	expect(fileinputWithUndefined).not.toBeDisabled();
-	
+	expect(textarea).not.toBeDisabled();
+	expect(fileinput).not.toBeDisabled();
 });
 
 

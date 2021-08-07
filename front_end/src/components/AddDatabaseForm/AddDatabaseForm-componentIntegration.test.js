@@ -46,38 +46,26 @@ test("AddDatabaseForm will pass the onErrorHandler prop to TextFileInput", async
 });
 
 
-test("AddDatabaseForm will pass the disabled prop down to TextFileInput", () => {
+test.each([
+	[undefined],
+	[true],
+	[false]
+])("AddDatabaseForm will pass the disabled prop down to TextFileInput", (isDisabled) => {
 	
-	const dbFormDisabledUndefined = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
+	const dbFormDisabled = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
 		onCancelHandler={fakeOnCancelHandler}
-		dbNameCharLimit={100} />);
+		dbNameCharLimit={100}
+		disabled={isDisabled} />);
 	
-	const dbFormDisabledFalse = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
-		formOnSubmit={fakeFormOnSubmit}
-		onErrorHandler={fakeOnErrorHandler}
-		onCancelHandler={fakeOnCancelHandler}
-		disabled={false}
-		dbNameCharLimit={100} />);
+	const textareaDisabled = 
+		ReactTestUtils.findRenderedDOMComponentWithTag(dbFormDisabled, "textarea");
 	
-	const dbFormDisabledTrue = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
-		formOnSubmit={fakeFormOnSubmit}
-		onErrorHandler={fakeOnErrorHandler}
-		onCancelHandler={fakeOnCancelHandler}
-		disabled={true}
-		dbNameCharLimit={100} />);
-	
-	const textareaDisabledUndefined = 
-		ReactTestUtils.findRenderedDOMComponentWithTag(dbFormDisabledUndefined, "textarea");
-	const textareaDisabledFalse = 
-		ReactTestUtils.findRenderedDOMComponentWithTag(dbFormDisabledFalse, "textarea");
-	const textareaDisabledTrue = 
-		ReactTestUtils.findRenderedDOMComponentWithTag(dbFormDisabledTrue, "textarea");
-	
-	expect(textareaDisabledUndefined).not.toBeDisabled();
-	expect(textareaDisabledFalse).not.toBeDisabled();
-	expect(textareaDisabledTrue).toBeDisabled();
+	if(!isDisabled)
+		expect(textareaDisabled).not.toBeDisabled();
+	else
+		expect(textareaDisabled).toBeDisabled();
 });
 
 test.each([

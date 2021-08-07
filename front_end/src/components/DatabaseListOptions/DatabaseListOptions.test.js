@@ -24,45 +24,24 @@ test("DatabaseListOptions will create buttons for loading, deleting and adding d
 	expect(deleteButtons.length).toBe(1);
 });
 
-test("DatabaseListOptions will disable it's load and delete buttons, if selected ID is less than 0", () => {
+test.each([
+	[-1],
+	[-2],
+	[-52]
+])("DatabaseListOptions will disable it's load and delete buttons, if selected ID is less than 0", (id) => {
 	
-	const options1 = ReactTestUtils.renderIntoDocument(
+	const options = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
 			<DatabaseListOptions
 				deleteSelectedDatabase={fakeDeletedSelectedDatabase}
-				selectedDatabaseID={-1}/>
+				selectedDatabaseID={id}/>
 		</MemoryRouter>
 	);
-	const loadButton1 = ReactTestUtils.findRenderedDOMComponentWithClass(options1, "loadDatabaseButton");
-	const deleteButton1 = ReactTestUtils.findRenderedDOMComponentWithClass(options1, "deleteDatabaseButton");
+	const loadButton = ReactTestUtils.findRenderedDOMComponentWithClass(options, "loadDatabaseButton");
+	const deleteButton = ReactTestUtils.findRenderedDOMComponentWithClass(options, "deleteDatabaseButton");
 	
-	const options2 = ReactTestUtils.renderIntoDocument(
-		<MemoryRouter>
-			<DatabaseListOptions
-				deleteSelectedDatabase={fakeDeletedSelectedDatabase}
-				selectedDatabaseID={-2}/>
-		</MemoryRouter>
-	);
-	const loadButton2 = ReactTestUtils.findRenderedDOMComponentWithClass(options2, "loadDatabaseButton");
-	const deleteButton2 = ReactTestUtils.findRenderedDOMComponentWithClass(options2, "deleteDatabaseButton");
-	
-	const options3 = ReactTestUtils.renderIntoDocument(
-		<MemoryRouter>
-			<DatabaseListOptions
-				deleteSelectedDatabase={fakeDeletedSelectedDatabase}
-				selectedDatabaseID={-52}/>
-		</MemoryRouter>
-	);
-	const loadButton3 = ReactTestUtils.findRenderedDOMComponentWithClass(options3, "loadDatabaseButton");
-	const deleteButton3 = ReactTestUtils.findRenderedDOMComponentWithClass(options3, "deleteDatabaseButton");
-	
-	
-	expect(loadButton1).toBeDisabled();
-	expect(loadButton2).toBeDisabled();
-	expect(loadButton3).toBeDisabled();
-	expect(deleteButton1).toBeDisabled();
-	expect(deleteButton2).toBeDisabled();
-	expect(deleteButton3).toBeDisabled();
+	expect(loadButton).toBeDisabled();
+	expect(deleteButton).toBeDisabled();
 });
 
 test("DatabaseListOptions will run the function passed as the deleteSelectedDatabase prop when the delete button is pressed", () => {

@@ -178,25 +178,21 @@ test("When EditableItem is being saved, the saveErrorHandler prop function will 
 });
 
 
-test("EditableItem will have add a maxLength attribute to the edit text box, of the value passed as textLengthLimit prop", () => {
+test.each([
+	[1],
+	[11]
+])("EditableItem will have add a maxLength attribute to the edit text box, of the value passed as textLengthLimit prop", (lengthLimit) => {
 	
-	const item1 = ReactTestUtils.renderIntoDocument(
+	const item = ReactTestUtils.renderIntoDocument(
 		<EditableItem 
-			saveChanges={fakeSaveChanges} saveErrorHandler={fakeSaveErrorHandler} text="testing123" textLengthLimit={1} />
+			saveChanges={fakeSaveChanges} 
+			saveErrorHandler={fakeSaveErrorHandler} 
+			text="testing123" 
+			textLengthLimit={lengthLimit} />
 	);
-	const editButton1 = ReactTestUtils.findRenderedDOMComponentWithClass(item1, "EIEditButton");
-	ReactTestUtils.Simulate.click(editButton1); //Enter edit mode
-	const textInput1 = ReactTestUtils.findRenderedDOMComponentWithClass(item1, "EITextInput");
+	const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EIEditButton");
+	ReactTestUtils.Simulate.click(editButton); //Enter edit mode
+	const textInput = ReactTestUtils.findRenderedDOMComponentWithClass(item, "EITextInput");
 	
-	const item2 = ReactTestUtils.renderIntoDocument(
-		<EditableItem 
-			saveChanges={fakeSaveChanges} saveErrorHandler={fakeSaveErrorHandler} text="testing123" textLengthLimit={11} />
-	);
-	const editButton2 = ReactTestUtils.findRenderedDOMComponentWithClass(item2, "EIEditButton"); 
-	ReactTestUtils.Simulate.click(editButton2); //Enter edit mode
-	const textInput2 = ReactTestUtils.findRenderedDOMComponentWithClass(item2, "EITextInput");
-	
-	
-	expect(textInput1.getAttribute("maxLength")).toBe("1");
-	expect(textInput2.getAttribute("maxLength")).toBe("11");
+	expect(textInput.getAttribute("maxLength")).toBe(lengthLimit.toString());
 });
