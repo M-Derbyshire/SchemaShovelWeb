@@ -100,7 +100,6 @@ class DatabaseSelection extends Component
 	componentWillUnmount()
 	{
 		this._isMounted = false;
-		this._databaseList = null;
 	}
 	
 	render()
