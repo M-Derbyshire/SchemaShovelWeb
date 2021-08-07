@@ -15,7 +15,8 @@ test("DatabaseSelection will load the database list, and pass it to the Selectab
 	const databaseSelectionRouter = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
 			<DatabaseSelection 
-				apiAccessor={mockAPIAccessor} />
+				apiAccessor={mockAPIAccessor}
+				dbNameCharLimit={45} />
 		</MemoryRouter>
 	);
 	
@@ -41,7 +42,8 @@ test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method 
 	const databaseSelectionRouter = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
 			<DatabaseSelection 
-				apiAccessor={mockAPIAccessor} />
+				apiAccessor={mockAPIAccessor}
+				dbNameCharLimit={45} />
 		</MemoryRouter>
 	);
 	
@@ -63,6 +65,33 @@ test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method 
 	
 });
 
+test.each([
+	[1],
+	[2]
+])("DatabaseSelection will pass the dbNameCharLimit prop to EditableItems", async (lengthLimit) => {
+	
+	const mockAPIAccessor = new MockAPIAccessor([
+		[ { id: 1, name: "1" } ]
+	]);
+	
+	const databaseSelectionRouter = ReactTestUtils.renderIntoDocument(
+		<MemoryRouter>
+			<DatabaseSelection 
+				apiAccessor={mockAPIAccessor} 
+				dbNameCharLimit={lengthLimit} />
+		</MemoryRouter>
+	);
+	
+	//We're dealing with asynchronous methods, so let it load
+	await sleep(100);
+	
+	const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "EIEditButton");
+	ReactTestUtils.Simulate.click(editButton); //Enter edit mode
+	const textInput = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "EITextInput");
+	
+	expect(textInput.getAttribute("maxLength")).toBe(lengthLimit.toString())
+});
+
 test("DatabaseSelection will pass the deleteSelectedDatabase func to the DatabaseListOptions", async () => {
 	
 	const mockAPIAccessor = new MockAPIAccessor([
@@ -73,7 +102,8 @@ test("DatabaseSelection will pass the deleteSelectedDatabase func to the Databas
 	const databaseSelectionRouter = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
 			<DatabaseSelection 
-				apiAccessor={mockAPIAccessor} />
+				apiAccessor={mockAPIAccessor}
+				dbNameCharLimit={45} />
 		</MemoryRouter>
 	);
 	
@@ -95,7 +125,7 @@ test("DatabaseSelection's will pass the SelectableList isLoading prop as true wh
 	
 	const databaseSelectionRouter = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
-			<DatabaseSelection />
+			<DatabaseSelection dbNameCharLimit={45} />
 		</MemoryRouter>
 	);
 	
@@ -114,7 +144,8 @@ test("DatabaseSelection will pass the SelectableList hasFailedToLoad prop as tru
 	const databaseSelectionRouter = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
 			<DatabaseSelection 
-				apiAccessor={mockAPIAccessor} />
+				apiAccessor={mockAPIAccessor}
+				dbNameCharLimit={45} />
 		</MemoryRouter>
 	);
 	

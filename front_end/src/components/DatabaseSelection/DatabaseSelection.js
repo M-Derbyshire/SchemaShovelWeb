@@ -50,8 +50,6 @@ class DatabaseSelection extends Component
 	
 	databaseListMapper(db)
 	{
-		const textLengthLimit = 45;
-		
 		const apiAccessor = this.props.apiAccessor;
 		const updateDatabaseName = (apiAccessor) ? 
 									apiAccessor.updateDatabaseName.bind(apiAccessor) :
@@ -61,7 +59,7 @@ class DatabaseSelection extends Component
 			<EditableItem 
 				key={db.id}
 				text={db.name} 
-				textLengthLimit={textLengthLimit} 
+				textLengthLimit={this.props.dbNameCharLimit} 
 				saveChanges={async (newName) => await updateDatabaseName(db.id, newName)} 
 				saveErrorHandler={() => {}}
 			/>
@@ -135,7 +133,8 @@ class DatabaseSelection extends Component
 }
 
 DatabaseSelection.propTypes = {
-	apiAccessor: PropTypes.object
+	apiAccessor: PropTypes.object,
+	dbNameCharLimit: PropTypes.number.isRequired
 };
 
 export default DatabaseSelection;

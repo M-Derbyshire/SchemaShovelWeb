@@ -39,7 +39,7 @@ class App extends Component
 	
 	onAPISettingsLoad(settings)
 	{
-		if(!settings || !settings.apiBaseURL)
+		if(!settings || !settings.apiBaseURL || !settings.dbNameCharLimit)
 		{
 			throw new Error("Settings JSON is misshapen.");
 		}
@@ -100,6 +100,9 @@ class App extends Component
 	
 	render()
 	{
+		const apiSettings = this.state.apiSettings;
+		const apiAccessor = this.state.apiAccessor;
+		
 		return (
 			<div className="App">
 				<BrowserRouter>
@@ -115,16 +118,18 @@ class App extends Component
 						
 						<Route exact path="/create">
 							<DatabaseAddition 
-								apiAccessor= { this.state.apiAccessor }
+								apiAccessor= { apiAccessor }
 								onErrorHandler={this.onErrorHandler.bind(this)} />
 						</Route>
 						
 						<Route path="/view/:id">
-							<DatabaseViewer apiAccessor= { this.state.apiAccessor } />
+							<DatabaseViewer apiAccessor= { apiAccessor } />
 						</Route>
 						
 						<Route path="/">
-							<DatabaseSelection apiAccessor={ this.state.apiAccessor } />
+							<DatabaseSelection 
+								apiAccessor={ apiAccessor }
+								dbNameCharLimit={ (apiSettings) ? apiSettings.dbNameCharLimit : -1 } />
 						</Route>
 					</Switch>
 					

@@ -8,7 +8,7 @@ test("DatabaseSelection will render a single SelectableList component", () => {
 	
 	const databaseSelectionRouter = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
-			<DatabaseSelection />
+			<DatabaseSelection dbNameCharLimit={45} />
 		</MemoryRouter>
 	);
 	
@@ -22,7 +22,7 @@ test("DatabaseSelection will render a single DatabaseListOptions component", () 
 	
 	const databaseSelectionRouter = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
-			<DatabaseSelection />
+			<DatabaseSelection dbNameCharLimit={45} />
 		</MemoryRouter>
 	);
 	
