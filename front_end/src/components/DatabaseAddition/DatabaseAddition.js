@@ -58,7 +58,8 @@ class DatabaseAddition extends Component
 					onCancelHandler={this.onCancelHandler.bind(this)} 
 					isLoading={isLoading}
 					disabled={isDisabled}
-					isSaving={this.state.isCreating} />
+					isSaving={this.state.isCreating}
+					dbNameCharLimit={this.props.dbNameCharLimit} />
 			</div>
 		);
 	}
@@ -66,7 +67,8 @@ class DatabaseAddition extends Component
 
 DatabaseAddition.propTypes = {
 	apiAccessor: PropTypes.object,
-	onErrorHandler: PropTypes.func.isRequired
+	onErrorHandler: PropTypes.func.isRequired,
+	dbNameCharLimit: PropTypes.number.isRequired
 };
 
 export default withRouter(DatabaseAddition);

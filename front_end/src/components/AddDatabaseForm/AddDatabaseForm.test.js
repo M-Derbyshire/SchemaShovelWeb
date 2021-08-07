@@ -14,7 +14,8 @@ test("AddDatabaseForm will run the onCancelHandler prop function when the cancel
 	const dbForm = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
-		onCancelHandler={mockOnCancelHandler} />);
+		onCancelHandler={mockOnCancelHandler}
+		dbNameCharLimit={100} />);
 	
 	const cancelButton = ReactTestUtils.findRenderedDOMComponentWithClass(dbForm, "databaseSchemaCancel");
 	ReactTestUtils.Simulate.click(cancelButton);
@@ -33,7 +34,8 @@ test("AddDatabaseForm will run the onSubmitHandler prop function with the right 
 	const dbForm = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={mockOnSubmitHandler}
 		onErrorHandler={fakeOnErrorHandler}
-		onCancelHandler={fakeOnCancelHandler} />);
+		onCancelHandler={fakeOnCancelHandler}
+		dbNameCharLimit={100} />);
 	
 	const textarea = ReactTestUtils.findRenderedDOMComponentWithTag(dbForm, "textarea");
 	ReactTestUtils.Simulate.change(textarea, { "target": { "value": testJSON }});
@@ -52,19 +54,22 @@ test("AddDatabaseForm fill disable its name input, and buttons, based on the dis
 	const dbFormDisabledUndefined = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
-		onCancelHandler={fakeOnCancelHandler} />);
+		onCancelHandler={fakeOnCancelHandler}
+		dbNameCharLimit={100} />);
 	
 	const dbFormDisabledFalse = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
 		onCancelHandler={fakeOnCancelHandler}
-		disabled={false} />);
+		disabled={false}
+		dbNameCharLimit={100} />);
 	
 	const dbFormDisabledTrue = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
 		onCancelHandler={fakeOnCancelHandler}
-		disabled={true} />);
+		disabled={true}
+		dbNameCharLimit={100} />);
 	
 	const nameInputDisabledUndefined = 
 		ReactTestUtils.findRenderedDOMComponentWithClass(dbFormDisabledUndefined, "databaseSchemaNameInput");
@@ -118,7 +123,8 @@ test("AddDatabaseForm will display loading test (and not a form) if isLoading pr
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
 		onCancelHandler={fakeOnCancelHandler}
-		isLoading={true} />);
+		isLoading={true}
+		dbNameCharLimit={100} />);
 	
 	const loadingTexts = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbForm, "infoText");
 	const renderedForms = ReactTestUtils.scryRenderedDOMComponentsWithTag(dbForm, "form");
@@ -133,7 +139,8 @@ test("AddDatabaseForm will display and set (onChanges) the database name test", 
 	const dbForm = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
-		onCancelHandler={fakeOnCancelHandler} />);
+		onCancelHandler={fakeOnCancelHandler}
+		dbNameCharLimit={100} />);
 	
 	const nameInput = ReactTestUtils.findRenderedDOMComponentWithClass(dbForm, "databaseSchemaNameInput");
 	
@@ -148,7 +155,8 @@ test("AddDatabaseForm will display and set (onChanges) the database JSON test", 
 	const dbForm = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
-		onCancelHandler={fakeOnCancelHandler} />);
+		onCancelHandler={fakeOnCancelHandler}
+		dbNameCharLimit={100} />);
 	
 	const textarea = ReactTestUtils.findRenderedDOMComponentWithTag(dbForm, "textarea");
 	
@@ -163,18 +171,21 @@ test("AddDatabaseForm will set the add database schema button's text to 'Saving.
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
 		onCancelHandler={fakeOnCancelHandler}
-		isSaving={true} />);
+		isSaving={true}
+		dbNameCharLimit={100} />);
 	
 	const dbFormSavingFalse = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
 		onCancelHandler={fakeOnCancelHandler}
-		isSaving={false} />);
+		isSaving={false}
+		dbNameCharLimit={100} />);
 	
 	const dbFormSavingUndefined = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
-		onCancelHandler={fakeOnCancelHandler} />);
+		onCancelHandler={fakeOnCancelHandler}
+		dbNameCharLimit={100} />);
 	
 	const submitButtonSavingTrue = ReactTestUtils.findRenderedDOMComponentWithClass(dbFormSavingTrue, "databaseSchemaSubmit");
 	const submitButtonSavingFalse = ReactTestUtils.findRenderedDOMComponentWithClass(dbFormSavingFalse, "databaseSchemaSubmit");
@@ -190,7 +201,8 @@ test("AddDatabaseForm will disable it's submit button if inputfields are empty, 
 	const dbForm = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
-		onCancelHandler={fakeOnCancelHandler} />);
+		onCancelHandler={fakeOnCancelHandler}
+		dbNameCharLimit={100} />);
 	
 	const nameInput = ReactTestUtils.findRenderedDOMComponentWithClass(dbForm, "databaseSchemaNameInput");
 	const jsonInput = ReactTestUtils.findRenderedDOMComponentWithTag(dbForm, "textarea");

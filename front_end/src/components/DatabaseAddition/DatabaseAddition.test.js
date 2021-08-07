@@ -10,7 +10,11 @@ test("onCancelHandler will redirect to root", () => {
 	let testHistory, testLocation;
 	const addition = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter initialEntries={["/create"]}>
-			<DatabaseAddition apiAccessor={new MockAPIAccessor()} onErrorHandler={(e)=>{}} />
+			<DatabaseAddition 
+				apiAccessor={new MockAPIAccessor()} 
+				onErrorHandler={(e)=>{}} 
+				dbNameCharLimit={100} />
+			
 			<Route path="*" render={({ history, location }) => {
 				testHistory = history;
 				testLocation = location;
@@ -42,7 +46,7 @@ test("databaseAdditionHandler will call createDatabase on apiAccessor, with the 
 	
 	const addition = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
-			<DatabaseAddition apiAccessor={apiAccessor} onErrorHandler={(e)=>{}} />
+			<DatabaseAddition apiAccessor={apiAccessor} onErrorHandler={(e)=>{}} dbNameCharLimit={100} />
 		</MemoryRouter>
 	);
 	
@@ -73,7 +77,7 @@ test("databaseAdditionHandler will catch any exceptions thrown by apiAccessor.cr
 	
 	const addition = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
-			<DatabaseAddition apiAccessor={apiAccessor} onErrorHandler={(e)=>{}} />
+			<DatabaseAddition apiAccessor={apiAccessor} onErrorHandler={(e)=>{}} dbNameCharLimit={100} />
 		</MemoryRouter>
 	);
 	
@@ -96,7 +100,11 @@ test("databaseAdditionHandler will redirect to root when finished", async () => 
 	let testHistory, testLocation;
 	const addition = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter initialEntries={["/create"]}>
-			<DatabaseAddition apiAccessor={new MockAPIAccessor()} onErrorHandler={(e)=>{}} />
+			<DatabaseAddition 
+				apiAccessor={new MockAPIAccessor()} 
+				onErrorHandler={(e)=>{}} 
+				dbNameCharLimit={100} />
+			
 			<Route path="*" render={({ history, location }) => {
 				testHistory = history;
 				testLocation = location;

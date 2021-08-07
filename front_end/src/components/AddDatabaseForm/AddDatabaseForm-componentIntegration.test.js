@@ -12,7 +12,8 @@ test("AddDatabaseForm will pass the dbJSON and fileText states, and their settin
 	const dbForm = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
-		onCancelHandler={fakeOnCancelHandler} />);
+		onCancelHandler={fakeOnCancelHandler}
+		dbNameCharLimit={100} />);
 	
 	const textarea = ReactTestUtils.findRenderedDOMComponentWithClass(dbForm, "TextFileTextArea");
 	
@@ -30,7 +31,8 @@ test("AddDatabaseForm will pass the onErrorHandler prop to TextFileInput", async
 	const dbForm = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={mockErrorHandler}
-		onCancelHandler={fakeOnCancelHandler} />);
+		onCancelHandler={fakeOnCancelHandler}
+		dbNameCharLimit={100} />);
 	
 	const fileInput = ReactTestUtils.findRenderedDOMComponentWithClass(dbForm, "TextFileFileInput");
 	
@@ -49,19 +51,22 @@ test("AddDatabaseForm will pass the disabled prop down to TextFileInput", () => 
 	const dbFormDisabledUndefined = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
-		onCancelHandler={fakeOnCancelHandler} />);
+		onCancelHandler={fakeOnCancelHandler}
+		dbNameCharLimit={100} />);
 	
 	const dbFormDisabledFalse = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
 		onCancelHandler={fakeOnCancelHandler}
-		disabled={false} />);
+		disabled={false}
+		dbNameCharLimit={100} />);
 	
 	const dbFormDisabledTrue = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
 		formOnSubmit={fakeFormOnSubmit}
 		onErrorHandler={fakeOnErrorHandler}
 		onCancelHandler={fakeOnCancelHandler}
-		disabled={true} />);
+		disabled={true}
+		dbNameCharLimit={100} />);
 	
 	const textareaDisabledUndefined = 
 		ReactTestUtils.findRenderedDOMComponentWithTag(dbFormDisabledUndefined, "textarea");
@@ -73,4 +78,20 @@ test("AddDatabaseForm will pass the disabled prop down to TextFileInput", () => 
 	expect(textareaDisabledUndefined).not.toBeDisabled();
 	expect(textareaDisabledFalse).not.toBeDisabled();
 	expect(textareaDisabledTrue).toBeDisabled();
+});
+
+test.each([
+	[1],
+	[2]
+])("AddDatabaseForm will pass its dbNameCharLimit prop to the name input", async (charLimit) => {
+	
+	const addition = ReactTestUtils.renderIntoDocument(<AddDatabaseForm 
+		formOnSubmit={fakeFormOnSubmit}
+		onErrorHandler={fakeOnErrorHandler}
+		onCancelHandler={fakeOnCancelHandler}
+		dbNameCharLimit={charLimit} />);
+	
+	const textInput = ReactTestUtils.findRenderedDOMComponentWithClass(addition, "databaseSchemaNameInput");
+	
+	expect(textInput.getAttribute("maxLength")).toBe(charLimit.toString());
 });

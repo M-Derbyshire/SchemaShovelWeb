@@ -65,6 +65,7 @@ class AddDatabaseForm extends Component
 						value={this.state.dbName}
 						onChange={this.onDBNameChangeHandler.bind(this)}
 						disabled={this.props.disabled}
+						maxLength={this.props.dbNameCharLimit}
 						required />
 					
 					<TextFileInput 
@@ -105,7 +106,8 @@ AddDatabaseForm.propTypes = {
 	onCancelHandler: PropTypes.func.isRequired,
 	isLoading: PropTypes.bool,
 	disabled: PropTypes.bool,
-	isSaving: PropTypes.bool
+	isSaving: PropTypes.bool,
+	dbNameCharLimit: PropTypes.number.isRequired
 };
 
 export default AddDatabaseForm;

@@ -10,7 +10,10 @@ test("DatabaseAddition will pass its onErrorHandler prop down to AddDatabaseForm
 	
 	const addition = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter initialEntries={["/create"]}>
-			<DatabaseAddition apiAccessor={new MockAPIAccessor()} onErrorHandler={mockErrorHandler} />
+			<DatabaseAddition 
+				apiAccessor={new MockAPIAccessor()} 
+				onErrorHandler={mockErrorHandler}
+				dbNameCharLimit={100} />
 		</MemoryRouter>
 	);
 	
@@ -24,6 +27,25 @@ test("DatabaseAddition will pass its onErrorHandler prop down to AddDatabaseForm
 	expect(mockErrorHandler).toHaveBeenCalled();
 });
 
+test.each([
+	[1],
+	[2]
+])("DatabaseAddition will pass its dbNameCharLimit prop down to AddDatabaseForm", async (charLimit) => {
+	
+	const addition = ReactTestUtils.renderIntoDocument(
+		<MemoryRouter initialEntries={["/create"]}>
+			<DatabaseAddition 
+				apiAccessor={new MockAPIAccessor()} 
+				onErrorHandler={()=>{}} 
+				dbNameCharLimit={charLimit} />
+		</MemoryRouter>
+	);
+	
+	const textInput = ReactTestUtils.findRenderedDOMComponentWithClass(addition, "databaseSchemaNameInput");
+	
+	expect(textInput.getAttribute("maxLength")).toBe(charLimit.toString());
+});
+
 
 test("DatabaseAddition will call createDatabase on apiAccessor, with the set name and parsed json", async () => {
 	
@@ -35,7 +57,10 @@ test("DatabaseAddition will call createDatabase on apiAccessor, with the set nam
 	
 	const addition = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
-			<DatabaseAddition apiAccessor={apiAccessor} onErrorHandler={(e)=>{}} />
+			<DatabaseAddition 
+				apiAccessor={apiAccessor} 
+				onErrorHandler={(e)=>{}}
+				dbNameCharLimit={100} />
 		</MemoryRouter>
 	);
 	
@@ -58,7 +83,11 @@ test("DatabaseAddition will pass onCancelHandler to AddDatabaseForm", () => {
 	let testHistory, testLocation;
 	const addition = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter initialEntries={["/create"]}>
-			<DatabaseAddition apiAccessor={new MockAPIAccessor()} onErrorHandler={(e)=>{}} />
+			<DatabaseAddition 
+				apiAccessor={new MockAPIAccessor()} 
+				onErrorHandler={(e)=>{}} 
+				dbNameCharLimit={100} />
+			
 			<Route path="*" render={({ history, location }) => {
 				testHistory = history;
 				testLocation = location;
@@ -83,7 +112,7 @@ test("DatabaseAddition will pass isLoading to AddDatabaseForm when awaiting apiA
 	
 	const addition = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
-			<DatabaseAddition apiAccessor={undefined} onErrorHandler={(e)=>{}} />
+			<DatabaseAddition apiAccessor={undefined} onErrorHandler={(e)=>{}} dbNameCharLimit={100} />
 		</MemoryRouter>
 	);
 	
@@ -102,7 +131,10 @@ test("DatabaseAddition will pass isCreating state to AddDatabaseForm as isSaving
 	
 	const addition = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
-			<DatabaseAddition apiAccessor={stallingApiAccessor} onErrorHandler={(e)=>{}} />
+			<DatabaseAddition 
+				apiAccessor={stallingApiAccessor} 
+				onErrorHandler={(e)=>{}} 
+				dbNameCharLimit={100} />
 		</MemoryRouter>
 	);
 	
@@ -131,7 +163,10 @@ test("DatabaseAddition will disable AddDatabaseForm when adding database", async
 	
 	const addition = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter>
-			<DatabaseAddition apiAccessor={stallingApiAccessor} onErrorHandler={(e)=>{}} />
+			<DatabaseAddition 
+				apiAccessor={stallingApiAccessor} 
+				onErrorHandler={(e)=>{}} 
+				dbNameCharLimit={100} />
 		</MemoryRouter>
 	);
 	

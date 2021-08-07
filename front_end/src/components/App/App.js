@@ -119,7 +119,8 @@ class App extends Component
 						<Route exact path="/create">
 							<DatabaseAddition 
 								apiAccessor= { apiAccessor }
-								onErrorHandler={this.onErrorHandler.bind(this)} />
+								onErrorHandler={this.onErrorHandler.bind(this)}
+								dbNameCharLimit={ (apiSettings) ? apiSettings.dbNameCharLimit : -1 } />
 						</Route>
 						
 						<Route path="/view/:id">
