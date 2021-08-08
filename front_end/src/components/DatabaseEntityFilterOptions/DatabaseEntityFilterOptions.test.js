@@ -189,3 +189,49 @@ test("if there is no table selected for the fk-filter, the fk filter button will
 	ReactTestUtils.Simulate.change(tableSelect, { target: { value: 1 } });
 	expect(runBtn).not.toBeDisabled();
 });
+
+
+test("the run text-filter button will clear the fk filter selects", () => {
+	
+	const options = ReactTestUtils.renderIntoDocument(
+		<DatabaseEntityFilterOptions 
+			schemas={bareTestSchemas} runTextFilter={dummyFuncProp} runFkFilter={dummyFuncProp} />
+	);
+	
+	const schemaSelect = ReactTestUtils.findRenderedDOMComponentWithClass(options, "fkSchemaSelect");
+	const tableSelect = ReactTestUtils.findRenderedDOMComponentWithClass(options, "fkTableSelect");
+	const runTxtFilterBtn = ReactTestUtils.findRenderedDOMComponentWithClass(options, "textFilterRunBtn");
+	
+	ReactTestUtils.Simulate.change(schemaSelect, { target: { value: "1" } });
+	ReactTestUtils.Simulate.change(tableSelect, { target: { value: "1" } });
+	ReactTestUtils.Simulate.click(runTxtFilterBtn);
+	
+	expect(schemaSelect.value).toEqual("-1");
+	expect(tableSelect.value).toEqual("-1");
+});
+
+
+test("the run fk-filter button will clear the text-filter inputs", () => {
+	
+	const options = ReactTestUtils.renderIntoDocument(
+		<DatabaseEntityFilterOptions 
+			schemas={bareTestSchemas} runTextFilter={dummyFuncProp} runFkFilter={dummyFuncProp} />
+	);
+	
+	const filterInputs = ReactTestUtils.scryRenderedDOMComponentsWithClass(options, "textFilterInput");
+	const runFKFilterBtn = ReactTestUtils.findRenderedDOMComponentWithClass(options, "fkFilterRunBtn");
+	const schemaSelect = ReactTestUtils.findRenderedDOMComponentWithClass(options, "fkSchemaSelect");
+	const tableSelect = ReactTestUtils.findRenderedDOMComponentWithClass(options, "fkTableSelect");
+	
+	filterInputs.forEach((fi) => {
+		ReactTestUtils.Simulate.change(fi, { target: { value: "test1" } });
+	});
+	
+	//Need to set these, to enable the run button for the fk filter
+	ReactTestUtils.Simulate.change(schemaSelect, { target: { value: "1" } });
+	ReactTestUtils.Simulate.change(tableSelect, { target: { value: "1" } });
+	
+	ReactTestUtils.Simulate.click(runFKFilterBtn);
+	
+	filterInputs.forEach(fi => expect(fi.value).toEqual(""));
+});

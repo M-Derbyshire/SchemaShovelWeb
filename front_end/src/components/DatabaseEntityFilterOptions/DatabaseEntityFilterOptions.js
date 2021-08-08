@@ -9,18 +9,16 @@ class DatabaseEntityFilterOptions extends Component
 		super(props);
 		
 		this.state = {
-			filterSchemaText: "",
-			filterTableText: "",
-			filterColumnText: "",
-			includeDescriptionText: false,
-			fkSelectedSchemaID: -1,
-			fkSelectedTableID: -1
+			...this.getClearedTextHandlerState(),
+			...this.getClearedFKHandlerState(),
+			includeDescriptionText: false
 		};
 	}
 	
 	
 	runTextFilterHandler()
 	{
+		this.setState(this.getClearedFKHandlerState());
 		this.props.runTextFilter(
 			this.state.filterSchemaText, 
 			this.state.filterTableText, 
@@ -29,29 +27,38 @@ class DatabaseEntityFilterOptions extends Component
 		);
 	}
 	
-	clearTextFilter()
+	getClearedTextHandlerState()
 	{
-		this.setState({
+		return {
 			filterSchemaText: "",
 			filterTableText: "",
 			filterColumnText: ""
-		});
-		
+		};
+	}
+	
+	clearTextFilter()
+	{
+		this.setState(this.getClearedTextHandlerState());
 		this.props.runTextFilter("", "", "", this.state.includeDescriptionText);
 	}
 	
 	runFKFilterHandler()
 	{
+		this.setState(this.getClearedTextHandlerState());
 		this.props.runFkFilter(this.state.fkSelectedTableID);
+	}
+	
+	getClearedFKHandlerState()
+	{
+		return {
+			fkSelectedSchemaID: -1,
+			fkSelectedTableID: -1
+		};
 	}
 	
 	clearFKFilter()
 	{
-		this.setState({
-			fkSelectedSchemaID: -1,
-			fkSelectedTableID: -1
-		});
-		
+		this.setState(this.getClearedFKHandlerState());
 		this.props.runFkFilter(-1);
 	}
 	
