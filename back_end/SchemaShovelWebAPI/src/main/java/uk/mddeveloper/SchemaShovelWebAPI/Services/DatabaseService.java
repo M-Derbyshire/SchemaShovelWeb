@@ -92,8 +92,14 @@ public class DatabaseService {
 		
 		try
 		{
+			//****************************************************************
 			//This goes over the schemas/tables multiple times,
 			//but this allows us to save on calls to the database.
+			
+			//This repetition of loops has drastically cut down the time it 
+			//takes to map a large database's JSON into the DB.
+			
+			//****************************************************************
 			
 			newDatabase = databaseRepo.saveAndFlush(newDatabase);
 			
