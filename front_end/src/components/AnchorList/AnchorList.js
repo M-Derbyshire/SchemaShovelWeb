@@ -12,8 +12,8 @@ class AnchorList extends Component
 	mapAnchorListToElements()
 	{
 		return this.props.anchorObjects.map(
-			(anchor, index) => (
-				<li key={`${index}-${anchor.anchor}`}><a href={"#" + anchor.anchor}>{anchor.label}</a></li>
+			(anchor) => (
+				<li key={`${anchor.anchor}`}><a href={"#" + anchor.anchor}>{anchor.label}</a></li>
 			)
 		);
 	}
