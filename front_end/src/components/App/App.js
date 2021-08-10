@@ -124,7 +124,9 @@ class App extends Component
 						</Route>
 						
 						<Route path="/view/:id">
-							<DatabaseViewer apiAccessor= { apiAccessor } />
+							<DatabaseViewer 
+								apiAccessor= { apiAccessor } 
+								entityDescCharLimit={ (apiSettings) ? apiSettings.entityDescCharLimit : -1 } />
 						</Route>
 						
 						<Route path="/">

@@ -114,7 +114,8 @@ class DatabaseViewer extends Component
 }
 
 DatabaseViewer.propTypes = {
-	apiAccessor: PropTypes.object
+	apiAccessor: PropTypes.object,
+	entityDescCharLimit: PropTypes.number.isRequired //The character limit of entity descriptions
 };
 
 export default withRouter(DatabaseViewer);
