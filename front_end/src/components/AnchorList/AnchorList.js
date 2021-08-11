@@ -13,7 +13,11 @@ class AnchorList extends Component
 	{
 		return this.props.anchorObjects.map(
 			(anchor) => (
-				<li key={`${anchor.anchor}`}><a href={"#" + anchor.anchor}>{anchor.label}</a></li>
+				<li key={`${anchor.anchor}`}>
+				<a href={"#" + anchor.anchor}>
+					{anchor.isMatch && <span className="anchorIsMatchText">(Match) </span>}
+					{anchor.label}
+				</a></li>
 			)
 		);
 	}
@@ -31,9 +35,10 @@ class AnchorList extends Component
 }
 
 AnchorList.propTypes = {
-	//each anchorObject should have 2 properties: 
+	//each anchorObject should have 3 properties: 
 	// - label: the text to display in the anchor tag.
 	// - anchor: the ID of the element to anchor to (don't include the # character)
+	// - isMatch: a boolean, stating if this entity was a matching result in a filter
 	anchorObjects: PropTypes.array.isRequired
 };
 
