@@ -23,7 +23,7 @@ class DatabaseEntity extends Component
 			(this.props.isMatch) ? `${componentClassName} ${matchClassName}` : componentClassName;
 		
 		return (
-			<div className={classList} style={colorStyles}>
+			<div className={classList} style={colorStyles} id={this.props.elementID}>
 				<h1>{this.props.name}</h1>
 				
 				<div className="entityDescription entityDetailLine">
@@ -52,6 +52,7 @@ class DatabaseEntity extends Component
 }
 
 DatabaseEntity.propTypes = {
+	elementID: PropTypes.string.isRequired, //Used as the element ID, so anchors can point to this
 	name: PropTypes.string.isRequired,
 	description: PropTypes.string.isRequired,
 	color: PropTypes.string.isRequired, //The color for the entity type

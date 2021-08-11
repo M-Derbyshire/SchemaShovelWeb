@@ -13,6 +13,7 @@ test.each([
 	
 	const dbEntity = ReactTestUtils.renderIntoDocument(
 		<DatabaseEntity
+			elementID="1"
 			name={name}
 			description="desc"
 			color="#000000"
@@ -35,6 +36,7 @@ test.each([
 	const withFKName = ReactTestUtils.renderIntoDocument(
 		<DatabaseEntity
 			fkToSchemaTableName={fkName}
+			elementID="1"
 			name="name"
 			description="desc"
 			color="#000000"
@@ -46,6 +48,7 @@ test.each([
 	
 	const withoutFKName = ReactTestUtils.renderIntoDocument(
 		<DatabaseEntity
+			elementID="1"
 			name="name"
 			description="desc"
 			color="#000000"
@@ -70,7 +73,7 @@ test("DatabaseEntity will display its children within li elements (within a ul)"
 	const spanClass = "testSpan";
 	
 	const dbEntity = ReactTestUtils.renderIntoDocument(
-		<DatabaseEntity name="name" description="desc" color="#000000" 
+		<DatabaseEntity elementID="1" name="name" description="desc" color="#000000" 
 			saveDescriptionChanges={dummyDescChange} saveDescriptionErrorHandler={dummyDescChangeErrorHandler}
 			descriptionCharLengthLimit={1000}>
 				
@@ -91,4 +94,28 @@ test("DatabaseEntity will display its children within li elements (within a ul)"
 	{
 		expect(spans[i].textContent).toEqual(testTexts[i]);
 	}
+});
+
+test.each([
+	["id1"],
+	["id2"],
+	["id3"],
+])("DatabaseEntity will set it's element ID to the entityID prop", (entityID) => {
+	
+	const dbEntity = ReactTestUtils.renderIntoDocument(
+		<DatabaseEntity
+			elementID={entityID}
+			name={name}
+			description="desc"
+			color="#000000"
+			saveDescriptionChanges={dummyDescChange}
+			saveDescriptionErrorHandler={dummyDescChangeErrorHandler}
+			descriptionCharLengthLimit={1000}
+		 />
+	);
+	
+	const dbEntityElement = ReactTestUtils.findRenderedDOMComponentWithClass(dbEntity, "DatabaseEntity");
+	
+	expect(dbEntityElement.getAttribute("id")).toEqual(entityID);
+	
 });

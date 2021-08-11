@@ -13,6 +13,7 @@ test.each([
 	
 	const dbEntity = ReactTestUtils.renderIntoDocument(
 		<DatabaseEntity 
+			elementID="1"
 			name="name"
 			description={description}
 			color="#000000"
@@ -34,6 +35,7 @@ test("DatabaseEntity will pass the saveDescriptionChanges prop on to the Editabl
 	
 	const dbEntity = ReactTestUtils.renderIntoDocument(
 		<DatabaseEntity 
+			elementID="1"
 			name="name"
 			description="desc"
 			color="#000000"
@@ -58,6 +60,7 @@ test("DatabaseEntity will pass the saveDescriptionErrorHandler prop on to the Ed
 	
 	const dbEntity = ReactTestUtils.renderIntoDocument(
 		<DatabaseEntity 
+			elementID="1"
 			name="name"
 			description="desc"
 			color="#000000"
@@ -85,6 +88,7 @@ test.each([
 	
 	const dbEntity = ReactTestUtils.renderIntoDocument(
 		<DatabaseEntity 
+			elementID="1"
 			name="name"
 			description="desc"
 			color="#000000"
