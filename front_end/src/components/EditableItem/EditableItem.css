@@ -8,7 +8,7 @@
 }
 
 .EditableItem .EITextArea {
-	flex-shrink: 0;
+	flex-shrink: 1;
 	font-weight: 600;
 	flex-grow: 1;
 	margin: auto 0.5em;
@@ -20,5 +20,4 @@
 
 .EditableItem .EIButtonArea {
 	margin: auto 0.5em;
-	flex-shrink: 0;
 }
