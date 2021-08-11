@@ -13,32 +13,39 @@ class DatabaseEntity extends Component
 	
 	render()
 	{
+		const colorStyles = {
+			backgroundColor: this.props.color
+		};
+		
 		const componentClassName = "DatabaseEntity";
-		const matchClassName = "MatchingDatabaseEntity";
+		const matchClassName = "matchingDatabaseEntity";
 		const classList = 
 			(this.props.isMatch) ? `${componentClassName} ${matchClassName}` : componentClassName;
 		
 		return (
-			<div className={classList}>
+			<div className={classList} style={colorStyles}>
 				<h1>{this.props.name}</h1>
 				
-				{/*Description*/}
-				<EditableItem 
-					text={this.props.description} 
-					saveChanges={this.props.saveDescriptionChanges} 
-					saveErrorHandler={this.props.saveDescriptionErrorHandler} 
-					textLengthLimit={this.props.descriptionCharLengthLimit} />
+				<div className="entityDescription entityDetailLine">
+					<label>Description: </label>
+					<EditableItem 
+						text={this.props.description} 
+						saveChanges={this.props.saveDescriptionChanges} 
+						saveErrorHandler={this.props.saveDescriptionErrorHandler} 
+						textLengthLimit={this.props.descriptionCharLengthLimit} />
+				</div>
 				
 				{this.props.fkToSchemaTableName && 
-					<div className="fkToTableInfo">
-						<span className="fkToTableLabel">Foreign key to table: </span>
+					<div className="fkToTableInfo entityDetailLine">
+						<label className="fkToTableLabel">Foreign key to table: </label>
 						<span className="fkToTableName">{this.props.fkToSchemaTableName}</span>
 					</div>
 				}
 				
+				{(React.Children.toArray(this.props.children).length > 0) && 
 				<ul>
 					{React.Children.map(this.props.children, this.childEntityToLiMapper.bind(this))}
-				</ul>
+				</ul>}
 			</div>
 		);
 	}
