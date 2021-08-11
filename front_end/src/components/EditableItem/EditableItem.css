@@ -10,6 +10,12 @@
 .EditableItem .EITextArea {
 	flex-shrink: 0;
 	font-weight: 600;
+	flex-grow: 1;
+	margin: auto 0.5em;
+}
+
+.EditableItem .EITextInput {
+	width: 100%;
 }
 
 .EditableItem .EIButtonArea {
