@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import './DatabaseEntity.css';
 import EditableItem from '../EditableItem/EditableItem';
 
 class DatabaseEntity extends Component
 {
-	constructor(props)
-	{
-		super(props);
-	}
 	
 	childEntityToLiMapper(childEntity, index)
 	{
@@ -58,6 +55,7 @@ DatabaseEntity.propTypes = {
 	//Used to update the database description
 	//Will be an async function
 	saveDescriptionChanges: PropTypes.func.isRequired,
+	
 	saveDescriptionErrorHandler: PropTypes.func.isRequired,
 	descriptionCharLengthLimit: PropTypes.number.isRequired
 };
