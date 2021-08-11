@@ -94,21 +94,21 @@ class DatabaseEntityFilterOptions extends Component
 					
 					<div className="FilterOptionsControl">
 						<label>Schema Filter: </label>
-						<input type="text" className="textFilterInput"
+						<input type="text" className="textFilterInput" size="10"
 							value={this.state.filterSchemaText} 
 							onChange={(e) => this.setState({ filterSchemaText: e.target.value })} />
 					</div>
 					
 					<div className="FilterOptionsControl">
 						<label>Table Filter: </label>
-						<input type="text" className="textFilterInput"
+						<input type="text" className="textFilterInput" size="10"
 							value={this.state.filterTableText} 
 							onChange={(e) => this.setState({ filterTableText: e.target.value })} />
 					</div>
 					
 					<div className="FilterOptionsControl">
 						<label>Column Filter: </label>
-						<input type="text" className="textFilterInput"
+						<input type="text" className="textFilterInput" size="10"
 							value={this.state.filterColumnText} 
 							onChange={(e) => this.setState({ filterColumnText: e.target.value })} />
 					</div>
