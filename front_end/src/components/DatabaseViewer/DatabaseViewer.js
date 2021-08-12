@@ -23,6 +23,8 @@ class DatabaseViewer extends Component
 		this.state = {
 			dbName: null,
 			dbSchemas: new FilterableSchemaList([], schemaColor, tableColor, columnColor),
+			filteredList: [],
+			fkFilterSubjectTable: null,
 			hasFailedToLoad: false,
 			schemaColor: schemaColor,
 			tableColor: tableColor,
@@ -50,19 +52,58 @@ class DatabaseViewer extends Component
 			
 			this.props.apiAccessor.getDatabaseByID(dbID)
 				.then((db) => {
+					
+					const filterableList = 
+						new FilterableSchemaList(db.schemas, schemaColor, tableColor, columnColor);
+					
 					if(this._isMounted) this.setState({
 						dbName: db.name,
-						dbSchemas: new FilterableSchemaList(db.schemas, schemaColor, tableColor, columnColor)
+						dbSchemas: filterableList,
+						filteredList: filterableList.getFullList()
 					});
+					
 				}).catch((err) => {
 					if(this._isMounted) this.setState({
 						hasFailedToLoad: true,
 						dbName: null,
-						dbSchemas: new FilterableSchemaList([], schemaColor, tableColor, columnColor)
+						dbSchemas: new FilterableSchemaList([], schemaColor, tableColor, columnColor),
+						filterableList: [],
+						fkFilterSubjectTable: null
 					});
 				});
 		}
 	}
+	
+	
+	
+	//If the given text values are blank, this acts as a complete clear of both kinds of filter.
+	runTextFilter(schemaFilterText, tableFilterText, columnFilterText, includeDescriptionText)
+	{
+		const newFilteredList = (!schemaFilterText && !tableFilterText && !columnFilterText) ?
+			this.state.dbSchemas.getFullList() :
+			this.state.dbSchemas.getFilteredList(
+				schemaFilterText, 
+				tableFilterText, 
+				columnFilterText, 
+				includeDescriptionText);
+		
+		this.setState({
+			fkFilterSubjectTable: null,
+			filteredList: newFilteredList
+		});
+	}
+	
+	runFkFilter(tableID)
+	{
+		const [subjectTable, newFilteredList] = this.state.dbSchemas.getForeignKeysToTable(tableID);
+		
+		this.setState({
+			fkFilterSubjectTable: subjectTable,
+			filteredList: newFilteredList
+		});
+	}
+	
+	
 	
 	componentDidUpdate()
 	{
@@ -104,8 +145,8 @@ class DatabaseViewer extends Component
 					<div className="dbViewerHeaderRow">
 						<DatabaseEntityFilterOptions 
 							schemas={this.state.dbSchemas.getFullList()}
-							runTextFilter={()=>{}}
-							runFkFilter={()=>{}} />
+							runTextFilter={this.runTextFilter.bind(this)}
+							runFkFilter={this.runFkFilter.bind(this)} />
 					</div>
 				</header>
 			</div>
