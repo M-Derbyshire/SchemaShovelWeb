@@ -40,7 +40,7 @@ class DatabaseViewer extends Component
 	startDatabaseRetrieval()
 	{
 		//this.props.match.params.* is not supported anymore
-		const dbID = window.location.pathname.split("/")[2];
+		const dbID = Number(window.location.pathname.split("/")[2]);
 		
 		//We may not have the apiAccessor yet (say, if the user goes directly to this route, 
 		//rather than through the selection menu)
@@ -138,8 +138,10 @@ class DatabaseViewer extends Component
 			<div className="DatabaseViewer">
 				<header>
 					<div className="dbViewerHeaderRow">
-						<button onClick={this.returnToMenu.bind(this)}>Main Menu</button>
-						<h1>{titleText}</h1>
+						<button className="dbViewerMenuBtn" onClick={this.returnToMenu.bind(this)}>
+							Main Menu
+						</button>
+						<h1 className="dbViewerTitle">{titleText}</h1>
 					</div>
 					
 					<div className="dbViewerHeaderRow">
