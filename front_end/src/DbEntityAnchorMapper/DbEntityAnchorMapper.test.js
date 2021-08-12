@@ -55,9 +55,6 @@ test("map will return the labels with the outer entities pre-pended to the strin
 	const testSchema = bareTestSchemas[0];
 	const testTable = testSchema.childEntities[0];
 	const testColumn = testTable.childEntities[0];
-	testSchema.isMatch = false;
-	testTable.isMatch = false;
-	testColumn.isMatch = false;
 	
 	const result = mapper.map([testSchema]);
 	
@@ -79,4 +76,48 @@ test("map will correctly set the isMatch property of the anchor objects", () => 
 	expect(result[3].isMatch).toBeTruthy();
 	expect(result[4].isMatch).toBeTruthy();
 	expect(result[5].isMatch).toBeTruthy();
+});
+
+
+
+test("mapSingleTable method will use the right EntityElementIdGenerator method for tables to generate the anchor text", () => {
+	
+	const mapper = new DbEntityAnchorMapper();
+	const idGenerator = new EntityElementIdGenerator();
+	
+	const subject = bareTestSchemas[0].childEntities[0];
+	const result = mapper.mapSingleTable(subject, "");
+	
+	expect(result.anchor).toEqual(idGenerator.getIdForTable(subject.id, subject.name));
+});
+
+
+test("mapSingleTable will return the labels with the outer schema pre-pended to the string with a period", () => {
+	
+	const mapper = new DbEntityAnchorMapper();
+	const idGenerator = new EntityElementIdGenerator();
+	
+	const schemaLabel = bareTestSchemas[0].name;
+	const subject = bareTestSchemas[0].childEntities[0];
+	const result = mapper.mapSingleTable(subject, schemaLabel);
+	
+	expect(result.label).toEqual(`${schemaLabel}.${subject.name}`);
+});
+
+test("mapSingleTable will correctly set the isMatch property of the anchor objects", () => {
+	
+	const mapper = new DbEntityAnchorMapper();
+	const idGenerator = new EntityElementIdGenerator();
+	
+	const schemaLabel1 = bareTestSchemas[0].name;
+	const subject1 = bareTestSchemas[0].childEntities[0];
+	const result1 = mapper.mapSingleTable(subject1, schemaLabel1);
+	
+	expect(result1.isMatch).toBeFalsy();
+	
+	const schemaLabel2 = bareTestSchemas[1].name;
+	const subject2 = bareTestSchemas[1].childEntities[0];
+	const result2 = mapper.mapSingleTable(subject2, schemaLabel2);
+	
+	expect(result2.isMatch).toBeTruthy();
 });

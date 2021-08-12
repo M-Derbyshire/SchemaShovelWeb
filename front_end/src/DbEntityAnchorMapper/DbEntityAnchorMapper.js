@@ -18,6 +18,14 @@ export default class DbEntityAnchorMapper
 		return this._mapEntityListForLayer(entityList, 0, "");
 	}
 	
+	//Useful for mapping the subject table of an FK filter.
+	//Returns just the anchor for the table (no inner entities)
+	//schemaLabel is the label of the entity that contains this entity
+	mapSingleTable(table, schemaLabel)
+	{
+		return this._mapEntityListForLayer([table], 1, schemaLabel)[0];
+	}
+	
 	//entityList is the list of entities
 	//layer is the layer number (so schemas is 0; tables is 1; columns is 2)
 	//outLayerLabel is the label of the entity that contains this entity
