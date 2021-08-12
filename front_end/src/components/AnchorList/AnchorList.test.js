@@ -54,3 +54,29 @@ test("AnchorList will add text before the anchor's label, only if isMatch is tru
 	expect(lis[1].textContent.toLowerCase()).toEqual(expect.stringContaining("match"));
 	expect(lis[2].textContent.toLowerCase()).toEqual(expect.not.stringContaining("match"));
 });
+
+test("AnchorList will add the anchor for a specific table to the list, if it is given as the fkSubjectTable prop", () => {
+	
+	const anchorObjects = [
+		{ label: "test1", anchor: "test1", isMatch: false },
+		{ label: "test2", anchor: "test2", isMatch: false },
+		{ label: "test3", anchor: "test3", isMatch: false }
+	];
+	
+	const fkSubjectTable = { label: "subject", anchor: "subject", isMatch: false };
+	
+	const anchorList = ReactTestUtils.renderIntoDocument(
+		<AnchorList anchorObjects={anchorObjects} fkSubjectTable={fkSubjectTable} />
+	);
+	
+	
+	const lis = ReactTestUtils.scryRenderedDOMComponentsWithTag(anchorList, "li");
+	const subjects = ReactTestUtils.scryRenderedDOMComponentsWithClass(anchorList, "fkSubjectAnchor")
+	
+	expect(subjects.length).toBe(1);
+	expect(lis.length).toBe(anchorObjects.length + 1);
+	expect(lis[0].textContent.toLowerCase()).toEqual(expect.stringContaining(fkSubjectTable.label));
+	expect(lis[1].textContent.toLowerCase()).toEqual(expect.stringContaining(anchorObjects[0].label));
+	expect(lis[2].textContent.toLowerCase()).toEqual(expect.stringContaining(anchorObjects[1].label));
+	expect(lis[3].textContent.toLowerCase()).toEqual(expect.stringContaining(anchorObjects[2].label));
+});
