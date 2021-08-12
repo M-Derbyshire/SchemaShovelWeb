@@ -83,8 +83,6 @@ class DatabaseEntityFilterOptions extends Component
 	
 	render()
 	{
-		// console.log(this.state.fkSelectedSchemaID);
-		
 		return (
 			<div className="DatabaseEntityFilterOptions">
 				
