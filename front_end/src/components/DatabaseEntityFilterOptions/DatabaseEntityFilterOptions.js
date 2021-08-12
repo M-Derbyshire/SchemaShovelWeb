@@ -59,7 +59,7 @@ class DatabaseEntityFilterOptions extends Component
 	clearFKFilter()
 	{
 		this.setState(this.getClearedFKHandlerState());
-		this.props.runFkFilter(-1);
+		this.props.runTextFilter("", "", "", this.state.includeDescriptionText);
 	}
 	
 	

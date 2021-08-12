@@ -106,13 +106,13 @@ test("using the fk-filter clear button will clear the lists back to -1", () => {
 });
 
 
-test("the fk-filter clear button will call the runFKFilter prop with -1 as the passed id", () => {
+test("the fk-filter clear button will call the runTextFilter prop with empty strings", () => {
 	
-	const mockRunFkFilter = jest.fn();
+	const mockRunTextFilter = jest.fn();
 	
 	const options = ReactTestUtils.renderIntoDocument(
 		<DatabaseEntityFilterOptions 
-			schemas={bareTestSchemas} runTextFilter={dummyFuncProp} runFkFilter={mockRunFkFilter} />
+			schemas={bareTestSchemas} runTextFilter={mockRunTextFilter} runFkFilter={dummyFuncProp} />
 	);
 	
 	const schemaSelect = ReactTestUtils.findRenderedDOMComponentWithClass(options, "fkSchemaSelect");
@@ -123,7 +123,7 @@ test("the fk-filter clear button will call the runFKFilter prop with -1 as the p
 	ReactTestUtils.Simulate.change(tableSelect, { target: { value: "1" } });
 	ReactTestUtils.Simulate.click(clearBtn);
 	
-	expect(mockRunFkFilter).toHaveBeenCalledWith(-1);
+	expect(mockRunTextFilter).toHaveBeenCalledWith("", "", "", false);
 });
 
 // looking at bareTestSchemas at the top of this file, each tableID is the same as it's schemaID, 
