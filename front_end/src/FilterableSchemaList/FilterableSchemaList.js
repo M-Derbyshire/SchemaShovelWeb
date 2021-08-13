@@ -185,6 +185,7 @@ export default class FilterableSchemaList {
 	getForeignKeysToTable(targetTableID)
 	{
 		let targetTable;
+		let targetSchemaName;
 		
 		const filteredList = this._fullList.reduce((matchingSchemas, schema) => {
 			
@@ -195,6 +196,7 @@ export default class FilterableSchemaList {
 				if(table.id === targetTableID)
 				{
 					targetTable = table;
+					targetSchemaName = schema.name;
 					return matchingTables;
 				}
 				
@@ -217,6 +219,6 @@ export default class FilterableSchemaList {
 		if(!targetTable)
 			throw new Error(`Error while searching for foreign keys to a table: the target table does not exist`);
 		
-		return [targetTable, filteredList];
+		return [targetTable, targetSchemaName, filteredList];
 	}
 }

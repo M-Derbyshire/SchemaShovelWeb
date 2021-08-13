@@ -1,6 +1,7 @@
 export default {
 	
 	targetTableID: 0,
+	targetSchemaName: "schemaWithTarget",
 	
 	expectMatchSchemaIDs: [1, 2],
 	expectMatchTableIDs: [1, 2, 3],

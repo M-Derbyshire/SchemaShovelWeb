@@ -234,13 +234,14 @@ test.each([
 
 
 // See ./testingHelpers/fkToTableData
-test("FilterableSchemaList getForeignKeysToTable will return an array to destructure, containing the target table, and then an array of matching tables (only the tables will have isMatch set to true)", () => {
+test("FilterableSchemaList getForeignKeysToTable will return an array to destructure, containing the target table, the name of the containing schema, and then an array of matching tables (only the tables will have isMatch set to true)", () => {
 	
 	const filtList = new FilterableSchemaList(fkToTableData.fullList, "", "", "");
 	
-	const [targetTable, matchingSchemas] = filtList.getForeignKeysToTable(fkToTableData.targetTableID);
+	const [targetTable, targetSchemaName, matchingSchemas] = filtList.getForeignKeysToTable(fkToTableData.targetTableID);
 	
 	expect(targetTable.id).toEqual(fkToTableData.targetTableID);
+	expect(targetSchemaName).toEqual(fkToTableData.targetSchemaName);
 	expect(matchingSchemas.length).toEqual(fkToTableData.expectMatchSchemaIDs.length);
 	
 	let returnedTableIDs = [];
