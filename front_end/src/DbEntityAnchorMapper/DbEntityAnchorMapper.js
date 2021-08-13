@@ -26,9 +26,9 @@ export default class DbEntityAnchorMapper
 		];
 	}
 	
-	map(entityList)
+	map(schemaList)
 	{
-		return this._mapEntityListForLayer(entityList, 0, "");
+		return this._mapEntityListForLayer(schemaList, 0, "");
 	}
 	
 	//Useful for mapping the subject table of an FK filter.
