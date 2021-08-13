@@ -167,7 +167,7 @@ class DatabaseViewer extends Component
 						<DatabaseEntityFilterOptions 
 							schemas={this.state.dbSchemas.getFullList()}
 							runTextFilter={this.runTextFilter.bind(this)}
-							runFkFilter={this.runFkFilter.bind(this)} />
+							runFkFilter={(this.runFkFilter.bind(this))} />
 					</div>
 				</header>
 				

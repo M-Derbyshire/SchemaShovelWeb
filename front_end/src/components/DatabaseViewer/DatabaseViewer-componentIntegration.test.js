@@ -39,9 +39,80 @@ test("DatabaseViewer will pass the full schema list to DatabaseEntityFilterOptio
 
 
 
-// DatabaseViewer will pass the runTextFilter method to the DatabaseEntityFilterOptions
+//This technically tests 2 things at once (for DatabaseEntityFilterOptions, and AnchorList),
+//but if we didn't do that, we would just be repeating the exact same tests for each thing tested here
+test("DatabaseViewer will pass the runTextFilter method to the DatabaseEntityFilterOptions, and pass the anchorObjects to AnchorList", async () => {
+	
+	const mockAPIAccessor = new MockAPIAccessor([
+		{ id: 1, name: "dbTitle", schemas: [
+			{ id: 1, name: "match", description: "", tables: [] },
+			{ id: 2, name: "other", description: "", tables: [] },
+		]},
+	]);
+	
+	const dbViewer = ReactTestUtils.renderIntoDocument(
+		<MemoryRouter initialEntries={["/view/1"]}>
+			<DatabaseViewer apiAccessor={mockAPIAccessor} entityDescCharLimit={1} />
+		</MemoryRouter>
+	);
+	
+	await sleep(100); //Await the async load method finishing
+	
+	const schemaTextFilterInput = 
+		ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "schemaTextFilterInput");
+	const textFilterRunBtn = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "textFilterRunBtn");
+	
+	const anchors = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "entityAnchor");
+	expect(anchors.length).toBe(2);
+	
+	//This will only match one of the mock schemas
+	ReactTestUtils.Simulate.change(schemaTextFilterInput, { "target": { "value": "match" } });
+	ReactTestUtils.Simulate.click(textFilterRunBtn);
+	
+	const anchorsFiltered = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "entityAnchor");
+	expect(anchorsFiltered.length).toBe(1);
+});
 
-// DatabaseViewer will pass the runFkFilter method to the DatabaseEntityFilterOptions
+
+//This technically tests 2 things at once (for DatabaseEntityFilterOptions, and AnchorList),
+//but if we didn't do that, we would just be repeating the exact same tests for each thing tested here
+test("DatabaseViewer will pass the runFkFilter method to the DatabaseEntityFilterOptions, and pass the fkSubjectTable anchor to AnchorList", async () => {
+	
+	const mockAPIAccessor = new MockAPIAccessor([
+		{ id: 1, name: "dbTitle", schemas: [
+			{ id: 1, name: "schema1", description: "", tables: [
+				{ id: 1, name: "subject", description: "", columns: [] },
+				{ id: 2, name: "fk", description: "", columns: [
+					{ id: 1, name: "fkID", description: "", fkToTableId: 1 },
+				] },
+			] }
+		]},
+	]);
+	
+	const dbViewer = ReactTestUtils.renderIntoDocument(
+		<MemoryRouter initialEntries={["/view/1"]}>
+			<DatabaseViewer apiAccessor={mockAPIAccessor} entityDescCharLimit={1} />
+		</MemoryRouter>
+	);
+	
+	await sleep(100); //Await the async load method finishing
+	
+	const schemaSelect = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "fkSchemaSelect");
+	const tableSelect = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "fkTableSelect");
+	const runBtn = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "fkFilterRunBtn");
+	
+	const anchors = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "entityAnchor");
+	expect(anchors[0].textContent).toEqual(expect.not.stringContaining("subject"));
+	
+	//This will only match one of the mock schemas
+	ReactTestUtils.Simulate.change(schemaSelect, { target: { value: 1 } });
+	ReactTestUtils.Simulate.change(tableSelect, { target: { value: 1 } });
+	ReactTestUtils.Simulate.click(runBtn);
+	
+	const anchorsFiltered = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "entityAnchor");
+	
+	expect(anchorsFiltered[0].textContent).toEqual(expect.stringContaining("subject"));
+});
 
 
 
