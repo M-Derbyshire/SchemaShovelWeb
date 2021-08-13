@@ -117,3 +117,17 @@ test("DatabaseViewer will render a DatabaseEntityFilterOptions", () => {
 	
 	expect(filterOptions.length).toBe(1);
 });
+
+test("DatabaseViewer will render an AnchorList", () => {
+	
+	const dbViewer = ReactTestUtils.renderIntoDocument(
+		<MemoryRouter initialEntries={["/view/1"]}>
+			<DatabaseViewer entityDescCharLimit={1} />
+		</MemoryRouter>
+	);
+	
+	const anchorList = 
+		ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "AnchorList");
+	
+	expect(anchorList.length).toBe(1);
+});
