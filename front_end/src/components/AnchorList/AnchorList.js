@@ -19,7 +19,7 @@ class AnchorList extends Component
 				<li key={`${anchor.anchor}`} 
 					className={(this.props.fkSubjectTable && idx === 0) ? "fkSubjectAnchor" : ""}>
 					
-					<a href={"#" + anchor.anchor}>
+					<a href={"#" + anchor.anchor} className="entityAnchor">
 						{anchor.isMatch && <span className="anchorIsMatchText">(Match) </span>}
 						{this.breakEntitiesToWords(anchor.label)}
 					</a>
@@ -34,7 +34,7 @@ class AnchorList extends Component
 		//We want them to break before each space, if possible.
 		//The CSS for the li elements will remove the width of the space we're adding,
 		//	here, so they don't appear to have a space.
-		return label.replaceAll(".", " .");
+		return label.replace(/\./g, " .");
 	}
 	
 	
