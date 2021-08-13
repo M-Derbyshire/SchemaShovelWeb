@@ -1,5 +1,12 @@
 import EntityElementIdGenerator from '../EntityElementIdGenerator/EntityElementIdGenerator';
 
+
+//Returned "anchor objects" will have the below properties:
+// - anchor: this is the element ID for the entity
+// - label: this is label text for listing anchors
+// - isMatch: was this entity a match to a filter
+// - entityID: the ID in the entity object
+// - entityType: the name of the entity type ("schema"; "table"; "column")
 export default class DbEntityAnchorMapper
 {
 	constructor()
@@ -10,6 +17,12 @@ export default class DbEntityAnchorMapper
 			"getIdForSchema",
 			"getIdForTable",
 			"getIdForColumn"
+		];
+		
+		this.layerEntityTypes = [
+			"schema",
+			"table",
+			"column"
 		];
 	}
 	
@@ -31,7 +44,7 @@ export default class DbEntityAnchorMapper
 	//outLayerLabel is the label of the entity that contains this entity
 	_mapEntityListForLayer(entityList, layer, outerLayerLabel)
 	{
-		if(layer >= this.idGeneratorLayerMethods.length || layer < 0)
+		if(layer >= this.idGeneratorLayerMethods.length || layer >= this.layerEntityTypes.length || layer < 0)
 			return [];
 		
 		const layerMethod = this.idGeneratorLayerMethods[layer];
@@ -42,7 +55,9 @@ export default class DbEntityAnchorMapper
 			const newAnchor = {
 				anchor: this.idGenerator[layerMethod](entity.id, entity.name),
 				isMatch: entity.isMatch,
-				label: ((outerLayerLabel !== "") ? `${outerLayerLabel}.` : "") + entity.name
+				label: ((outerLayerLabel !== "") ? `${outerLayerLabel}.` : "") + entity.name,
+				entityID: entity.id,
+				entityType: this.layerEntityTypes[layer]
 			};
 			
 			anchors.push(newAnchor);

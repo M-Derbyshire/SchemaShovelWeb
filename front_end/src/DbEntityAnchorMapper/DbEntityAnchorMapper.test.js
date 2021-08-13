@@ -63,7 +63,7 @@ test("map will return the labels with the outer entities pre-pended to the strin
 	expect(result[2].label).toEqual(`${testSchema.name}.${testTable.name}.${testColumn.name}`);
 });
 
-test("map will correctly set the isMatch property of the anchor objects", () => {
+test("map will correctly set the isMatch, entityID and entityType properties of the anchor objects", () => {
 	
 	const mapper = new DbEntityAnchorMapper();
 	const idGenerator = new EntityElementIdGenerator();
@@ -76,6 +76,20 @@ test("map will correctly set the isMatch property of the anchor objects", () => 
 	expect(result[3].isMatch).toBeTruthy();
 	expect(result[4].isMatch).toBeTruthy();
 	expect(result[5].isMatch).toBeTruthy();
+	
+	expect(result[0].entityID).toBe(1);
+	expect(result[1].entityID).toBe(1);
+	expect(result[2].entityID).toBe(1);
+	expect(result[3].entityID).toBe(2);
+	expect(result[4].entityID).toBe(2);
+	expect(result[5].entityID).toBe(2);
+	
+	expect(result[0].entityType).toEqual("schema");
+	expect(result[1].entityType).toEqual("table");
+	expect(result[2].entityType).toEqual("column");
+	expect(result[3].entityType).toEqual("schema");
+	expect(result[4].entityType).toEqual("table");
+	expect(result[5].entityType).toEqual("column");
 });
 
 
