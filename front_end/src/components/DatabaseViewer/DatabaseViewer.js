@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import './DatabaseViewer.css';
 import { withRouter } from 'react-router-dom';
 import FilterableSchemaList from '../../FilterableSchemaList/FilterableSchemaList';
+import DbEntityAnchorMapper from '../../DbEntityAnchorMapper/DbEntityAnchorMapper';
 import DatabaseEntityFilterOptions from '../DatabaseEntityFilterOptions/DatabaseEntityFilterOptions';
+import AnchorList from '../AnchorList/AnchorList';
 
 class DatabaseViewer extends Component
 {
@@ -25,6 +27,9 @@ class DatabaseViewer extends Component
 			dbSchemas: new FilterableSchemaList([], schemaColor, tableColor, columnColor),
 			filteredList: [],
 			fkFilterSubjectTable: null,
+			fkFilterSchemaName: "",
+			anchorMapper: new DbEntityAnchorMapper(),
+			fullTableAnchorsList: [],
 			hasFailedToLoad: false,
 			schemaColor: schemaColor,
 			tableColor: tableColor,
@@ -56,10 +61,16 @@ class DatabaseViewer extends Component
 					const filterableList = 
 						new FilterableSchemaList(db.schemas, schemaColor, tableColor, columnColor);
 					
+					const filteredList = filterableList.getFullList();
+					
+					const tableAnchors = 
+						this.state.anchorMapper.map(filteredList).filter(e => e.entityType === "table");
+					
 					if(this._isMounted) this.setState({
 						dbName: db.name,
 						dbSchemas: filterableList,
-						filteredList: filterableList.getFullList()
+						filteredList,
+						fullTableAnchorsList: tableAnchors
 					});
 					
 				}).catch((err) => {
@@ -95,10 +106,11 @@ class DatabaseViewer extends Component
 	
 	runFkFilter(tableID)
 	{
-		const [subjectTable, newFilteredList] = this.state.dbSchemas.getForeignKeysToTable(tableID);
+		const [subjectTable, subjectSchemaName, newFilteredList] = this.state.dbSchemas.getForeignKeysToTable(tableID);
 		
 		this.setState({
 			fkFilterSubjectTable: subjectTable,
+			fkFilterSchemaName: subjectSchemaName,
 			filteredList: newFilteredList
 		});
 	}
@@ -123,6 +135,13 @@ class DatabaseViewer extends Component
 	
 	render()
 	{
+		const anchorMapper = this.state.anchorMapper;
+		
+		const anchorObjects = anchorMapper.map(this.state.filteredList)
+		const fkSubjectTableAnchor = (this.state.fkFilterSubjectTable) ? 
+			anchorMapper.mapSingleTable(this.state.fkFilterSubjectTable, this.state.fkFilterSchemaName) :
+			null;
+		
 		const hasFailedToLoad = this.state.hasFailedToLoad;
 		const isLoading = (!hasFailedToLoad && !this.state.dbName);
 		
@@ -151,6 +170,14 @@ class DatabaseViewer extends Component
 							runFkFilter={this.runFkFilter.bind(this)} />
 					</div>
 				</header>
+				
+				<div className="dbViewerContentContainer">
+					<nav>
+						<AnchorList 
+							anchorObjects={anchorObjects}
+							fkSubjectTable={fkSubjectTableAnchor} />
+					</nav>
+				</div>
 			</div>
 		);
 	}

@@ -43,3 +43,6 @@ test("DatabaseViewer will pass the full schema list to DatabaseEntityFilterOptio
 
 // DatabaseViewer will pass the runFkFilter method to the DatabaseEntityFilterOptions
 
+
+
+// DatabaseViewer will pass the full table label list to DatabaseEntityList (even after a filter, it will be the full list)
