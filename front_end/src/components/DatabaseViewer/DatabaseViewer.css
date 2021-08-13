@@ -17,3 +17,13 @@
 	margin: 5px 1rem 0 0;
 	font-size: large;
 }
+
+.DatabaseViewer .dbViewerContentContainer {
+	display: flex;
+}
+
+.DatabaseViewer .dbViewerContentContainer .AnchorList {
+	width: 17vw;
+	flex-grow: 0;
+	flex-shrink: 0;
+}

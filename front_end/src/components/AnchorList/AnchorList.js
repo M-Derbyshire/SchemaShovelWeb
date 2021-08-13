@@ -4,11 +4,6 @@ import PropTypes from 'prop-types';
 
 class AnchorList extends Component
 {
-	constructor(props)
-	{
-		super(props);
-	}
-	
 	mapAnchorListToElements()
 	{
 		const allAnchors = [];
@@ -26,12 +21,23 @@ class AnchorList extends Component
 					
 					<a href={"#" + anchor.anchor}>
 						{anchor.isMatch && <span className="anchorIsMatchText">(Match) </span>}
-						{anchor.label}
+						{this.breakEntitiesToWords(anchor.label)}
 					</a>
 				</li>
 			)
 		);
 	}
+	
+	breakEntitiesToWords(label)
+	{
+		//This is part of a hack, to make sure the labels line-break in the best way.
+		//We want them to break before each space, if possible.
+		//The CSS for the li elements will remove the width of the space we're adding,
+		//	here, so they don't appear to have a space.
+		return label.replaceAll(".", " .");
+	}
+	
+	
 	
 	render()
 	{

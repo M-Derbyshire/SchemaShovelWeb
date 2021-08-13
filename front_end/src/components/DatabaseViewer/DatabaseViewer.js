@@ -172,11 +172,9 @@ class DatabaseViewer extends Component
 				</header>
 				
 				<div className="dbViewerContentContainer">
-					<nav>
-						<AnchorList 
-							anchorObjects={anchorObjects}
-							fkSubjectTable={fkSubjectTableAnchor} />
-					</nav>
+					<AnchorList 
+						anchorObjects={anchorObjects}
+						fkSubjectTable={fkSubjectTableAnchor} />
 				</div>
 			</div>
 		);

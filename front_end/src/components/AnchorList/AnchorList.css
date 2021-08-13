@@ -1,0 +1,62 @@
+.AnchorList {
+	margin: 0.5rem;
+	padding: 0.25rem;
+	border: 1px solid #666;
+	background-color: white;
+	
+	height: 95vh;
+	overflow-y: scroll;
+	overflow-x: auto;
+	
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0.5rem;
+}
+
+.AnchorList ul {
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+}
+
+.AnchorList li {
+	font-size: 0.75rem;
+	margin: 0.5rem auto;
+	
+	/* 
+		We have programatically added spaces before each period character.
+		This is so the line will break on the period.
+		However, we are removing the actual space created by the space character here.
+	*/
+	word-spacing: -0.5ch;
+}
+
+.AnchorList a {
+	text-decoration: none;
+	color: #00b6ce;
+	
+	display: block; /* So the hover background-color fits the whole li */
+	padding: 0.1rem;
+}
+
+.AnchorList a:hover {
+	color: #007b8b;
+	background-color: #eeee;
+}
+
+
+
+.AnchorList ul .fkSubjectAnchor {
+	background-color: #ddd;
+	border: 1px solid red;
+}
+
+.AnchorList a .anchorIsMatchText {
+	color: red;
+	
+	/* 
+		undoing the effect of the space hack used to remove spaces before periods 
+		(see .AnchorList li styling)
+	*/
+	word-spacing: 0; 
+}
