@@ -84,7 +84,7 @@ test("DatabaseEntity will pass the saveDescriptionErrorHandler prop on to the Ed
 test.each([
 	[100],
 	[200]
-])("DatabaseEntity will pass the saveDescriptionErrorHandler prop on to the EditableItem", (textLimit) => {
+])("DatabaseEntity will pass the descriptionCharLengthLimit prop on to the EditableItem", (textLimit) => {
 	
 	const dbEntity = ReactTestUtils.renderIntoDocument(
 		<DatabaseEntity 
