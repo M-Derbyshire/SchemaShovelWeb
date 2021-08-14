@@ -74,6 +74,17 @@ test("getDatabaseList() will call the error callback, and throw an exception, if
 	expect(mockErrorCallback).toHaveBeenCalledTimes(2);
 });
 
+test("getDatabaseList() will raise an error that contains the status code, if there's a bad status", async () => {
+	
+	const api = new APIAccessor("/", mockErrorCallback);
+	fetch.mockResponses(['[{ "id": 1, "name": "test1" }]', { status: 404 }]);
+	
+	await expect(async () => await api.getDatabaseList()).rejects.toThrow();
+	const errorText = api.getNextError();
+	
+	expect(errorText).toEqual(expect.stringContaining("404"));
+});
+
 test("getDatabaseList() will throw and raise an error, if the JSON was not an array", async () => {
 	
 	const api = new APIAccessor("/", mockErrorCallback);
@@ -142,6 +153,17 @@ test("getDatabaseByID() will not throw or call the error callback if there's no 
 	expect(mockErrorCallback).not.toHaveBeenCalled();
 });
 
+test("getDatabaseByID() will raise an error that contains the status code, if there's a bad status", async () => {
+	
+	const api = new APIAccessor("/", mockErrorCallback);
+	fetch.mockResponses(['[{ "id": 1, "name": "test1", "schemas": [] }]', { status: 404 }]);
+	
+	await expect(async () => await api.getDatabaseByID(1)).rejects.toThrow();
+	const errorText = api.getNextError();
+	
+	expect(errorText).toEqual(expect.stringContaining("404"));
+});
+
 
 
 test("createDatabase() will throw/raise errors, if there were any", async () => {
@@ -199,6 +221,17 @@ test("createDatabase() will not throw or call the error callback if there's no e
 	expect(mockErrorCallback).not.toHaveBeenCalled();
 });
 
+test("createDatabase() will raise an error that contains the status code, if there's a bad status", async () => {
+	
+	const api = new APIAccessor("/", mockErrorCallback);
+	fetch.mockResponses(['[{ "id": 1, "name": "test1", "schemas": [] }]', { status: 404 }]);
+	
+	await expect(async () => await api.createDatabase(createDatabaseJSON)).rejects.toThrow();
+	const errorText = api.getNextError();
+	
+	expect(errorText).toEqual(expect.stringContaining("404"));
+});
+
 
 
 test("updateDatabaseName() will throw/raise errors, if there were any", async () => {
@@ -253,6 +286,17 @@ test("updateDatabaseName() will throw/raise an error, if the given name was not 
 	expect(mockErrorCallback).toHaveBeenCalled();
 });
 
+test("updateDatabaseName() will raise an error that contains the status code, if there's a bad status", async () => {
+	
+	const api = new APIAccessor("/", mockErrorCallback);
+	fetch.mockResponses(['[{ "id": 1, "name": "test1", "schemas": [] }]', { status: 404 }]);
+	
+	await expect(async () => await api.updateDatabaseName(0, "test")).rejects.toThrow();
+	const errorText = api.getNextError();
+	
+	expect(errorText).toEqual(expect.stringContaining("404"));
+});
+
 
 
 test("deleteDatabase() will call the error callback, and throw an exception, if there's an error", async () => {
@@ -283,6 +327,17 @@ test("deleteDatabase() will not throw or call the error callback if there's no e
 	await api.deleteDatabase(1);
 	
 	expect(mockErrorCallback).not.toHaveBeenCalled();
+});
+
+test("deleteDatabase() will raise an error that contains the status code, if there's a bad status", async () => {
+	
+	const api = new APIAccessor("/", mockErrorCallback);
+	fetch.mockResponses(['', { status: 404 }]);
+	
+	await expect(async () => await api.deleteDatabase(1)).rejects.toThrow();
+	const errorText = api.getNextError();
+	
+	expect(errorText).toEqual(expect.stringContaining("404"));
 });
 
 
@@ -349,4 +404,15 @@ test("updateEntityDescription() will not throw or call the error callback if the
 	await api.updateEntityDescription("route", 1, "newDesc");
 	
 	expect(mockErrorCallback).not.toHaveBeenCalled();
+});
+
+test("updateEntityDescription() will raise an error that contains the status code, if there's a bad status", async () => {
+	
+	const api = new APIAccessor("/", mockErrorCallback);
+	fetch.mockResponses(['[{ "id": 1, "name": "test1", "schemas": [] }]', { status: 404 }]);
+	
+	await expect(async () => await api.updateEntityDescription("route", 1, "newDesc")).rejects.toThrow();
+	const errorText = api.getNextError();
+	
+	expect(errorText).toEqual(expect.stringContaining("404"));
 });

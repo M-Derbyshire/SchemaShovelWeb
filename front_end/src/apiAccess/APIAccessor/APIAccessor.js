@@ -37,7 +37,7 @@ export default class APIAccessor
 		
 		if(!response.ok)
 		{
-			throw new Error(response.statusText);
+			throw new Error(`(${response.status}) ${response.statusText}`);
 		}
 		
 		const text = await response.text();

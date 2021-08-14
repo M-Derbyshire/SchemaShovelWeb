@@ -158,7 +158,7 @@ export default class DatabaseEntityAccessor
 			}
 			else
 			{
-				throw new Error(response.statusText);
+				throw new Error(`(${response.status}) ${response.statusText}`);
 			}
 		}
 		catch(err)
