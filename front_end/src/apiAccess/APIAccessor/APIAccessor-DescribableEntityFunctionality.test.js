@@ -21,7 +21,7 @@ test("updateEntityDescription() will return the new object, after having sent th
 	const result = await api.updateEntityDescription(entityRouteName, 1, testNewDesc);
 	
 	expect(result.description).toBe(testNewDesc);
-	expect(fetch).toHaveBeenCalledWith(`${base_url}/${entityRouteName}/${dbID}`, {
+	expect(fetch).toHaveBeenCalledWith(`${base_url}/${entityRouteName}/update_description/${dbID}`, {
 		method: "PATCH",
 		headers: {
 			'Accept': 'application/json',
