@@ -27,3 +27,7 @@
 	flex-grow: 0;
 	flex-shrink: 0;
 }
+
+.DatabaseViewer .dbViewerContentContainer .DatabaseEntityList {
+	flex-grow: 1;
+}

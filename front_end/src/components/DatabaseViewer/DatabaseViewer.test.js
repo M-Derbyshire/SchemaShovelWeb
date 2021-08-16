@@ -126,8 +126,22 @@ test("DatabaseViewer will render an AnchorList", () => {
 		</MemoryRouter>
 	);
 	
-	const anchorList = 
+	const anchorLists = 
 		ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "AnchorList");
 	
-	expect(anchorList.length).toBe(1);
+	expect(anchorLists.length).toBe(1);
+});
+
+test("DatabaseViewer will render a DatabaseEntityList", () => {
+	
+	const dbViewer = ReactTestUtils.renderIntoDocument(
+		<MemoryRouter initialEntries={["/view/1"]}>
+			<DatabaseViewer entityDescCharLimit={1} />
+		</MemoryRouter>
+	);
+	
+	const entityLists = 
+		ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "DatabaseEntityList");
+	
+	expect(entityLists.length).toBe(1);
 });

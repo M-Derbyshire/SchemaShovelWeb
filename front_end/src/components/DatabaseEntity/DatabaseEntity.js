@@ -24,7 +24,7 @@ class DatabaseEntity extends Component
 		
 		return (
 			<div className={classList} style={colorStyles} id={this.props.elementID}>
-				<h1>{this.props.name}</h1>
+				<h1 className={"dbEntityName"}>{this.props.name}</h1>
 				
 				<div className="entityDescription entityDetailLine">
 					<label>Description: </label>

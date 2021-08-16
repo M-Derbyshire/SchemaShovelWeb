@@ -1,0 +1,9 @@
+.DatabaseEntityList ul {
+	list-style: none;
+	padding-left: 0;
+}
+
+.DatabaseEntityList ul .subjectEntityRecord {
+	padding: 1em;
+	background-color: blue;
+}

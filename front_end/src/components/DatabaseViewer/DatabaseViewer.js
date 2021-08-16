@@ -6,6 +6,7 @@ import FilterableSchemaList from '../../FilterableSchemaList/FilterableSchemaLis
 import DbEntityAnchorMapper from '../../DbEntityAnchorMapper/DbEntityAnchorMapper';
 import DatabaseEntityFilterOptions from '../DatabaseEntityFilterOptions/DatabaseEntityFilterOptions';
 import AnchorList from '../AnchorList/AnchorList';
+import DatabaseEntityList from '../DatabaseEntityList/DatabaseEntityList';
 
 class DatabaseViewer extends Component
 {
@@ -18,9 +19,9 @@ class DatabaseViewer extends Component
 	{
 		super(props);
 		
-		const schemaColor = "#ff0000";
-		const tableColor = "#00ff00";
-		const columnColor = "#0000ff";
+		const schemaColor = "#3bdbd9";
+		const tableColor = "#db7e70";
+		const columnColor = "#dbbb70";
 		
 		this.state = {
 			dbName: null,
@@ -175,6 +176,13 @@ class DatabaseViewer extends Component
 					<AnchorList 
 						anchorObjects={anchorObjects}
 						fkSubjectTable={fkSubjectTableAnchor} />
+					
+					<DatabaseEntityList
+						entityList={this.state.filteredList}
+						subjectTableEntity={this.state.fkFilterSubjectTable}
+						tableLabels={this.state.fullTableAnchorsList}
+						entityDescCharLimit={this.props.entityDescCharLimit}
+						apiAccessor={this.props.apiAccessor} />
 				</div>
 			</div>
 		);
