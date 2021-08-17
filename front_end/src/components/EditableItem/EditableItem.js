@@ -80,6 +80,8 @@ class EditableItem extends Component
 							(<input className="EITextInput" type="text" value={this.state.currentText} 
 								onChange={(e) => this.textChange(e)} 
 								disabled={this.state.isSavingChanges}
+								size={1} //Without allowing the input to get really small, upto the min-width,
+										// the flexbox styling doesn't wrap
 								maxLength={(this.state.textLengthLimit > -1) ? 
 												this.state.textLengthLimit : 
 												undefined} />);

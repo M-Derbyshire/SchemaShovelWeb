@@ -1,6 +1,7 @@
 .EditableItem {
 	display: inline-flex;
-	width: 100%;
+	flex-wrap: wrap;
+	width: 99%;
 	justify-content: space-between;
 	border: solid 1px #bbb;
 	padding: 5px;
@@ -8,16 +9,18 @@
 }
 
 .EditableItem .EITextArea {
-	flex-shrink: 1;
-	font-weight: 600;
 	flex-grow: 1;
+	font-weight: 600;
 	margin: auto 0.5em;
+	display: flex;
 }
 
 .EditableItem .EITextInput {
-	width: 100%;
+	flex-grow: 1;
+	min-width: 90px;
 }
 
 .EditableItem .EIButtonArea {
 	margin: auto 0.5em;
+	width: fit-content;
 }
