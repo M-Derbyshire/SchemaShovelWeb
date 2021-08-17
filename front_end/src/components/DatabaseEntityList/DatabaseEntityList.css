@@ -7,3 +7,9 @@
 	padding: 1em;
 	background-color: blue;
 }
+
+@media (max-width: 700px) {
+	.DatabaseEntityList ul .subjectEntityRecord {
+		padding: 0.1em;
+	}
+}

@@ -118,7 +118,7 @@ class DatabaseEntityFilterOptions extends Component
 							onChange={(e) => this.setState({ includeDescriptionText: e.target.checked })} />
 					</div>
 					
-					<div className="FilterOptionsControl">
+					<div className="FilterOptionsControl filterOptionsControlBtns">
 						<button onClick={this.runTextFilterHandler.bind(this)} className="textFilterRunBtn">
 							Filter
 						</button>
@@ -154,7 +154,7 @@ class DatabaseEntityFilterOptions extends Component
 						</select>
 					</div>
 					
-					<div className="FilterOptionsControl">
+					<div className="FilterOptionsControl filterOptionsControlBtns">
 						<button 
 							onClick={this.runFKFilterHandler.bind(this)}
 							disabled={this.state.fkSelectedTableID < 0} 

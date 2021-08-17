@@ -34,3 +34,13 @@
 	margin: auto 0.25rem auto auto;
 	font-weight: bold;
 }
+
+.FilterOptionsRow .FilterOptionsControl select {
+	width: 130px;
+}
+
+@media (max-width: 640px) {
+	.FilterOptionsRow {
+		flex-direction: column;
+	}
+}

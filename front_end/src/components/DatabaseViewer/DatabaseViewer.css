@@ -5,12 +5,20 @@
 	margin: auto 0.5rem;
 }
 
+.DatabaseViewer header > * {
+	display: inline;
+}
+
 .DatabaseViewer .dbViewerHeaderRow {
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
 	padding: 0.25rem;
 	margin: auto 1rem;
+}
+
+.DatabaseViewer .dbViewerHeaderRow h1 {
+	word-break: break-all;
 }
 
 .DatabaseViewer header button {
@@ -30,4 +38,27 @@
 
 .DatabaseViewer .dbViewerContentContainer .DatabaseEntityList {
 	flex-grow: 1;
+}
+
+@media (max-width: 570px) {
+	.DatabaseViewer .dbViewerContentContainer .AnchorList {
+		display: none;
+	}
+	
+	.DatabaseViewer header {
+		margin: auto 0.1em;
+	}
+}
+
+@media (max-width: 400px) {
+	
+	.DatabaseViewer .dbViewerHeaderRow {
+		display: flex;
+		flex-wrap: wrap-reverse;
+	}
+	
+	.DatabaseViewer .dbViewerHeaderRow > * {
+		margin: 0.25em;
+		justify-content: center;
+	}
 }

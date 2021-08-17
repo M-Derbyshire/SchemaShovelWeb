@@ -46,3 +46,20 @@
 	padding-left: 0;
 	border: 1px solid black;
 }
+
+@media (max-width: 570px) {
+	.DatabaseEntity {
+		margin: 0.1em;
+		padding: 0.1em 0.25em;
+		border: 1px solid #666;
+	}
+	
+	.DatabaseEntity h1, .DatabaseEntity .fkToTableName {
+		word-break: break-all;
+	}
+	
+	.DatabaseEntity .fkToTableName::before {
+		content: '\A'; /*New line*/
+		white-space: pre;
+	}
+}
