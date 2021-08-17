@@ -4,7 +4,6 @@
 	padding: 1rem;
 	width: fit-content;
 	min-width: 60vw;
-	min-height: 60vh;
 }
 
 .AddDatabaseForm .infoText {
@@ -21,8 +20,7 @@
 	font-size: large;
 }
 
-
 .AddDatabaseForm .databaseSchemaSubmit, .AddDatabaseForm .databaseSchemaCancel {
 	font-size: large;
-	margin-right: 0.5em;
+	margin: 0.25em 0.5em 0.25em auto;
 }
