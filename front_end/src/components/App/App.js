@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import APIAccessor from '../../apiAccess/APIAccessor/APIAccessor';
 import DatabaseSelection from '../DatabaseSelection/DatabaseSelection';
 import DatabaseAddition from '../DatabaseAddition/DatabaseAddition';
@@ -105,41 +106,38 @@ class App extends Component
 		
 		return (
 			<div className="App">
-				<BrowserRouter>
-					<ErrorDisplay>
-						{this.state.errorList.map(this.errorMessageMapper.bind(this))}
-					</ErrorDisplay>
+				<ErrorDisplay>
+					{this.state.errorList.map(this.errorMessageMapper.bind(this))}
+				</ErrorDisplay>
+				
+				<header>
+					<h1>SchemaShovel Web</h1>
+				</header>
+				
+				<Switch>
 					
-					<header>
-						<h1>SchemaShovel Web</h1>
-					</header>
+					<Route exact path="/create">
+						<DatabaseAddition 
+							apiAccessor= { apiAccessor }
+							onErrorHandler={this.onErrorHandler.bind(this)}
+							dbNameCharLimit={ (apiSettings) ? apiSettings.dbNameCharLimit : -1 } />
+					</Route>
 					
-					<Switch>
-						
-						<Route exact path="/create">
-							<DatabaseAddition 
-								apiAccessor= { apiAccessor }
-								onErrorHandler={this.onErrorHandler.bind(this)}
-								dbNameCharLimit={ (apiSettings) ? apiSettings.dbNameCharLimit : -1 } />
-						</Route>
-						
-						<Route path="/view/:id">
-							<DatabaseViewer 
-								apiAccessor= { apiAccessor } 
-								entityDescCharLimit={ (apiSettings) ? apiSettings.entityDescCharLimit : -1 } />
-						</Route>
-						
-						<Route path="/">
-							<DatabaseSelection 
-								apiAccessor={ apiAccessor }
-								dbNameCharLimit={ (apiSettings) ? apiSettings.dbNameCharLimit : -1 } />
-						</Route>
-					</Switch>
+					<Route path="/view/:id">
+						<DatabaseViewer 
+							apiAccessor= { apiAccessor } 
+							entityDescCharLimit={ (apiSettings) ? apiSettings.entityDescCharLimit : -1 } />
+					</Route>
 					
-				</BrowserRouter>
+					<Route path="/">
+						<DatabaseSelection 
+							apiAccessor={ apiAccessor }
+							dbNameCharLimit={ (apiSettings) ? apiSettings.dbNameCharLimit : -1 } />
+					</Route>
+				</Switch>
 			</div>
 		);
 	}
 }
 
-export default App;
+export default withRouter(App);
