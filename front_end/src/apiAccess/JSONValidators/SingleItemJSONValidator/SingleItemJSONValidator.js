@@ -1,10 +1,18 @@
 import JSONValidator from '../JSONValidator/JSONValidator';
 
-//Used to validate a single object, based on the given array of valid properties
-export default class SingleItemJSONValidator extends JSONValidator
+/**
+* Used to validate JSON text for a single object, based on the given array of valid properties
+* @extends JSONValidator
+ */
+class SingleItemJSONValidator extends JSONValidator
 {
-	//validProperties will be an array of objects. Each object will have a "name" and 
-	//"type" property
+	/**
+	* Creates a new DatabaseJSONValidator instance
+	* @param {array} validProperties - An array of objects that define the valid properties for the item in 
+	* question. Each of these objects will have a "name" and "type" property, 
+	* which are both strings. They can also have "optional" and "canBeEmptyString" properties, which are 
+	* booleans
+	*/
 	constructor(validProperties)
 	{
 		super();
@@ -12,9 +20,11 @@ export default class SingleItemJSONValidator extends JSONValidator
 		this._validProperties = validProperties;
 	}
 	
-	//Takes the textual representation of the item, and validates it.
-	//As per the superclass, this returns true if there were no errors,
-	//or false if errors were raised
+	/**
+	* Validates the given JSON text
+	* @param {string} json - The JSON text to be validated
+	* @return {boolean} Returns true if the JSON is valid, or false if not
+	*/
 	validateJSON(json)
 	{
 		try
@@ -37,3 +47,5 @@ export default class SingleItemJSONValidator extends JSONValidator
 		return !this.hasErrors();
 	}
 }
+
+export default SingleItemJSONValidator;

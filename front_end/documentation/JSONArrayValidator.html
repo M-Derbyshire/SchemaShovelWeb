@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: exports</title>
+    <title>JSDoc: Class: JSONArrayValidator</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: exports</h1>
+    <h1 class="page-title">Class: JSONArrayValidator</h1>
 
     
 
@@ -28,11 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>exports<span class="signature">(isJSONFromAPI)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>JSONArrayValidator<span class="signature">(itemTypeName, validProperties)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Used to validate JSON representations of database schemas (and their inner-objects).
-This could be JSON provided by the user, or JSON from the API (when the user is accessing
-a database's record).</p></div>
+            <div class="class-description"><p>Used to validate a JSON text representation of an array of objects, based on the given validProperties</p></div>
         
     
 </header>
@@ -47,7 +45,7 @@ a database's record).</p></div>
     
 
     
-    <h4 class="name" id="exports"><span class="type-signature"></span>new exports<span class="signature">(isJSONFromAPI)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="JSONArrayValidator"><span class="type-signature"></span>new JSONArrayValidator<span class="signature">(itemTypeName, validProperties)</span><span class="type-signature"></span></h4>
     
 
     
@@ -55,7 +53,7 @@ a database's record).</p></div>
 
 
 <div class="description">
-    <p>Creates a new DatabaseJSONValidator instance</p>
+    <p>Create a new JSONArrayValidator instance</p>
 </div>
 
 
@@ -81,8 +79,6 @@ a database's record).</p></div>
         
 
         
-        <th>Default</th>
-        
 
         <th class="last">Description</th>
     </tr>
@@ -93,13 +89,13 @@ a database's record).</p></div>
 
         <tr>
             
-                <td class="name"><code>isJSONFromAPI</code></td>
+                <td class="name"><code>itemTypeName</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">string</span>
 
 
             
@@ -108,15 +104,35 @@ a database's record).</p></div>
             
 
             
-                <td class="default">
-                
-                    true
-                
-                </td>
+
+            <td class="description last"><p>the name of the type of entity being validated, such as
+schema/table/column (used in error messages)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>validProperties</code></td>
             
 
-            <td class="description last"><p>Is the JSON to be validated from the API, rather
-than from the user?</p></td>
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An array of objects that define the valid properties for the item in
+question. Each of these objects will have a &quot;name&quot; and &quot;type&quot; property,
+which are both strings. They can also have &quot;optional&quot; and &quot;canBeEmptyString&quot; properties, which are
+booleans</p></td>
         </tr>
 
     
@@ -157,7 +173,7 @@ than from the user?</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="apiAccess_JSONValidators_DatabaseJSONValidator_DatabaseJSONValidator.js.html">apiAccess/JSONValidators/DatabaseJSONValidator/DatabaseJSONValidator.js</a>, <a href="apiAccess_JSONValidators_DatabaseJSONValidator_DatabaseJSONValidator.js.html#line12">line 12</a>
+        <a href="apiAccess_JSONValidators_JSONArrayValidator_JSONArrayValidator.js.html">apiAccess/JSONValidators/JSONArrayValidator/JSONArrayValidator.js</a>, <a href="apiAccess_JSONValidators_JSONArrayValidator_JSONArrayValidator.js.html#line7">line 7</a>
     </li></ul></dd>
     
 
@@ -1406,7 +1422,7 @@ booleans</p></td>
     
 
     
-    <h4 class="name" id="validateJSON"><span class="type-signature"></span>validateJSON<span class="signature">(json)</span><span class="type-signature"> &rarr; {bool}</span></h4>
+    <h4 class="name" id="validateJSON"><span class="type-signature"></span>validateJSON<span class="signature">(json)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
@@ -1414,7 +1430,7 @@ booleans</p></td>
 
 
 <div class="description">
-    <p>Overrides of this should return true if successful, or false if there were errors</p>
+    <p>Validates the given JSON text</p>
 </div>
 
 
@@ -1512,7 +1528,7 @@ booleans</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="apiAccess_JSONValidators_JSONValidator_JSONValidator.js.html">apiAccess/JSONValidators/JSONValidator/JSONValidator.js</a>, <a href="apiAccess_JSONValidators_JSONValidator_JSONValidator.js.html#line41">line 41</a>
+        <a href="apiAccess_JSONValidators_JSONArrayValidator_JSONArrayValidator.js.html">apiAccess/JSONValidators/JSONArrayValidator/JSONArrayValidator.js</a>, <a href="apiAccess_JSONValidators_JSONArrayValidator_JSONArrayValidator.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -1541,7 +1557,7 @@ booleans</p></td>
 
         
 <div class="param-desc">
-    <p>This implementation just returns true</p>
+    <p>Returns true if the JSON is valid, or false if not</p>
 </div>
 
 
@@ -1552,7 +1568,7 @@ booleans</p></td>
     </dt>
     <dd>
         
-<span class="param-type">bool</span>
+<span class="param-type">boolean</span>
 
 
     </dd>
@@ -1580,13 +1596,13 @@ booleans</p></td>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="APIAccessor.html">APIAccessor</a></li><li><a href="App.html">App</a></li><li><a href="DatabaseEntityAccessor.html">DatabaseEntityAccessor</a></li><li><a href="DescribableEntityAccessor.html">DescribableEntityAccessor</a></li><li><a href="JSONValidator.html">JSONValidator</a></li><li><a href="module.exports.html">exports</a></li><li><a href="Queue.html">Queue</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_getErrorsFromSingleItemValidator">_getErrorsFromSingleItemValidator</a></li><li><a href="global.html#_validateColumns">_validateColumns</a></li><li><a href="global.html#_validateSchemaArray">_validateSchemaArray</a></li><li><a href="global.html#_validateTables">_validateTables</a></li><li><a href="global.html#validateJSON">validateJSON</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="APIAccessor.html">APIAccessor</a></li><li><a href="App.html">App</a></li><li><a href="DatabaseEntityAccessor.html">DatabaseEntityAccessor</a></li><li><a href="DatabaseJSONValidator.html">DatabaseJSONValidator</a></li><li><a href="DescribableEntityAccessor.html">DescribableEntityAccessor</a></li><li><a href="JSONArrayValidator.html">JSONArrayValidator</a></li><li><a href="JSONValidator.html">JSONValidator</a></li><li><a href="Queue.html">Queue</a></li><li><a href="SingleItemJSONValidator.html">SingleItemJSONValidator</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Aug 23 2021 18:34:55 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Aug 23 2021 18:56:31 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

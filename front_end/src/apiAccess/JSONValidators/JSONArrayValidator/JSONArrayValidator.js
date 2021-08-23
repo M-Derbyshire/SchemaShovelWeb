@@ -1,10 +1,20 @@
 import JSONValidator from '../JSONValidator/JSONValidator'; 
 
-export default class JSONArrayValidator extends JSONValidator
+/** 
+* Used to validate a JSON text representation of an array of objects, based on the given validProperties 
+* @extends JSONValidator
+*/
+class JSONArrayValidator extends JSONValidator
 {
-	//itemTypeName is the name of the type of entity being validated (used in error messages)
-	//validProperties will be an array of objects. Each object will have a "name" and 
-	//	"type" property
+	/**
+	* Create a new JSONArrayValidator instance
+	* @param {string} itemTypeName - the name of the type of entity being validated, such as 
+	* schema/table/column (used in error messages)
+	* @param {array} validProperties - An array of objects that define the valid properties for the item in 
+	* question. Each of these objects will have a "name" and "type" property, 
+	* which are both strings. They can also have "optional" and "canBeEmptyString" properties, which are 
+	* booleans
+	*/
 	constructor(itemTypeName, validProperties)
 	{
 		super();
@@ -13,9 +23,12 @@ export default class JSONArrayValidator extends JSONValidator
 		this._validProperties = validProperties;
 	}
 	
-	//Takes the textual representation of the array of objects, and validates it.
-	//As per the superclass, this returns true if there were no errors,
-	//or false if errors were raised
+	
+	/**
+	* Validates the given JSON text
+	* @param {string} json - The JSON text to be validated
+	* @return {boolean} Returns true if the JSON is valid, or false if not
+	*/
 	validateJSON(json)
 	{
 		try
@@ -40,3 +53,5 @@ export default class JSONArrayValidator extends JSONValidator
 		return !this.hasErrors();
 	}
 }
+
+export default JSONArrayValidator;
