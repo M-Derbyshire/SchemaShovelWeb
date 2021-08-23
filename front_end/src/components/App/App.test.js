@@ -127,3 +127,22 @@ test("App's onErrorHandler will console.error the errors", async () => {
 	
 	expect(console.error).toHaveBeenCalledWith(expect.stringContaining(errorText));
 });
+
+test.each([
+	['{ "dbNameCharLimit": 1, "entityDescCharLimit": 1 }'],
+	['{ "apiBaseURL": "http://myapi.com", "entityDescCharLimit": 1 }'], 
+	['{ "apiBaseURL": "http://myapi.com", "dbNameCharLimit": 1 }']
+])("App will raise an error if the API Settings JSON is missing a property", async (json) => {
+	
+	fetch.mockResponseOnce(json);
+	
+	const application = ReactTestUtils.renderIntoDocument(
+		<MemoryRouter initialEntries={["/"]}>
+			<App />
+		</MemoryRouter>
+	);
+	
+	await sleep(100); //Awaiting loading of settings (which will fail)
+	
+	expect(console.error).toHaveBeenCalledWith(expect.stringContaining("Settings JSON is misshapen"));
+});
