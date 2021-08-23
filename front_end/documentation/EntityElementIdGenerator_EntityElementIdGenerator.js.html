@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: apiAccess/Queue/Queue.js</title>
+    <title>JSDoc: Source: EntityElementIdGenerator/EntityElementIdGenerator.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: apiAccess/Queue/Queue.js</h1>
+    <h1 class="page-title">Source: EntityElementIdGenerator/EntityElementIdGenerator.js</h1>
 
     
 
@@ -26,62 +26,57 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** A standard implementation of a Queue data structure */
-class Queue
+            <pre class="prettyprint source linenums"><code>/** Used to generate a unique ID for a given entity object (from a FilterableSchemaList instance). 
+These can be used as HTML element IDs */
+class EntityElementIdGenerator
 {
-	/** Create a new Queue instance */
-	constructor()
+	/**
+	* Generate an ID for a schema object
+	* @param {number} schemaID - The ID from the schema entity object
+	* @param {string} schemaName - The name of the schema
+	* @return {string} The generated ID
+	 */
+	getIdForSchema(schemaID, schemaName)
 	{
-		this._queue = [];
-	}
-	
-	/** 
-	* Add an item to the queue 
-	* @param item - The item to add to the queue
-	*/
-	enqueue(item)
-	{
-		this._queue.push(item);
+		return this._getIdForEntity(schemaID, schemaName, "schema");
 	}
 	
 	/**
-	* Retrieve and remove the next item from the queue
-	* @return The item that was removed from the queue
-	*/
-	dequeue()
+	* Generate an ID for a table object
+	* @param {number} tableID - The ID from the table entity object
+	* @param {string} tableName - The name of the table
+	* @return {string} The generated ID
+	 */
+	getIdForTable(tableID, tableName)
 	{
-		return this._queue.shift();
+		return this._getIdForEntity(tableID, tableName, "table");
 	}
 	
 	/**
-	* Retrieve (but don't remove) the next item from the queue
-	* @return The next item from the queue
-	*/
-	peek()
+	* Generate an ID for a column object
+	* @param {number} columnID - The ID from the column entity object
+	* @param {string} columnName - The name of the column
+	* @return {string} The generated ID
+	 */
+	getIdForColumn(columnID, columnName)
 	{
-		return this._queue[0];
+		return this._getIdForEntity(columnID, columnName, "column");
 	}
 	
-	/**
-	* Get the current length of the queue
-	* @return {number} The current length of the queue
-	*/
-	getLength()
-	{
-		return this._queue.length;
-	}
 	
 	/**
-	* Returns a boolean, which confirms if the queue is currently empty
-	* @return {boolean} Is the queue currently empty?
-	*/
-	isEmpty()
+	* Generate an ID for an entity object
+	* @param {number} id - The ID from the entity object
+	* @param {string} name - The name of the entity
+	* @return {string} The generated ID
+	 */
+	_getIdForEntity(id, name, entityType)
 	{
-		return (this.getLength() === 0);
+		return `${entityType}:${id}_${name}`;
 	}
 }
 
-export default Queue;</code></pre>
+export default EntityElementIdGenerator;</code></pre>
         </article>
     </section>
 
