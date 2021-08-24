@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import './ErrorMessage.css';
 import PropTypes from 'prop-types';
 
+/**
+* Displays the given error message text, and provides a button for dismissing the error
+*
+*@component
+ */
 class ErrorMessage extends Component
 {
+	/** Renders an ErrorMessage */
 	render()
 	{
 		return (
@@ -16,7 +22,14 @@ class ErrorMessage extends Component
 }
 
 ErrorMessage.propTypes = {
+	/**
+	* The error text to be displayed
+	 */
 	errorText: PropTypes.string.isRequired,
+	
+	/**
+	* A function that will dismiss this error.
+	 */
 	closeButtonOnClick: PropTypes.func.isRequired
 };
 
