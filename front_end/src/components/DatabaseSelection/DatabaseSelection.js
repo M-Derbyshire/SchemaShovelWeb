@@ -5,6 +5,11 @@ import SelectableList from '../SelectableList/SelectableList';
 import EditableItem from '../EditableItem/EditableItem';
 import DatabaseListOptions from '../DatabaseListOptions/DatabaseListOptions';
 
+/**
+* Used to view the list of databases in the app's database. Also used to add/remove/rename/load databases
+*
+*@component
+ */
 class DatabaseSelection extends Component
 {
 	//Used if the user leaves changes route, but a promise is still unresolved.
@@ -12,6 +17,7 @@ class DatabaseSelection extends Component
 	//This can't be held in state, as it won't get set in componentWillUnount
 	_isMounted: boolean = false;
 	
+	/** Create a new instance of DatabaseSelection */
 	constructor(props)
 	{
 		super(props);
@@ -23,6 +29,10 @@ class DatabaseSelection extends Component
 		};
 	}
 	
+	/**
+	* Sets the selected database's index (index in the this.state.databaseList array)
+	* @param {number} index - The index in the this.state.databaseList array
+	 */
 	setSelectedDatabaseIndex(index)
 	{
 		if(this.state.selectedDatabaseIndex !== index)
@@ -31,6 +41,10 @@ class DatabaseSelection extends Component
 		}
 	}
 	
+	/**
+	* Deletes a database record from the app's database, and removes it from the displayed list
+	* @param {number} id - The ID of the database record
+	 */
 	async deleteDatabaseAndRemoveFromList(id)
 	{
 		try
@@ -48,6 +62,11 @@ class DatabaseSelection extends Component
 		}
 	}
 	
+	/**
+	* A callback function for a map function. This maps database objects, from the API, into 
+	* EditableItem components (so the database name can be changed by the user)
+	* @param {object} db - The database object (should have id and name properties)
+	 */
 	databaseListMapper(db)
 	{
 		const apiAccessor = this.props.apiAccessor;
@@ -66,6 +85,10 @@ class DatabaseSelection extends Component
 		);
 	}
 	
+	/**
+	* Starts the retrieval of the list of databases, once an instance of APIAccessor has been provided 
+	* as a prop
+	 */
 	startDatabaseListRetrieval()
 	{
 		if(this.state.databaseList === null && this.props.apiAccessor && !this.state.hasFailedToLoad)
@@ -84,11 +107,17 @@ class DatabaseSelection extends Component
 		}
 	}
 	
+	/**
+	* Attempts to start the retrieval of the list of databases
+	 */
 	componentDidUpdate()
 	{
 		this.startDatabaseListRetrieval();
 	}
 	
+	/**
+	* Attempts to start the retrieval of the list of databases, and sets this._isMounted to true
+	 */
 	componentDidMount()
 	{
 		//This is more useful for integration tests, 
@@ -97,11 +126,15 @@ class DatabaseSelection extends Component
 		this._isMounted = true;
 	}
 	
+	/**
+	* Sets this._isMounted to false
+	 */
 	componentWillUnmount()
 	{
 		this._isMounted = false;
 	}
 	
+	/** Render the DatabaseSelection */
 	render()
 	{
 		const selectedDatabaseIndex = (this.state.hasFailedToLoad) ? -1 : this.state.selectedDatabaseIndex;
@@ -132,7 +165,14 @@ class DatabaseSelection extends Component
 }
 
 DatabaseSelection.propTypes = {
+	/**
+	* An instance of APIAccessor (if this is undefined, a loading message will be displayed)
+	 */
 	apiAccessor: PropTypes.object,
+	
+	/**
+	* The character limit for database names
+	 */
 	dbNameCharLimit: PropTypes.number.isRequired
 };
 
