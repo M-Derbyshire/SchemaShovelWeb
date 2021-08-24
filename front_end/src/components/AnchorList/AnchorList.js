@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import './AnchorList.css';
 import PropTypes from 'prop-types';
 
+/**
+* Provides a list of anchor tags for the different entities in the currently viewed database record, 
+* so the user can quickly navigate to each one
+*
+*@component
+ */
 class AnchorList extends Component
 {
 	mapAnchorListToElements()
@@ -52,14 +58,15 @@ class AnchorList extends Component
 }
 
 AnchorList.propTypes = {
-	//each anchorObject should have 3 properties: 
-	// - label: the text to display in the anchor tag.
-	// - anchor: the ID of the element to anchor to (don't include the # character)
-	// - isMatch: a boolean, stating if this entity was a matching result in a filter
+	/**
+	* An array of "anchor objects", created by an instance of DbEntityAnchorMapper.
+	 */
 	anchorObjects: PropTypes.array.isRequired,
 	
-	//When a table is the subject of a search for foreign keys, an anchor object for the
-	// the table can be passed in here
+	/**
+	* When a table is the subject of a search for foreign keys, an anchor object for the table 
+	* can be passed in as this prop
+	 */
 	fkSubjectTable: PropTypes.object
 };
 
