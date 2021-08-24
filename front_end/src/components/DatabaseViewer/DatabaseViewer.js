@@ -8,6 +8,11 @@ import DatabaseEntityFilterOptions from '../DatabaseEntityFilterOptions/Database
 import AnchorList from '../AnchorList/AnchorList';
 import DatabaseEntityList from '../DatabaseEntityList/DatabaseEntityList';
 
+/**
+* Used to view and search through the entities within a database record.
+*
+*@component
+ */
 class DatabaseViewer extends Component
 {
 	//Used if the user leaves changes route, but a promise is still unresolved.
@@ -15,6 +20,7 @@ class DatabaseViewer extends Component
 	//This can't be held in state, as it won't get set in componentWillUnount
 	_isMounted: boolean = false;
 	
+	/** Create a new DatabaseViewer instance */
 	constructor(props)
 	{
 		super(props);
@@ -38,11 +44,16 @@ class DatabaseViewer extends Component
 		};
 	}
 	
+	/** Returns the user to the homepage */
 	returnToMenu()
 	{
 		this.props.history.push("/");
 	}
 	
+	/**
+	* Starts the retrieval of the database record, once an instance of APIAccessor has been provided 
+	* as a prop
+	 */
 	startDatabaseRetrieval()
 	{
 		//this.props.match.params.* is not supported anymore
@@ -88,7 +99,14 @@ class DatabaseViewer extends Component
 	
 	
 	
-	//If the given text values are blank, this acts as a complete clear of both kinds of filter.
+	/** 
+	* Runs a text filter against the database entity names (and possibly also thier descriptions). If the
+	* given text values are blank, this acts as a complete clear of both the text and FK filters.
+	* @param {string} schemaFilterText - The filter text for schema names/descriptions | 
+	* @param {string} tableFilterText - The filter text for table names/descriptions | 
+	* @param {string} columnFilterText - The filter text for column names/descriptions | 
+	* @param {boolean} includeDescriptionText - Should descriptions be included in the filter? 
+	*/
 	runTextFilter(schemaFilterText, tableFilterText, columnFilterText, includeDescriptionText)
 	{
 		const newFilteredList = (!schemaFilterText && !tableFilterText && !columnFilterText) ?
@@ -105,6 +123,10 @@ class DatabaseViewer extends Component
 		});
 	}
 	
+	/**
+	* Runs a filter that finds tables with Foreign Keys to a given table
+	* @param {number} tableID - The ID of the table that is the subject of the search
+	 */
 	runFkFilter(tableID)
 	{
 		const [subjectTable, subjectSchemaName, newFilteredList] = this.state.dbSchemas.getForeignKeysToTable(tableID);
@@ -117,23 +139,32 @@ class DatabaseViewer extends Component
 	}
 	
 	
-	
+	/**
+	* Attempts to start the retrieval of the list of databases
+	 */
 	componentDidUpdate()
 	{
 		this.startDatabaseRetrieval();
 	}
 	
+	/**
+	* Attempts to start the retrieval of the list of databases, and sets this._isMounted to true
+	 */
 	componentDidMount()
 	{
 		this.startDatabaseRetrieval();
 		this._isMounted = true;
 	}
 	
+	/**
+	* Sets this._isMounted to false
+	 */
 	componentWillUnmount()
 	{
 		this._isMounted = false;
 	}
 	
+	/** Render the DatabaseViewer */
 	render()
 	{
 		const anchorMapper = this.state.anchorMapper;
@@ -190,7 +221,14 @@ class DatabaseViewer extends Component
 }
 
 DatabaseViewer.propTypes = {
+	/**
+	* An instance of APIAccessor (if this is undefined, a loading message will be displayed)
+	 */
 	apiAccessor: PropTypes.object,
+	
+	/**
+	* The character limit for database entity descriptions
+	 */
 	entityDescCharLimit: PropTypes.number.isRequired //The character limit of entity descriptions
 };
 
