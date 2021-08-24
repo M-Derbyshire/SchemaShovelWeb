@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import './ErrorDisplay.css';
 
+/**
+* Displays its child elements as a list of errors
+*
+*@component
+ */
 class ErrorDisplay extends Component
 {
+	/**
+	* A callback for a map function. Maps a child element into a JSX LI element
+	* @param {JSX} child - The child element
+	* @return {JSX} The JSX LI element, containing the child element
+	 */
 	childMapper(child)
 	{
 		return (
@@ -10,6 +20,7 @@ class ErrorDisplay extends Component
 		);
 	}
 	
+	/** Render an ErrorDisplay */
 	render()
 	{
 		return (
