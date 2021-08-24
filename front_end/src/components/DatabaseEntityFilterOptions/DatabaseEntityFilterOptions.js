@@ -2,8 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './DatabaseEntityFilterOptions.css';
 
+/**
+* Provides an interface for filtering through the viewed 
+* database entities
+*
+*@component
+ */
 class DatabaseEntityFilterOptions extends Component
 {
+	/** Render a new DatabaseEntityFilterOptions */
 	constructor(props)
 	{
 		super(props);
@@ -15,7 +22,9 @@ class DatabaseEntityFilterOptions extends Component
 		};
 	}
 	
-	
+	/**
+	* Handles the running of the text filter, with the values of the filter-text states
+	 */
 	runTextFilterHandler()
 	{
 		this.setState(this.getClearedFKHandlerState());
@@ -27,6 +36,11 @@ class DatabaseEntityFilterOptions extends Component
 		);
 	}
 	
+	/**
+	* Provides an object with the filter-text properties, but reset to their cleared values (to be passed 
+	* to setState())
+	* @return {object} An object to be passed to setState(), in order to clear the text filter
+	 */
 	getClearedTextHandlerState()
 	{
 		return {
@@ -36,18 +50,29 @@ class DatabaseEntityFilterOptions extends Component
 		};
 	}
 	
+	/**
+	* Clears the text-filter
+	 */
 	clearTextFilter()
 	{
 		this.setState(this.getClearedTextHandlerState());
 		this.props.runTextFilter("", "", "", this.state.includeDescriptionText);
 	}
 	
+	/**
+	* Handles the running of a Foreign Key filter
+	 */
 	runFKFilterHandler()
 	{
 		this.setState(this.getClearedTextHandlerState());
 		this.props.runFkFilter(this.state.fkSelectedTableID);
 	}
 	
+	/**
+	* Provides an object with the FK filter properties, but reset to their cleared values (to be passed 
+	* to setState())
+	* @return {object} An object to be passed to setState(), in order to clear the FK filter
+	 */
 	getClearedFKHandlerState()
 	{
 		return {
@@ -56,19 +81,32 @@ class DatabaseEntityFilterOptions extends Component
 		};
 	}
 	
+	/**
+	* Clears the FK filter
+	 */
 	clearFKFilter()
 	{
 		this.setState(this.getClearedFKHandlerState());
 		this.props.runTextFilter("", "", "", this.state.includeDescriptionText);
 	}
 	
-	
+	/**
+	* Maps the this.props.schemas array into a list of JSX option elements (with the schema ID and name).
+	* Used to generate options for the schema select list in the FK filter
+	* @return {JSX} A list of option tags, for each schema
+	 */
 	schemaSelectOptionsMapper()
 	{
 		return this.props
 			.schemas.map((schema, i) => (<option value={schema.id} key={i}>{schema.name}</option>));
 	}
 	
+	/**
+	* Maps the tables for the selected FK-search into a list of JSX option elements (with the table 
+	* ID and name). Used to generate options for the table select list in the FK filter (after a schema 
+	* has been selected)
+	* @return {JSX} A list of option tags, for each table in the selected schema
+	 */
 	tableSelectOptionsMapper()
 	{
 		const schemaID = this.state.fkSelectedSchemaID;
@@ -81,6 +119,7 @@ class DatabaseEntityFilterOptions extends Component
 		return tableList.map((table, i) => (<option value={table.id} key={i}>{table.name}</option>));
 	}
 	
+	/** Render the DatabaseEntityFilterOptions */
 	render()
 	{
 		return (
@@ -170,15 +209,26 @@ class DatabaseEntityFilterOptions extends Component
 }
 
 DatabaseEntityFilterOptions.propTypes = {
-	
-	//Required, but can be an empty list if not yet retrieved.
-	//Should be an array of schemas, from a FilterableSchemaList method
+	/**
+	* Should be an array of schemas, from a FilterableSchemaList method (or an empty array if these 
+	* have not yet been retrieved) 
+	 */
 	schemas: PropTypes.array.isRequired,
 	
-	//Should take 4 params: schemaFilterText, tableFilterText, columnFilterText, includeDescriptionText
+	/**
+	* A function that will run the text filter
+	* @param {string} schemaFilterText - The filter text for schema names/descriptions | 
+	* @param {string} tableFilterText - The filter text for table names/descriptions | 
+	* @param {string} columnFilterText - The filter text for column names/descriptions | 
+	* @param {boolean} includeDescriptionText - Should descriptions be included in the filter? 
+	 */
 	runTextFilter: PropTypes.func.isRequired,
 	
 	//Should take the target table ID as a parameter
+	/**
+	* A function that will run the FK filter, to find tables that have Foreign Keys to the given table
+	* @param {number} tableID - The table ID of the subject table
+	 */
 	runFkFilter: PropTypes.func.isRequired
 };
 
