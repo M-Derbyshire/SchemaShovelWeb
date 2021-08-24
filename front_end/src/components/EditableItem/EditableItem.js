@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './EditableItem.css';
 
-
-
+/**
+* Displays the given text, but also provides a way for the user to edit the text, and save the new value
+*
+*@component
+ */
 class EditableItem extends Component
 {
+	/** Create a new EditableItem instance */
 	constructor(props)
 	{
 		super(props);
@@ -21,6 +25,7 @@ class EditableItem extends Component
 		};
 	}
 	
+	/** This switches the component's mode, between editing and not-editing */
 	toggleEditMode()
 	{
 		this.setState({
@@ -28,6 +33,7 @@ class EditableItem extends Component
 		});
 	}
 	
+	/** This sets the state for the current text, whenever it is changed during editing */
 	textChange(e)
 	{
 		this.setState({
@@ -35,6 +41,7 @@ class EditableItem extends Component
 		});
 	}
 	
+	/** This handles the saving of the new text, once it has been edited */
 	saveChanges(e)
 	{
 		e.stopPropagation();
@@ -61,6 +68,7 @@ class EditableItem extends Component
 			});
 	}
 	
+	/** This allows the user to cancel their changes to the text */
 	cancelChanges(e)
 	{
 		e.stopPropagation();
@@ -72,6 +80,7 @@ class EditableItem extends Component
 		});
 	}
 	
+	/** Render an EditableItem */
 	render()
 	{
 		//If we are in editing mode, things need to be displayed differently
@@ -125,9 +134,26 @@ class EditableItem extends Component
 }
 
 EditableItem.propTypes = {
+	/**
+	* The initial text for the element
+	 */
 	text: PropTypes.string,
-	saveChanges: PropTypes.func.isRequired, //Asynchronus function. Takes one parameter (the new text to be saved)
-	saveErrorHandler: PropTypes.func.isRequired, //Takes one parameter (the error)
+	
+	/**
+	* An async function that will save the new text
+	* @param {string} newValue - The new value for the text
+	 */
+	saveChanges: PropTypes.func.isRequired,
+	
+	/**
+	* A fuction to call if there is an error
+	* @param {string} error - The error message
+	 */
+	saveErrorHandler: PropTypes.func.isRequired,
+	
+	/**
+	* The character limit of the text values
+	 */
 	textLengthLimit: PropTypes.number,
 }
 
