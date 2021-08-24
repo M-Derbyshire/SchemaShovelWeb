@@ -5,6 +5,7 @@
 	},
 	"source": {
 	  "include": ["src"],
+	  "exclude": ["src/components"],
 	  "includePattern": ".+\\.js(doc|x)?$",
 	  "excludePattern": "(^|\\/|\\\\)_"
 	},
