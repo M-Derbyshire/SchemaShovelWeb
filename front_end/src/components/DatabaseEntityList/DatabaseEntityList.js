@@ -4,8 +4,15 @@ import './DatabaseEntityList.css';
 import EntityElementIdGenerator from '../../EntityElementIdGenerator/EntityElementIdGenerator';
 import DatabaseEntity from '../DatabaseEntity/DatabaseEntity';
 
+/**
+* Used to display a list of DatabaseEntity components (the list being provided by an instance of 
+* FilterableSchemaList)
+*
+*@component
+ */
 class DatabaseEntityList extends Component
 {
+	/** Create a new instance of DatabaseEntityList */
 	constructor(props)
 	{
 		super(props);
@@ -17,6 +24,13 @@ class DatabaseEntityList extends Component
 		};
 	}
 	
+	/**
+	* Maps the given schemas (from a FilterableSchemaList instance), and their child entities, to LI elements
+	* @param {array} entities - An array of schemas, from a FilterableSchemaList instance
+	* @param {boolean} firstIsSubjectEntity - Is the first entity in the passed array, actually a table (the 
+	* table that is the subject of an FK filter)
+	* @return {array} An array of JSX LI elements
+	 */
 	mapPassedSchemasToListItems(entities, firstIsSubjectEntity = false)
 	{
 		return entities.map((entity, index) => {
@@ -29,9 +43,13 @@ class DatabaseEntityList extends Component
 		});
 	}
 	
-	//entity is the entity object itself.
-	//layer is the index of the entities related ID generation method in elemIdGenerator
-	//	(see this.state.entityLayerIdMethods)
+	
+	/**
+	* Maps a given entity (from a FilterableSchemaList instance) into a DatabaseEntity component
+	* @param {object} entity - The entity to be mapped
+	* @param {number} layer - The entity layer this entity is on (0 = schema; 1 = table; 2 = column)
+	* @return {JSX} The DatabaseEntity component for the given entity
+	 */
 	mapEntityToComponent(entity, layer)
 	{
 		const apiAccessor = this.props.apiAccessor;
@@ -76,8 +94,7 @@ class DatabaseEntityList extends Component
 	}
 	
 	
-	
-	
+	/** Render the DatabaseEntityList */
 	render()
 	{
 		const firstIsSubjectEntity = !!this.props.subjectTableEntity;
@@ -100,22 +117,33 @@ class DatabaseEntityList extends Component
 }
 
 DatabaseEntityList.propTypes = {
-	
+	/**
+	* An instance of APIAccessor
+	 */
 	apiAccessor: PropTypes.object,
 	
-	//An array of entity objects, to be displayed
+	/**
+	* An array schemas, taken from an instance of FilterableSchemaList
+	 */
 	entityList: PropTypes.array.isRequired,
 	
-	//If an FK filter has been run, the entity for the table that is the subject 
-	//of that search should be passed here
+	/**
+	* If an FK filter has been run, the entity for the table that is the subject 
+	* of that search should be passed here
+	 */
 	subjectTableEntity: PropTypes.object,
 	
-	//An array of objects, representing labelling information for all table entities in the DB.
-	//Each object should have a "label" and "entityID" property.
-	//This is used when populating the "Foreign Key to" data of columns that have FK constraints
+	/**
+	* An array of objects, representing labelling information for all table entities in the DB.
+	* Each object should have a "label" and "entityID" property.
+	* This is used when populating the "Foreign Key to" data of columns that have FK constraints
+	 */
 	tableLabels: PropTypes.array.isRequired,
 	
-	entityDescCharLimit: PropTypes.number.isRequired //The max length of an entity's description field
+	/**
+	* The max length of entity description fields
+	 */
+	entityDescCharLimit: PropTypes.number.isRequired
 };
 
 export default DatabaseEntityList;
