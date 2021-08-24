@@ -2,10 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './SelectableList.css';
 
-
+/**
+* Lists its child elements in a UL element. It also allows you to select elements (only one element can be 
+* selected at a time). This can also display a loading message, or an error message.
+*
+*@component
+ */
 class SelectableList extends Component
 {	
-	
+	/**
+	* This is the callback for a map function. This maps the given child element into a JSX LI element
+	* @param {JSX} child - The child element to be mapped
+	* @param {number} index - The index of the child in its respective array
+	 */
 	childMapper(child, index)
 	{
 		return (
@@ -17,6 +26,7 @@ class SelectableList extends Component
 		);
 	}
 	
+	/** Render a selectable list */
 	render()
 	{
 		let listContent;
@@ -46,9 +56,25 @@ class SelectableList extends Component
 }
 
 SelectableList.propTypes = {
+	/**
+	* The array index of the selected item in the child array
+	 */
 	selectedItemIndex: PropTypes.number,
+	
+	/**
+	* A function that sets the selected index
+	* @param {number} index - The index of the newly selected item
+	 */
 	setSelectedItemIndex: PropTypes.func.isRequired,
+	
+	/**
+	* Is the application still loading something that is required to generate this list?
+	 */
 	isLoading: PropTypes.bool.isRequired,
+	
+	/**
+	* Has this application failed to load something that is critical to generating this list?
+	 */
 	hasFailedToLoad: PropTypes.bool.isRequired
 }
 
