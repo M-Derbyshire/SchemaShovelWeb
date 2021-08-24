@@ -4,7 +4,7 @@ import './AddDatabaseForm.css';
 import TextFileInput from '../TextFileInput/TextFileInput';
 
 /**
-* Provides a form for adding a new database record to the db (or a span that tell the user that things 
+* Provides a form for adding a new database record to the db (or a span that tells the user that things 
 * are loading, when the APIAccessor instance has not yet been provided)
 *
 *@component
