@@ -93,7 +93,7 @@ class DatabaseEntityFilterOptions extends Component
 	/**
 	* Maps the this.props.schemas array into a list of JSX option elements (with the schema ID and name).
 	* Used to generate options for the schema select list in the FK filter
-	* @return {JSX} A list of option tags, for each schema
+	* @return {array} An array of JSX option tags, for each schema
 	 */
 	schemaSelectOptionsMapper()
 	{
@@ -105,7 +105,7 @@ class DatabaseEntityFilterOptions extends Component
 	* Maps the tables for the selected FK-search into a list of JSX option elements (with the table 
 	* ID and name). Used to generate options for the table select list in the FK filter (after a schema 
 	* has been selected)
-	* @return {JSX} A list of option tags, for each table in the selected schema
+	* @return {array} An array of JSX option tags, for each table in the selected schema
 	 */
 	tableSelectOptionsMapper()
 	{
