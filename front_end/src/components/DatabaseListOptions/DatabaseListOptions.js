@@ -3,8 +3,15 @@ import './DatabaseListOptions.css';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+/**
+* Provides buttons for actions that can be completed, in relation to database records in the 
+* app's database. (Load, create and delete.)
+*
+*@component
+ */
 class DatabaseListOptions extends Component
 {	
+	/** Create a new DatabaseListOptions instance */
 	constructor(props)
 	{
 		super(props);
@@ -14,6 +21,9 @@ class DatabaseListOptions extends Component
 		};
 	}
 	
+	/**
+	* Deletes the currently selected database record
+	 */
 	_deleteSelectedDatabase()
 	{
 		this.setState({
@@ -34,6 +44,7 @@ class DatabaseListOptions extends Component
 		});
 	}
 	
+	/** Render the DatabaseListOptions */
 	render()
 	{
 		const loadAndDeleteDisabled = (this.props.selectedDatabaseID < 0 || this.state.isDeleting);
@@ -63,8 +74,15 @@ class DatabaseListOptions extends Component
 }
 
 DatabaseListOptions.propTypes = {
-	deleteSelectedDatabase: PropTypes.func.isRequired, //Should be async
-	selectedDatabaseID: PropTypes.number.isRequired //Should be -1 if nothing selected
+	/**
+	* An async function that will delete the currently selected database
+	 */
+	deleteSelectedDatabase: PropTypes.func.isRequired,
+	
+	/**
+	* The ID of the currently selected database (or -1 if nothing is selected)
+	 */
+	selectedDatabaseID: PropTypes.number.isRequired
 };
 
 export default withRouter(DatabaseListOptions);
