@@ -15,7 +15,7 @@
 	  }
 	},
 	"opts": {
-	  "destination": "documentation",
+	  "destination": "./documentation/classes",
 	  "recurse": true
 	}
   }
