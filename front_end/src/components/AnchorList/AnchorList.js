@@ -10,6 +10,11 @@ import PropTypes from 'prop-types';
  */
 class AnchorList extends Component
 {
+	/**
+	* This maps the this.props.anchorObjects array into an array of JSX LI elements, containing Anchor tags
+	* @return {array} An array of JSX LI elements. Each will contain an anchor tag, that anchors to the given 
+	* element ID
+	 */
 	mapAnchorListToElements()
 	{
 		const allAnchors = [];
@@ -34,17 +39,21 @@ class AnchorList extends Component
 		);
 	}
 	
+	/**
+	* This is part of a hack, to make sure the labels line-break in the best way.
+	* We want them to break before each space, if possible.
+	* The CSS for the li elements will remove the width of the space char we're adding,
+	* here, so they don't appear to have a space.
+	* @param {string} label - The anchor label to be broken up
+	* @return {string} The original label, but with spaces before any periods
+	 */
 	breakEntitiesToWords(label)
 	{
-		//This is part of a hack, to make sure the labels line-break in the best way.
-		//We want them to break before each space, if possible.
-		//The CSS for the li elements will remove the width of the space we're adding,
-		//	here, so they don't appear to have a space.
 		return label.replace(/\./g, " .");
 	}
 	
 	
-	
+	/** Render a new AnchorList component */
 	render()
 	{
 		return (
