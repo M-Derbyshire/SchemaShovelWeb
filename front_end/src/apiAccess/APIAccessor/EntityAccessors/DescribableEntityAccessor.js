@@ -18,7 +18,7 @@ class DescribableEntityAccessor
 		this._getJSONFromAPI = getJSONFromAPIFunc;
 		this._addError = addErrorFunc;
 		
-		const validProperties = [{ name: "description", type: "string" }];
+		const validProperties = [{ name: "description", type: "string", canBeEmptyString: true }];
 		
 		this._validator = new SingleItemJSONValidator(validProperties);
 	}
