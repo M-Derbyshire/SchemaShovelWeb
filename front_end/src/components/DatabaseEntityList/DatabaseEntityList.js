@@ -81,7 +81,11 @@ class DatabaseEntityList extends Component
 				isMatch={entity.isMatch}
 				fkToSchemaTableName={fkString}
 				saveDescriptionChanges={
-					async (newDesc) => await updateEntityDescription(entityType, entity.id, newDesc)
+					async (newDesc) => {
+						entity.description = newDesc; //If we don't do this, 
+													//we can't filter with the new desc
+						await updateEntityDescription(entityType, entity.id, newDesc);
+					}
 				}
 				saveDescriptionErrorHandler={()=>{}}
 				descriptionCharLengthLimit={this.props.entityDescCharLimit}>
