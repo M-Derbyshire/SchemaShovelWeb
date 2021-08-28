@@ -33,14 +33,14 @@ public class DatabaseController {
 	//Retrieval methods
 	
 	@GetMapping("")
-	List<DatabaseNameIdProjection> getAll() throws InternalServerErrorException
+	public List<DatabaseNameIdProjection> getAll() throws InternalServerErrorException
 	{
 		return databaseService.getAll();
 	}
 	
 	
 	@GetMapping("/{id}")
-	Database getOne(@PathVariable Long id) 
+	public Database getOne(@PathVariable Long id) 
 			throws RecordNotFoundException, UnprocessableEntityException, InternalServerErrorException
 	{
 		return databaseService.getOne(id);
@@ -49,7 +49,7 @@ public class DatabaseController {
 	
 	
 	@PostMapping("")
-	Database create(@RequestBody Database newDatabase) 
+	public Database create(@RequestBody Database newDatabase) 
 			throws UnprocessableEntityException, InternalServerErrorException
 	{
 		return databaseService.create(newDatabase);
@@ -57,7 +57,7 @@ public class DatabaseController {
 	
 	
 	@PatchMapping("/{id}")
-	Database update(@RequestBody Database newDatabase, @PathVariable Long id) 
+	public Database update(@RequestBody Database newDatabase, @PathVariable Long id) 
 			throws RecordNotFoundException, UnprocessableEntityException, InternalServerErrorException
 	{
 		return databaseService.update(newDatabase, id);
@@ -66,7 +66,7 @@ public class DatabaseController {
 	
 	
 	@DeleteMapping("/{id}")
-	void delete(@PathVariable Long id) 
+	public void delete(@PathVariable Long id) 
 			throws BadRequestException, InternalServerErrorException, RecordNotFoundException
 	{
 		databaseService.delete(id);
