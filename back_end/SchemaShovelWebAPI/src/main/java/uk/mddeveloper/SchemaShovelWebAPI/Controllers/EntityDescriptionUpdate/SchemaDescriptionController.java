@@ -28,7 +28,7 @@ public class SchemaDescriptionController {
 
 	
 	@PatchMapping("/update_description/{id}")
-	DescriptionOnlyHelperModel updateDescription(@RequestBody DescriptionOnlyHelperModel newDescription, @PathVariable Long id) 
+	public DescriptionOnlyHelperModel updateDescription(@RequestBody DescriptionOnlyHelperModel newDescription, @PathVariable Long id) 
 			throws RecordNotFoundException, RuntimeException, Throwable
 	{	
 		return descriptionUpdater.updateDescriptionWithGivenRepo(newDescription, id, repo);
