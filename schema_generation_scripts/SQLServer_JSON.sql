@@ -5,7 +5,7 @@
 
 
 -- We get the JSON for each schema, table and column.
--- Each record will begin with the comma (and then the first comma is removed when 
+-- Each record will begin with the comma (and then the first record's comma is removed when 
 -- the JSON is generated)
 
 
@@ -14,8 +14,7 @@
 -- ----------------------------------------------------------------------------
 SELECT 
 	s.schema_id AS id,
-	',{"name": "' + s.name + '", "description": "", "tables": [' AS JSONStart,
-	']}' AS JSONEnd
+	',{"name": "' + s.name + '", "description": "", "tables": [' AS JSONStart
 INTO #schemaJSON
 FROM sys.schemas AS s
 ORDER BY s.schema_id;
@@ -28,8 +27,7 @@ ORDER BY s.schema_id;
 SELECT
 	t.object_id AS id,
 	o.schema_id AS schema_id,
-	',{"name": "' + t.name + '", "description": "", "columns": [' AS JSONStart,
-	']}' AS JSONEnd
+	',{"name": "' + t.name + '", "description": "", "columns": [' AS JSONStart
 INTO #tableJSON
 FROM sys.tables AS t
 JOIN sys.objects AS o ON t.object_id = o.object_id
@@ -50,7 +48,7 @@ SELECT
 	-- Now add FK_to values for schema and table (if this is an FK).
 	IIF(referenced_table.name IS NOT NULL, 
 		'"fkToTableStr": "' + referenced_schema.name + '.' + referenced_table.name + '", ', '') + 
-	
+
 	'"description": ""}' AS [JSON]
 INTO #columnJSON
 FROM sys.columns AS c
@@ -82,13 +80,13 @@ STUFF((
 					ORDER BY c.id
 					FOR XML PATH('')
 				), 1, 1, '') + 
-				t.JSONEnd
+				']}'
 			FROM #tableJSON AS t
 			WHERE t.schema_id = s.id
 			ORDER BY t.id
 			FOR XML PATH('')
 		), 1, 1, '') + 
-		s.JSONEnd
+		']}'
 	FROM #schemaJSON AS s
 	ORDER BY s.id
 	FOR XML PATH('')
