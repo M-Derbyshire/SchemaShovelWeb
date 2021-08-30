@@ -22,7 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 
-import uk.mddeveloper.SchemaShovelWebAPI.Components.DatbaseEntityIdentifier.DatbaseEntityIdentifier;
+import uk.mddeveloper.SchemaShovelWebAPI.Components.DatabaseEntityIdentifier.DatabaseEntityIdentifier;
 import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.HttpStatusExceptionFactory;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Column;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Database;
@@ -41,7 +41,7 @@ class DatabaseServiceUnitTests {
 	@Mock
 	private HttpStatusExceptionFactory exFactory;
 	@Mock
-	private DatbaseEntityIdentifier databaseEntityIdentifier;
+	private DatabaseEntityIdentifier databaseEntityIdentifier;
 	@Mock
 	private DatabaseRepository databaseRepo;
 	@Mock

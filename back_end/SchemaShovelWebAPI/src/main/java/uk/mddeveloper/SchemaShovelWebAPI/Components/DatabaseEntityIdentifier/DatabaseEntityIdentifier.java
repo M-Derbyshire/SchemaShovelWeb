@@ -1,4 +1,4 @@
-package uk.mddeveloper.SchemaShovelWebAPI.Components.DatbaseEntityIdentifier;
+package uk.mddeveloper.SchemaShovelWebAPI.Components.DatabaseEntityIdentifier;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -13,12 +13,12 @@ import uk.mddeveloper.SchemaShovelWebAPI.Models.Schema;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Table;
 
 @Component
-public class DatbaseEntityIdentifier {
+public class DatabaseEntityIdentifier {
 	
 	private Pattern tablePattern;
 	private Pattern columnPattern;
 	
-	public DatbaseEntityIdentifier()
+	public DatabaseEntityIdentifier()
 	{
 		tablePattern = Pattern.compile("[^.]+\\.[^.]+");
 		columnPattern = Pattern.compile("[^.]+\\.[^.]+\\.[^.]+");

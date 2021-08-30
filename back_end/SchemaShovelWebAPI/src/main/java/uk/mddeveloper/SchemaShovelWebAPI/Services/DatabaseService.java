@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import uk.mddeveloper.SchemaShovelWebAPI.Components.DatbaseEntityIdentifier.DatbaseEntityIdentifier;
+import uk.mddeveloper.SchemaShovelWebAPI.Components.DatabaseEntityIdentifier.DatabaseEntityIdentifier;
 import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.BadRequestException;
 import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.HttpStatusExceptionFactory;
 import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.InternalServerErrorException;
@@ -32,11 +32,11 @@ public class DatabaseService {
 	ColumnRepository columnRepo;
 	
 	HttpStatusExceptionFactory httpStatusExceptionFactory;
-	DatbaseEntityIdentifier databaseEntityIdentifier;
+	DatabaseEntityIdentifier databaseEntityIdentifier;
 	
 	
 	public DatabaseService(HttpStatusExceptionFactory exFactory, 
-			DatbaseEntityIdentifier databaseEntityIdentifier, DatabaseRepository databaseRepo, 
+			DatabaseEntityIdentifier databaseEntityIdentifier, DatabaseRepository databaseRepo, 
 			SchemaRepository schemaRepo, TableRepository tableRepo, ColumnRepository columnRepo)
 	{
 		this.databaseRepo = databaseRepo;
