@@ -2,6 +2,7 @@ package uk.mddeveloper.SchemaShovelWebAPI.Components.DescribableDescriptionUpdat
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -52,6 +53,29 @@ class DescribableDescriptionUpdaterUnitTests {
 		assertThat(result.getDescription()).isEqualTo(description);
 		assertThat(result.getId()).isEqualTo(id);
 		assertThat(mockSchema.getDescription()).isEqualTo(description);
+		
+	}
+	
+	
+	@Test
+	void updateDescriptionWillThrowExceptionFromExceptionFactoryIfDescriptionNotSet()
+	{
+		
+		//Not setting description
+		DescriptionOnlyHelperModel descModel = new DescriptionOnlyHelperModel();
+		
+		RuntimeException mockException = new RuntimeException();
+		
+		when(exFactory.createHttpStatusException(any(Exception.class))).thenReturn(mockException);
+		
+		try
+		{
+			descUpdater.updateDescriptionWithGivenRepo(descModel, (long) 1, schemaRepo);
+		}
+		catch(Exception e)
+		{
+			assertThat(e == mockException).isTrue();
+		}
 		
 	}
 
