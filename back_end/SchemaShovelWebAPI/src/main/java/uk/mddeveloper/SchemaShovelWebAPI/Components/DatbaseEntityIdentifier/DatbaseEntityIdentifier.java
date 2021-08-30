@@ -37,7 +37,7 @@ public class DatbaseEntityIdentifier {
 	private boolean isValidPathForGivenPattern(String stringToTest, Pattern pattern)
 	{
 		Matcher matcher = pattern.matcher(stringToTest);
-		return matcher.find();
+		return matcher.matches();
 	}
 	
 	
