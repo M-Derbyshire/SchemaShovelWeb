@@ -72,7 +72,7 @@ public class DatabaseEntityIdentifier {
 		if(!isValidColumnPath(path))
 			throw new UnprocessableEntityException("The given path to a column (" + path + ") is not valid");
 		
-		String[] pathEntities = path.split(".");
+		String[] pathEntities = path.split("\\.");
 		
 		
 		Schema matchingSchema = (Schema) getFirstEntityWithMatchingNameOrNull(schemas, pathEntities[0]);
