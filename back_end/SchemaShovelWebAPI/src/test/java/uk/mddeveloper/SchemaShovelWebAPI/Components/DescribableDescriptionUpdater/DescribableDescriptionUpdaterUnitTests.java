@@ -71,6 +71,7 @@ class DescribableDescriptionUpdaterUnitTests {
 		try
 		{
 			descUpdater.updateDescriptionWithGivenRepo(descModel, (long) 1, schemaRepo);
+			fail("An exception was not thrown");
 		}
 		catch(Exception e)
 		{
