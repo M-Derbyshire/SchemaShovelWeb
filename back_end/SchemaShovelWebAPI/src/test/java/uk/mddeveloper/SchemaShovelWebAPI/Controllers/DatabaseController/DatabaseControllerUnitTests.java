@@ -20,7 +20,7 @@ import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.*;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Database;
 import uk.mddeveloper.SchemaShovelWebAPI.Repositories.Projections.DatabaseNameIdProjection;
-import uk.mddeveloper.SchemaShovelWebAPI.Services.DatabaseService;
+import uk.mddeveloper.SchemaShovelWebAPI.Services.*;
 
 @ExtendWith(MockitoExtension.class)
 public class DatabaseControllerUnitTests {
