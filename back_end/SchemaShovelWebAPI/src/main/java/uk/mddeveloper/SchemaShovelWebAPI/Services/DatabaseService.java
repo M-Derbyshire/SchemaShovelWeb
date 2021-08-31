@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import uk.mddeveloper.SchemaShovelWebAPI.Components.DatabaseEntityIdentifier.DatabaseEntityIdentifier;
 import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.BadRequestException;
@@ -67,7 +65,7 @@ public class DatabaseService {
 	
 	
 	
-	public Database getOne(@PathVariable Long id) 
+	public Database getOne(Long id) 
 			throws RecordNotFoundException, UnprocessableEntityException, InternalServerErrorException
 	{
 		Database result = null;
@@ -86,7 +84,7 @@ public class DatabaseService {
 	
 	
 	@Transactional
-	public Database create(@RequestBody Database newDatabase) 
+	public Database create(Database newDatabase) 
 			throws UnprocessableEntityException, InternalServerErrorException
 	{
 		
@@ -150,7 +148,7 @@ public class DatabaseService {
 	
 	
 	
-	public Database update(@RequestBody Database newDatabase, @PathVariable Long id) 
+	public Database update(Database newDatabase, Long id) 
 			throws RecordNotFoundException, UnprocessableEntityException, InternalServerErrorException
 	{
 		Database database = null;
@@ -172,7 +170,7 @@ public class DatabaseService {
 	
 	
 	
-	public void delete(@PathVariable Long id) 
+	public void delete(Long id) 
 			throws BadRequestException, InternalServerErrorException, RecordNotFoundException
 	{
 		try
