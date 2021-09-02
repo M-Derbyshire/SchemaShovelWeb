@@ -3,12 +3,20 @@ package uk.mddeveloper.SchemaShovelWebAPI.models.DescriptionOnlyHelperModel;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+
 import org.junit.jupiter.api.Test;
 
 import uk.mddeveloper.SchemaShovelWebAPI.Components.DescribableDescriptionUpdater.DescriptionOnlyHelperModel;
 
 class DescriptionOnlyHelperModelUnitTests {
 
+	private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+	
 	@Test
 	void willNotEditIdWhenGettingSetting() {
 		
@@ -35,6 +43,23 @@ class DescriptionOnlyHelperModelUnitTests {
 			assertThat(helper.getDescription()).isEqualTo(desc);
 		}
 		
+	}
+	
+	@Test
+	void descriptionMustNotBeNullButCanBeEmpty() {
+		
+		DescriptionOnlyHelperModel descNull = new DescriptionOnlyHelperModel();
+		
+		Set<ConstraintViolation<DescriptionOnlyHelperModel>> 
+			violationsForNull = validator.validate(descNull);
+		
+		DescriptionOnlyHelperModel descEmpty = new DescriptionOnlyHelperModel();
+		descEmpty.setDescription("");
+		
+		Set<ConstraintViolation<DescriptionOnlyHelperModel>> 
+			violationsForEmpty = validator.validate(descEmpty);
+		
+		assertThat(violationsForEmpty).isEmpty();
 	}
 
 }
