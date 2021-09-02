@@ -107,4 +107,11 @@ public class DatabaseControllerUnitTests {
 		verify(databaseService, times(1)).delete(id);
 	}
 	
+	
+	@Test
+	void classExtendsSuperController()
+	{
+		assertThat(databaseController instanceof Controller).isTrue();
+	}
+	
 }

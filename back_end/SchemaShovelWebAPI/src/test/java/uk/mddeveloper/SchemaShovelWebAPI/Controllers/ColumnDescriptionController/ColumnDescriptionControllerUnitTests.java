@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import uk.mddeveloper.SchemaShovelWebAPI.Components.DescribableDescriptionUpdater.DescribableDescriptionUpdater;
 import uk.mddeveloper.SchemaShovelWebAPI.Components.DescribableDescriptionUpdater.DescriptionOnlyHelperModel;
+import uk.mddeveloper.SchemaShovelWebAPI.Controllers.Controller;
 import uk.mddeveloper.SchemaShovelWebAPI.Controllers.EntityDescriptionUpdate.ColumnDescriptionController;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Column;
 import uk.mddeveloper.SchemaShovelWebAPI.Repositories.ColumnRepository;
@@ -45,5 +46,11 @@ public class ColumnDescriptionControllerUnitTests {
 		
 		verify(descriptionUpdater, times(1)).updateDescriptionWithGivenRepo(newDesc, id, repo);
 		assertThat(result == returnDesc).isTrue();
+	}
+	
+	@Test
+	void classExtendsSuperController()
+	{
+		assertThat(controller instanceof Controller).isTrue();
 	}
 }
