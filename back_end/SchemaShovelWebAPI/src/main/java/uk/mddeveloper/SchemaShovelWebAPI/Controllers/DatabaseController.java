@@ -2,6 +2,8 @@ package uk.mddeveloper.SchemaShovelWebAPI.Controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,7 +23,7 @@ import uk.mddeveloper.SchemaShovelWebAPI.Services.DatabaseService;
 
 @RestController
 @RequestMapping("/api/v1/databases")
-public class DatabaseController {
+public class DatabaseController extends Controller {
 	
 	DatabaseService databaseService;
 	
@@ -49,7 +51,7 @@ public class DatabaseController {
 	
 	
 	@PostMapping("")
-	public Database create(@RequestBody Database newDatabase) 
+	public Database create(@Valid @RequestBody Database newDatabase) 
 			throws UnprocessableEntityException, InternalServerErrorException
 	{
 		return databaseService.create(newDatabase);
@@ -57,7 +59,7 @@ public class DatabaseController {
 	
 	
 	@PatchMapping("/{id}")
-	public Database update(@RequestBody Database newDatabase, @PathVariable Long id) 
+	public Database update(@Valid @RequestBody Database newDatabase, @PathVariable Long id) 
 			throws RecordNotFoundException, UnprocessableEntityException, InternalServerErrorException
 	{
 		return databaseService.update(newDatabase, id);
