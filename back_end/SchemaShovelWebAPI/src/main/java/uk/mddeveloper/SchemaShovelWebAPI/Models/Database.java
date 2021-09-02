@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @javax.persistence.Table(name = "\"database\"")
@@ -18,8 +20,10 @@ public class Database implements INameable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotEmpty(message = "Name must be provided") //This covers null as well
 	private String name;
 	
+	//Has to be able to be null, as update requests will not provide this
 	@OneToMany(mappedBy = "database")
 	private List<Schema> schemas;
 	

@@ -22,6 +22,7 @@ public class Table implements IDescribable, INameable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	//Can be null, in case of description updates
 	private String name;
 	
 	private String description;

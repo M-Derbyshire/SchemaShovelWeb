@@ -27,6 +27,7 @@ public class Schema implements IDescribable, INameable {
 	@JsonIgnore
 	private Database database;
 	
+	//Can be null, in case of description updates
 	private String name;
 	
 	private String description;
