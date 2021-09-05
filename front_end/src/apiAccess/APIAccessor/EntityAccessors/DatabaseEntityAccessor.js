@@ -37,11 +37,11 @@ class DatabaseEntityAccessor
 	{
 		try
 		{
-			const [dbListText, dbList] = await this._getJSONFromAPI(this._baseURL + "/databases");
+			const dbListText = await this._getJSONFromAPI(this._baseURL + "/databases");
 			
 			this._validateIDAndNameJSON(dbListText);
 			
-			return dbList;
+			return JSON.parse(dbListText);
 		}
 		catch(err)
 		{
@@ -60,11 +60,11 @@ class DatabaseEntityAccessor
 	{
 		try
 		{
-			const [dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases/" + id);
+			const dbText = await this._getJSONFromAPI(this._baseURL + "/databases/" + id);
 			
 			this._validateDatabaseJSON(dbText, false);
 			
-			return db;
+			return JSON.parse(dbText);
 		}
 		catch(err)
 		{
@@ -81,7 +81,7 @@ class DatabaseEntityAccessor
 	*/
 	async createDatabase(newDB)
 	{
-		let dbText, db;
+		let dbText;
 		
 		try
 		{
@@ -104,7 +104,7 @@ class DatabaseEntityAccessor
 				body: newDB
 			};
 			
-			[dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases", settings);
+			dbText = await this._getJSONFromAPI(this._baseURL + "/databases", settings);
 		}
 		catch(duringCreationError)
 		{
@@ -122,7 +122,7 @@ class DatabaseEntityAccessor
 			return {};
 		}
 		
-		return db;
+		return JSON.parse(dbText);
 	}
 	
 	
@@ -149,11 +149,11 @@ class DatabaseEntityAccessor
 				})
 			};
 			
-			const [dbText, db] = await this._getJSONFromAPI(this._baseURL + "/databases/" + id, settings);
+			const dbText = await this._getJSONFromAPI(this._baseURL + "/databases/" + id, settings);
 			
 			this._validateDatabaseJSON(dbText, false);
 			
-			return db;
+			return JSON.parse(dbText);
 		}
 		catch(err)
 		{

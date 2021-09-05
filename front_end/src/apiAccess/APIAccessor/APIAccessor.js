@@ -38,8 +38,7 @@ class APIAccessor
 	* @param {string} path - The API URL for the request
 	* @param {Object} settings - The second argument passed to fetch()
 	*
-	* @return {array} An array to be destructured. The first element is the JSON text retrieved, and the 
-	* second is the parsed JSON object
+	* @return {string} The JSON text that was retrieved
 	*/
 	async _getJSONFromAPI(path, settings = {})
 	{
@@ -50,10 +49,7 @@ class APIAccessor
 			throw new Error(`(${response.status}) ${response.statusText}`);
 		}
 		
-		const text = await response.text();
-		const json = JSON.parse(text);
-		
-		return [text, json];
+		return await response.text();
 	}
 	
 	

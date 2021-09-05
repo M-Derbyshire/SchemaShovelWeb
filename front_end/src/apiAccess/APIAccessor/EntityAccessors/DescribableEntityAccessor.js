@@ -54,14 +54,14 @@ class DescribableEntityAccessor
 				})
 			};
 			
-			const [recordText, record] = await this._getJSONFromAPI(
+			const recordText = await this._getJSONFromAPI(
 				`${this._baseURL}/${entityRouteName}/update_description/${id}`, 
 				settings
 			);
 			
 			this._validateDescriptionJSON(recordText);
 			
-			return record;
+			return JSON.parse(recordText);
 		}
 		catch(err)
 		{
