@@ -16,13 +16,30 @@ import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.RecordNotFoundExcepti
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Schema;
 import uk.mddeveloper.SchemaShovelWebAPI.Repositories.SchemaRepository;
 
+/**
+ * A controller for updating description fields on "schema" entities (route "/api/v1/schemas")
+ * @author Matthew Derbyshire
+ *
+ */
 @RestController
 @RequestMapping("/api/v1/schemas")
 public class SchemaDescriptionController extends Controller {
 	
+	/**
+	 * The repository for this particular entity type
+	 */
 	SchemaRepository repo;
+	
+	/**
+	 * The class that handles the updating of entity descriptions
+	 */
 	DescribableDescriptionUpdater<Schema> descriptionUpdater;
 	
+	/**
+	 * Constructor
+	 * @param repo The repository for this particular entity type
+	 * @param descriptionUpdater The class that handles the updating of entity descriptions
+	 */
 	public SchemaDescriptionController(SchemaRepository repo, 
 			DescribableDescriptionUpdater<Schema> descriptionUpdater)
 	{
@@ -30,7 +47,17 @@ public class SchemaDescriptionController extends Controller {
 		this.descriptionUpdater = descriptionUpdater;
 	}
 
-	
+	/**
+	 * Updates the entity description with the new description in the given DescriptionOnlyHelperModel 
+	 * instance
+	 * @param newDescription A DescriptionOnlyHelperModel instance with the new description
+	 * @param id The ID of the entity to be updated
+	 * @return A DescriptionOnlyHelperModel instance, with the newly updated description
+	 * @throws MethodArgumentNotValidException Thrown if there is a model validation issue
+	 * @throws RecordNotFoundException Thrown if the requested record is not found
+	 * @throws RuntimeException General error
+	 * @throws Throwable General error
+	 */
 	@PatchMapping("/update_description/{id}")
 	public DescriptionOnlyHelperModel updateDescription(@Valid @RequestBody DescriptionOnlyHelperModel newDescription, @PathVariable Long id) 
 			throws MethodArgumentNotValidException, RecordNotFoundException, RuntimeException, Throwable

@@ -5,6 +5,11 @@ import org.springframework.stereotype.Repository;
 
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Table;
 
+/**
+ * The repository for making changes to "Table" entities
+ * @author Matthew Derbyshire
+ *
+ */
 @Repository
 public interface TableRepository extends JpaRepository<Table, Long> {
 	

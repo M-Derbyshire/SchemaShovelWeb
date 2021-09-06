@@ -17,13 +17,30 @@ import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.RecordNotFoundExcepti
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Table;
 import uk.mddeveloper.SchemaShovelWebAPI.Repositories.TableRepository;
 
+/**
+ * A controller for updating description fields on "table" entities (route "/api/v1/tables")
+ * @author Matthew Derbyshire
+ *
+ */
 @RestController
 @RequestMapping("/api/v1/tables")
 public class TableDescriptionController extends Controller {
 	
+	/**
+	 * The repository for this particular entity type
+	 */
 	TableRepository repo;
+	
+	/**
+	 * The class that handles the updating of entity descriptions
+	 */
 	DescribableDescriptionUpdater<Table> descriptionUpdater;
 	
+	/**
+	 * Constructor
+	 * @param repo The repository for this particular entity type
+	 * @param descriptionUpdater The class that handles the updating of entity descriptions
+	 */
 	public TableDescriptionController(TableRepository repo, 
 			DescribableDescriptionUpdater<Table> descriptionUpdater)
 	{
@@ -32,6 +49,17 @@ public class TableDescriptionController extends Controller {
 	}
 	
 	
+	/**
+	 * Updates the entity description with the new description in the given DescriptionOnlyHelperModel 
+	 * instance
+	 * @param newDescription A DescriptionOnlyHelperModel instance with the new description
+	 * @param id The ID of the entity to be updated
+	 * @return A DescriptionOnlyHelperModel instance, with the newly updated description
+	 * @throws MethodArgumentNotValidException Thrown if there is a model validation issue
+	 * @throws RecordNotFoundException Thrown if the requested record is not found
+	 * @throws RuntimeException General error
+	 * @throws Throwable General error
+	 */
 	@PatchMapping("/update_description/{id}")
 	public DescriptionOnlyHelperModel updateDescription(@Valid @RequestBody DescriptionOnlyHelperModel newDescription, @PathVariable Long id) 
 			throws MethodArgumentNotValidException, RecordNotFoundException, RuntimeException, Throwable

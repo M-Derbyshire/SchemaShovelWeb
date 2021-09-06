@@ -9,17 +9,39 @@ import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.RecordNotFoundExcepti
 import uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling.UnprocessableEntityException;
 import uk.mddeveloper.SchemaShovelWebAPI.Models.IDescribable;
 
+/**
+ * This is used to update the descriptions of any models that implement IDescribable
+ * 
+ * @author Matthew Derbyshire
+ *
+ * @param <T> The type for the instance (must implement IDescribable)
+ */
 @Component
 public class DescribableDescriptionUpdater<T extends IDescribable> {
 	
+	/**
+	 * The factory for generating the right HTTP-status exception for any exception thrown
+	 */
 	HttpStatusExceptionFactory httpStatusExceptionFactory;
 	
+	/**
+	 * Constructor
+	 * @param exFactory The factory for generating the right HTTP-status exception for any exception thrown
+	 */
 	public DescribableDescriptionUpdater(HttpStatusExceptionFactory exFactory)
 	{
 		this.httpStatusExceptionFactory = exFactory;
 	}
 	
-	
+	/**
+	 * Using the given repository, update the description of an object that implements IDescribable
+	 * @param newDescription A DescriptionOnlyHelperModel instance, with the new description for the entity
+	 * @param id The PK of the entity
+	 * @param repo The repository to use to perform this operation
+	 * @return A DescriptionOnlyHelperModel instance, with the new description
+	 * @throws UnprocessableEntityException Thrown if the provided description is null
+	 * @throws InternalServerErrorException Thrown if there is any general error
+	 */
 	public DescriptionOnlyHelperModel updateDescriptionWithGivenRepo(
 			DescriptionOnlyHelperModel newDescription, 
 			Long id,

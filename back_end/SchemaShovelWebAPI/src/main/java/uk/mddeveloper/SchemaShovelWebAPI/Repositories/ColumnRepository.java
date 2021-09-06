@@ -5,6 +5,11 @@ import org.springframework.stereotype.Repository;
 
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Column;
 
+/**
+ * The repository for making changes to "Column" entities
+ * @author Matthew Derbyshire
+ *
+ */
 @Repository
 public interface ColumnRepository extends JpaRepository<Column, Long> {
 	

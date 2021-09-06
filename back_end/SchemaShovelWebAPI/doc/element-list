@@ -1,0 +1,10 @@
+uk.mddeveloper.SchemaShovelWebAPI
+uk.mddeveloper.SchemaShovelWebAPI.Components.DatabaseEntityIdentifier
+uk.mddeveloper.SchemaShovelWebAPI.Components.DescribableDescriptionUpdater
+uk.mddeveloper.SchemaShovelWebAPI.Controllers
+uk.mddeveloper.SchemaShovelWebAPI.Controllers.EntityDescriptionUpdate
+uk.mddeveloper.SchemaShovelWebAPI.ExceptionHandling
+uk.mddeveloper.SchemaShovelWebAPI.Models
+uk.mddeveloper.SchemaShovelWebAPI.Repositories
+uk.mddeveloper.SchemaShovelWebAPI.Repositories.Projections
+uk.mddeveloper.SchemaShovelWebAPI.Services

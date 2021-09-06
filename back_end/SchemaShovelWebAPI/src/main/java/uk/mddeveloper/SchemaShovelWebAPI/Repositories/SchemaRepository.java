@@ -5,6 +5,11 @@ import org.springframework.stereotype.Repository;
 
 import uk.mddeveloper.SchemaShovelWebAPI.Models.Schema;
 
+/**
+ * The repository for making changes to "Schema" entities
+ * @author Matthew Derbyshire
+ *
+ */
 @Repository
 public interface SchemaRepository extends  JpaRepository<Schema, Long>  {
 	

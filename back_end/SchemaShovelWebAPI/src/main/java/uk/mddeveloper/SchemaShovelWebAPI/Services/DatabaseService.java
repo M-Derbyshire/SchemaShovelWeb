@@ -21,18 +21,53 @@ import uk.mddeveloper.SchemaShovelWebAPI.Repositories.SchemaRepository;
 import uk.mddeveloper.SchemaShovelWebAPI.Repositories.TableRepository;
 import uk.mddeveloper.SchemaShovelWebAPI.Repositories.Projections.DatabaseNameIdProjection;
 
+/**
+ * Handles CRUD operations for records in the "Database" table
+ * @author Matthew Derbyshire
+ *
+ */
 @Service
 public class DatabaseService {
 	
+	/**
+	 * The repository for the "Database" table
+	 */
 	DatabaseRepository databaseRepo;
+	
+	/**
+	 * The repository for the "Schema" table
+	 */
 	SchemaRepository schemaRepo;
+	
+	/**
+	 * The repository for the "Table" table
+	 */
 	TableRepository tableRepo;
+	
+	/**
+	 * The repository for the "Column" table
+	 */
 	ColumnRepository columnRepo;
 	
+	/**
+	 * The factory for generating the right HTTP-status exception for any exception thrown
+	 */
 	HttpStatusExceptionFactory httpStatusExceptionFactory;
+	
+	/**
+	 * Finds tables/columns in a given list of schema entities
+	 */
 	DatabaseEntityIdentifier databaseEntityIdentifier;
 	
-	
+	/**
+	 * Constructor
+	 * @param exFactory The factory for generating the right HTTP-status exception for any exception thrown
+	 * @param databaseEntityIdentifier Finds tables/columns in a given list of schema entities
+	 * @param databaseRepo The repository for the "Database" table
+	 * @param schemaRepo The repository for the "Schema" table
+	 * @param tableRepo The repository for the "Table" table
+	 * @param columnRepo The repository for the "Column" table
+	 */
 	public DatabaseService(HttpStatusExceptionFactory exFactory, 
 			DatabaseEntityIdentifier databaseEntityIdentifier, DatabaseRepository databaseRepo, 
 			SchemaRepository schemaRepo, TableRepository tableRepo, ColumnRepository columnRepo)
@@ -47,6 +82,12 @@ public class DatabaseService {
 	}
 	
 	
+	/**
+	 * Gets all of the "database" records in the database, but only returns them as projections 
+	 * with just the name and ID
+	 * @return A list of DatabaseNameIdProjection objects
+	 * @throws InternalServerErrorException Thrown if there is a general error
+	 */
 	public List<DatabaseNameIdProjection> getAll() throws InternalServerErrorException
 	{
 		List<DatabaseNameIdProjection> results;
@@ -64,7 +105,14 @@ public class DatabaseService {
 	}
 	
 	
-	
+	/**
+	 * Gets the "database" record with the given ID
+	 * @param id The PK of the "database" record
+	 * @return The Database object for this "database" entity
+	 * @throws RecordNotFoundException Thrown if the requested record is not found
+	 * @throws UnprocessableEntityException Thrown if there is something wrong with an entity
+	 * @throws InternalServerErrorException Thrown if there is a general error
+	 */
 	public Database getOne(Long id) 
 			throws RecordNotFoundException, UnprocessableEntityException, InternalServerErrorException
 	{
@@ -82,7 +130,14 @@ public class DatabaseService {
 		return result;
 	}
 	
-	
+	/**
+	 * Adds a new "database" record (and all of its inner child records) to the database. This runs 
+	 * the creation process within a transaction
+	 * @param newDatabase The new database record to be added
+	 * @return The new "database" record that had been created
+	 * @throws UnprocessableEntityException Thrown if there is something wrong with an entity
+	 * @throws InternalServerErrorException Thrown if there is a general error
+	 */
 	@Transactional
 	public Database create(Database newDatabase) 
 			throws UnprocessableEntityException, InternalServerErrorException
@@ -147,7 +202,15 @@ public class DatabaseService {
 	}
 	
 	
-	
+	/**
+	 * Updates the name of the "database" record with the given ID
+	 * @param newDatabase An instance of Database, with the new name
+	 * @param id The ID of the database record to be updated
+	 * @return The newly updated "database" record
+	 * @throws RecordNotFoundException Thrown if the requested record is not found
+	 * @throws UnprocessableEntityException Thrown if there is something wrong with an entity
+	 * @throws InternalServerErrorException Thrown if there is a general error
+	 */
 	public Database update(Database newDatabase, Long id) 
 			throws RecordNotFoundException, UnprocessableEntityException, InternalServerErrorException
 	{
@@ -169,7 +232,13 @@ public class DatabaseService {
 	}
 	
 	
-	
+	/**
+	 *  Deletes the "database" record with the given ID
+	 * @param id The ID of the "database" record to delete
+	 * @throws BadRequestException Thrown if the requested record is not found
+	 * @throws InternalServerErrorException Thrown if there is a general error
+	 * @throws RecordNotFoundException Thrown if there is something wrong with an entity
+	 */
 	public void delete(Long id) 
 			throws BadRequestException, InternalServerErrorException, RecordNotFoundException
 	{
