@@ -6,6 +6,8 @@ First, the user will use one of the schema-generation SQL scripts (see */schema_
 
 The application allows you to add descriptions to the schemas/tables/columns in the database record. You can also filter by the names/descriptions of these entities. You can also select a table, and have the application filter to just tables that have a foreign-key constraint to that table -- helping you to truly get to grips with how entities are connected in that particular database.
 
+**You can find a user guide for this application in the */user_guides* directory.**
+
 ## Running the application
 
 The application has a ReactJS front-end, and a Spring-Boot back-end. You should be able to run/test the back-end from an IDE such as Eclipse, and information on how to run/test the front-end can be found in */front_end/package.json*.
@@ -23,6 +25,7 @@ That being said, there a few pre-requisites you will need to set up before you c
 
 The documentation for the application can be found in the below locations:
 
+- **User Guide** - You can find a user guide for this application in the */user_guides* directory.
 - **Front-end** - The documentation for the ReactJS application can be found in */front_end/documentation*. Note that there are 2 sets of documentation: one for components, and another for general classes. This is due to the limitations of the individual document-generation systems used. You can find the npm commands for generating each type of documentation in the *package.json* file.
 - **Back-end** - The documentation for the back-end can be found in */back_end/SchemaShovelWebAPI/doc*. This was generated with Javadoc, and can be generated from an IDE such as Eclipse.
 - **Database** - The documentation for the database can be found in */back_end/database*. This was written manually with OpenOffice Writer (then converted to PDF). In this directory, there is also a file called *SchemaShovelWebModel.mwb*. This contains the model diagram for the database, and can be viewed in MySQL Workbench.
