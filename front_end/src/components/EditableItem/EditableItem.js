@@ -84,16 +84,6 @@ class EditableItem extends Component
 	render()
 	{
 		//If we are in editing mode, things need to be displayed differently
-		const textElem = (!this.state.isInEditMode) ? 
-							(<span className="EIStaticText">{this.state.savedText}</span>) :
-							(<input className="EITextInput" type="text" value={this.state.currentText} 
-								onChange={(e) => this.textChange(e)} 
-								disabled={this.state.isSavingChanges}
-								size={1} //Without allowing the input to get really small, upto the min-width,
-										// the flexbox styling doesn't wrap
-								maxLength={(this.state.textLengthLimit > -1) ? 
-												this.state.textLengthLimit : 
-												undefined} />);
 		
 		//The button has 3 uses: "edit" (enter editing mode), "save" and "saving".
 		//There is also a cancel button, when editing, to exit without saving.
@@ -117,17 +107,32 @@ class EditableItem extends Component
 			buttonText = "Edit";
 			buttonOnClick = () => this.toggleEditMode();
 		}
-		const buttonElem =  (<button onClick={buttonOnClick} disabled={this.state.isSavingChanges}
-									className={this.state.isInEditMode ? "EISaveButton" : "EIEditButton"} >
-									{buttonText}</button>);
-		
-		const cancelButtonElem = (<button className="EICancelChangeButton" 
-									onClick={(e) => this.cancelChanges(e)}>Cancel</button>);
 		
 		return (
 			<div className="EditableItem">
-				<span className="EITextArea">{textElem}</span>
-				<span className="EIButtonArea">{buttonElem} {cancelButtonVisible && cancelButtonElem}</span>
+				<span className="EITextArea">
+					
+					{!this.state.isInEditMode && <span className="EIStaticText">{this.state.savedText}</span>}
+					{this.state.isInEditMode && <input className="EITextInput" type="text" value={this.state.currentText} 
+								onChange={(e) => this.textChange(e)} 
+								disabled={this.state.isSavingChanges}
+								size={1} //Without allowing the input to get really small, upto the min-width,
+										// the flexbox styling doesn't wrap
+								maxLength={(this.state.textLengthLimit > -1) ? 
+												this.state.textLengthLimit : 
+												undefined} />}
+					
+				</span>
+				
+				<span className="EIButtonArea">
+					
+					<button onClick={buttonOnClick} disabled={this.state.isSavingChanges}
+										className={this.state.isInEditMode ? "EISaveButton" : "EIEditButton"} >
+										{buttonText}</button>
+					
+					{cancelButtonVisible && <button className="EICancelChangeButton" 
+												onClick={(e) => this.cancelChanges(e)}>Cancel</button>}
+				</span>
 			</div>
 		);
 	}
