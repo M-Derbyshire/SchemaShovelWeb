@@ -74,16 +74,13 @@ class AddDatabaseForm extends Component
 		//dev mistake removing the required properties)
 		const disableSubmitButton = (this.props.disabled || !this.state.dbName || !this.state.dbJSON);
 		
-		let formContent;
 		
-		if(this.props.isLoading)
-		{
-			formContent = (<span className="infoText">Loading...</span>);
-		}
-		else
-		{
-			formContent = (
-				<form onSubmit={this.onSubmitHandler.bind(this)}>
+		return (
+			<div className="AddDatabaseForm">
+				
+				{this.props.isLoading && <span className="infoText">Loading...</span>}
+				
+				{!this.props.isLoading && <form onSubmit={this.onSubmitHandler.bind(this)}>
 					<input 
 						type="text" 
 						className="databaseSchemaNameInput" 
@@ -112,13 +109,7 @@ class AddDatabaseForm extends Component
 						disabled={this.props.disabled} >
 							Cancel
 					</button>
-				</form>
-			);
-		}
-		
-		return (
-			<div className="AddDatabaseForm">
-				{formContent}
+				</form>}
 			</div>
 		);
 	}
