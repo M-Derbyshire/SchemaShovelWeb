@@ -21,6 +21,18 @@ class DatabaseAddition extends Component
 		};
 	}
 	
+	
+	/**
+	* Aborts any active fetch requests
+	 */
+	componentWillUnmount()
+	{
+		if(this.props.apiAccessor)
+			this.props.apiAccessor.abortRequests();
+	}
+	
+	
+	
 	/**
 	* Handles the cancelling of the database addition (takes the user to the homepage)
 	 */

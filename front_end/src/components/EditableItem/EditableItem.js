@@ -80,6 +80,19 @@ class EditableItem extends Component
 		});
 	}
 	
+	
+	
+	/**
+	* Aborts any active fetch requests
+	 */
+	componentWillUnmount()
+	{
+		if(this.props.apiAccessor)
+			this.props.apiAccessor.abortRequests();
+	}
+	
+	
+	
 	/** Render an EditableItem */
 	render()
 	{

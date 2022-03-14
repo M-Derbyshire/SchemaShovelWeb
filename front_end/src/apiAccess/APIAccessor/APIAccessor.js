@@ -16,21 +16,52 @@ class APIAccessor
 		this._baseURL = baseURL;
 		this._onErrorCallback = onErrorCallback;
 		
+		this._abortControllers = [];
+		
 		this._errorQueue = new Queue();
 		this._addError = this._errorQueue.enqueue.bind(this._errorQueue);
 		
 		this._databaseEntityAccessor = new DatabaseEntityAccessor(
 			this._baseURL, 
-			this._getJSONFromAPI, 
+			this._getJSONFromAPI.bind(this), 
 			this._addError
 		);
 		
 		this._describableEntityAccessor = new DescribableEntityAccessor(
 			this._baseURL, 
-			this._getJSONFromAPI, 
+			this._getJSONFromAPI.bind(this), 
 			this._addError
 		);
 	}
+	
+	
+	/**
+	 * Call this before making any FETCH calls, to get an AbortController instance. 
+	 * You can then use the signal from the controller as an abort signal for the request.
+	 * 
+	 * @returns {AbortController} The newly created abort controller
+	 */
+	_getNewAbortController()
+	{
+		//First, clear out any controllers that have aborted
+		//There's no way to tell if one's finished if it wasn't aborted, but we're not expecting more than 100 in one sitting
+		this._abortControllers = this._abortControllers.filter(controller => !controller.signal.aborted);
+		
+		const newAbortController = new AbortController();
+		this._abortControllers.push(newAbortController);
+		
+		return newAbortController;
+	}
+	
+	/**
+	 * Cancel all fetch requests currently being made
+	 */
+	abortRequests()
+	{
+		this._abortControllers.forEach(controller => controller.abort());
+	}
+	
+	
 	
 	
 	/** 
@@ -42,7 +73,9 @@ class APIAccessor
 	*/
 	async _getJSONFromAPI(path, settings = {})
 	{
-		const response = await fetch(path, settings);
+		const abortController = this._getNewAbortController();
+		
+		const response = await fetch(path, { ...settings, signal: abortController.signal });
 		
 		if(!response.ok)
 		{

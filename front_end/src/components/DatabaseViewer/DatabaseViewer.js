@@ -15,10 +15,6 @@ import DatabaseEntityList from '../DatabaseEntityList/DatabaseEntityList';
  */
 class DatabaseViewer extends Component
 {
-	//Used if the user leaves changes route, but a promise is still unresolved.
-	//The promise will try to setState an unmounted component, so this can stop it.
-	//This can't be held in state, as it won't get set in componentWillUnount
-	_isMounted: boolean = false;
 	
 	/** Create a new DatabaseViewer instance */
 	constructor(props)
@@ -78,7 +74,7 @@ class DatabaseViewer extends Component
 					const tableAnchors = 
 						this.state.anchorMapper.map(filteredList).filter(e => e.entityType === "table");
 					
-					if(this._isMounted) this.setState({
+					this.setState({
 						dbName: db.name,
 						dbSchemas: filterableList,
 						filteredList,
@@ -86,7 +82,7 @@ class DatabaseViewer extends Component
 					});
 					
 				}).catch((err) => {
-					if(this._isMounted) this.setState({
+					this.setState({
 						hasFailedToLoad: true,
 						dbName: null,
 						dbSchemas: new FilterableSchemaList([], schemaColor, tableColor, columnColor),
@@ -148,21 +144,24 @@ class DatabaseViewer extends Component
 	}
 	
 	/**
-	* Attempts to start the retrieval of the list of databases, and sets this._isMounted to true
+	* Attempts to start the retrieval of the list of databases
 	 */
 	componentDidMount()
 	{
 		this.startDatabaseRetrieval();
-		this._isMounted = true;
 	}
 	
 	/**
-	* Sets this._isMounted to false
+	* Aborts any active fetch requests
 	 */
 	componentWillUnmount()
 	{
-		this._isMounted = false;
+		if(this.props.apiAccessor)
+			this.props.apiAccessor.abortRequests();
 	}
+	
+	
+	
 	
 	/** Render the DatabaseViewer */
 	render()
