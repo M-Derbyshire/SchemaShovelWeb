@@ -1,5 +1,0 @@
-{
-	"apiBaseURL": "http://localhost:8080/api/v1",
-	"dbNameCharLimit": 45,
-	"entityDescCharLimit": 2000
-}

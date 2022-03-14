@@ -12,6 +12,9 @@ beforeEach(async () => {
 	fetch.resetMocks();
 	jest.resetModules(); // clears the cache
 	process.env.PUBLIC_URL = "http://localhost:8080";
+	process.env.REACT_APP_API_BASE_URL = "http://localhost:8080/api/v1";
+	process.env.REACT_APP_DB_NAME_CHAR_LIMIT = 45;
+	process.env.REACT_APP_ENTITY_DESC_CHAR_LIMIT = 2000;
 });
 
 afterAll(() => {
@@ -19,27 +22,15 @@ afterAll(() => {
 });
 
 
-const testSettings = {
-	apiBaseURL: "http://localhost:8080/api/v1",
-	dbNameCharLimit: 45,
-	entityDescCharLimit: 2000
-};
-
-
 
 
 test("App will pass the apiAccessor to DatabaseAddition component", async () => {
-	
-	fetch.mockResponseOnce(() => Promise.resolve(JSON.stringify(testSettings)));
 	
 	const application = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter initialEntries={["/create"]}>
 			<App />
 		</MemoryRouter>
 	);
-	
-	const loadingText = ReactTestUtils.findRenderedDOMComponentWithClass(application, "infoText");
-	expect(loadingText.textContent.toLowerCase()).toEqual(expect.stringContaining("loading"));
 	
 	await waitFor(() => {
 		const forms = ReactTestUtils.scryRenderedDOMComponentsWithTag(application, "form");
@@ -52,11 +43,7 @@ test("App will pass the apiAccessor to DatabaseAddition component", async () => 
 
 test("App will pass the onErrorHandler to DatabaseAddition component", async () => {
 	
-	fetch.mockResponseOnce(() => Promise.resolve(JSON.stringify(testSettings)));
-	
-	//We don't want to see these, but the onErrorHandler logs them
-	const originalConsoleError = console.error;
-	console.error = jest.fn();
+	fetch.once(() => Promise.reject(new Error("test error")));
 	
 	const application = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter initialEntries={["/create"]}>
@@ -65,6 +52,11 @@ test("App will pass the onErrorHandler to DatabaseAddition component", async () 
 	);
 	
 	await waitFor(() => {
+		
+		//We don't want to see these, but the onErrorHandler logs them
+		const originalConsoleError = console.error;
+		console.error = jest.fn();
+		
 		const fileInput = ReactTestUtils.findRenderedDOMComponentWithClass(application, "TextFileFileInput");
 		
 		//Will cause an exception
@@ -86,8 +78,6 @@ test("App will pass the onErrorHandler to DatabaseAddition component", async () 
 
 test("App will pass the dbNameCharLimit to the DatabaseAddition component", async () => {
 	
-	fetch.mockResponseOnce(() => Promise.resolve(JSON.stringify(testSettings)));
-	
 	const application = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter initialEntries={["/create"]}>
 			<App />
@@ -98,7 +88,7 @@ test("App will pass the dbNameCharLimit to the DatabaseAddition component", asyn
 		const nameInput = 
 			ReactTestUtils.findRenderedDOMComponentWithClass(application, "databaseSchemaNameInput");
 		
-		expect(nameInput.getAttribute("maxLength")).toBe(testSettings.dbNameCharLimit.toString());
+		expect(nameInput.getAttribute("maxLength")).toBe(process.env.REACT_APP_DB_NAME_CHAR_LIMIT.toString());
 	});
 	
 	
@@ -114,9 +104,7 @@ test("App will pass the entityDescCharLimit and apiAccessor to the DatabaseViewe
 		{ id: 1, name: "schemaName", description: schemaDescription, color: "", tables: []}
 	]};
 	
-	fetch
-		.once(() => Promise.resolve(JSON.stringify(testSettings)))
-		.once(() => Promise.resolve(JSON.stringify(databaseData)));
+	fetch.once(() => Promise.resolve(JSON.stringify(databaseData)));
 	
 	const application = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter initialEntries={["/view/1"]}>
@@ -135,7 +123,7 @@ test("App will pass the entityDescCharLimit and apiAccessor to the DatabaseViewe
 			.filter(inp => inp.value === schemaDescription);
 		
 		expect(descriptionInputs.length).toBe(1);
-		expect(descriptionInputs[0].getAttribute("maxLength")).toBe(testSettings.entityDescCharLimit.toString());
+		expect(descriptionInputs[0].getAttribute("maxLength")).toBe(process.env.REACT_APP_ENTITY_DESC_CHAR_LIMIT.toString());
 	});
 	
 });
@@ -149,9 +137,7 @@ test("App will pass the entityDescCharLimit and apiAccessor to the DatabaseSelec
 	
 	const databaseData = [{ id: 1, name: dbTitle }];
 	
-	fetch
-		.once(() => Promise.resolve(JSON.stringify(testSettings)))
-		.once(() => Promise.resolve(JSON.stringify(databaseData)));
+	fetch.once(() => Promise.resolve(JSON.stringify(databaseData)));
 	
 	const application = ReactTestUtils.renderIntoDocument(
 		<MemoryRouter initialEntries={["/"]}>
@@ -170,7 +156,7 @@ test("App will pass the entityDescCharLimit and apiAccessor to the DatabaseSelec
 			.filter(inp => inp.value === dbTitle);
 		
 		expect(nameInputs.length).toBe(1);
-		expect(nameInputs[0].getAttribute("maxLength")).toBe(testSettings.dbNameCharLimit.toString());
+		expect(nameInputs[0].getAttribute("maxLength")).toBe(process.env.REACT_APP_DB_NAME_CHAR_LIMIT.toString());
 	});
 	
 });

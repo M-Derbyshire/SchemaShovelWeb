@@ -26,54 +26,18 @@ class App extends Component
 		
 		this.state = {
 			selectedDatabaseIndex: -1,
-			apiSettings: null,
-			apiAccessor: null,
+			apiSettings: {
+				apiBaseURL: process.env.REACT_APP_API_BASE_URL,
+				dbNameCharLimit: Number(process.env.REACT_APP_DB_NAME_CHAR_LIMIT),
+				entityDescCharLimit: Number(process.env.REACT_APP_ENTITY_DESC_CHAR_LIMIT)
+			},
+			
+			//Orignially, other things were loaded before this was instantiated, so you may see a lot of components 
+			//that can wait for the apiAccessor to be available, instead of it being a required prop
+			apiAccessor:  new APIAccessor(process.env.REACT_APP_API_BASE_URL, this.onErrorHandler.bind(this)),
 			databaseList: [],
 			errorList: []
 		};
-	}
-	
-	/** 
-	* Runs after the component has mounted. This will trigger the loadAPISettings() method, 
-	* with the path to the API settings JSON.
-	*/
-	componentDidMount()
-	{
-		this.loadAPISettings(`${process.env.PUBLIC_URL}/settings.json`);
-	}
-	
-	/** 
-	* Loads the API settings JSON, then calls the onAPISettingsLoad() method (or onErrorHandler(), if 
-	* there was an error)
-	* @param {string} path - The URL path of the settings JSON
-	*/
-	loadAPISettings(path)
-	{
-		fetch(path)
-			.then(response => response.json())
-			.then(json => this.onAPISettingsLoad(json))
-			.catch(err => this.onErrorHandler(`Error while loading API settings: ${err.message}`));
-	}
-	
-	/** 
-	* Once the API settings have been loaded, this will add them to the state, and also add a new 
-	* APIAccessor instance (Or this will throw an exception, if there are missing settings).
-	* @param {Object} settings - The settings object
-	* @param {string} settings.apiBaseURL - The Base URl of the API
-	* @param {number} settings.dbNameCharLimit - The database's character limit for database record names
-	* @param {number} settings.entityDescCharLimit - The database's character limit for the description columns of the various entities
-	*/
-	onAPISettingsLoad(settings)
-	{
-		if(!settings || !settings.apiBaseURL || !settings.dbNameCharLimit || !settings.entityDescCharLimit)
-		{
-			throw new Error("Settings JSON is misshapen.");
-		}
-		
-		this.setState({
-			apiSettings: settings,
-			apiAccessor: new APIAccessor(settings.apiBaseURL, this.onErrorHandler.bind(this))
-		});
 	}
 	
 	/** 
@@ -155,19 +119,19 @@ class App extends Component
 						<DatabaseAddition 
 							apiAccessor= { apiAccessor }
 							onErrorHandler={this.onErrorHandler.bind(this)}
-							dbNameCharLimit={ (apiSettings) ? apiSettings.dbNameCharLimit : -1 } />
+							dbNameCharLimit={ apiSettings.dbNameCharLimit } />
 					</Route>
 					
 					<Route path="/view/:id">
 						<DatabaseViewer 
 							apiAccessor= { apiAccessor } 
-							entityDescCharLimit={ (apiSettings) ? apiSettings.entityDescCharLimit : -1 } />
+							entityDescCharLimit={ apiSettings.entityDescCharLimit } />
 					</Route>
 					
 					<Route path="/">
 						<DatabaseSelection 
 							apiAccessor={ apiAccessor }
-							dbNameCharLimit={ (apiSettings) ? apiSettings.dbNameCharLimit : -1 } />
+							dbNameCharLimit={ apiSettings.dbNameCharLimit } />
 					</Route>
 				</Switch>
 			</div>

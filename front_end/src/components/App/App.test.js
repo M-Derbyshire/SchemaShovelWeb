@@ -13,6 +13,9 @@ beforeEach(async () => {
 	fetch.resetMocks();
 	jest.resetModules(); // clears the cache
 	process.env.PUBLIC_URL = "http://localhost:8080";
+	process.env.REACT_APP_API_BASE_URL = "http://localhost:8080/api/v1";
+	process.env.REACT_APP_DB_NAME_CHAR_LIMIT = 45;
+	process.env.REACT_APP_ENTITY_DESC_CHAR_LIMIT = 2000;
 	console.error = jest.fn();
 });
 
@@ -106,7 +109,7 @@ test("App will map ErrorMessage objects (from onErrorHandler) for errors into Er
 		const errors = ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "ErrorMessage");
 		
 		expect(errorDisplay.textContent).toEqual(expect.stringContaining(errorText));
-		expect(errors.length).toBe(1);
+		expect(errors.length).not.toBe(0);
 		expect(errors[0].textContent).toEqual(expect.stringContaining(errorText));
 	});
 	
@@ -125,23 +128,5 @@ test("App's onErrorHandler will console.error the errors", async () => {
 	);
 	
 	await waitFor(() => expect(console.error).toHaveBeenCalledWith(expect.stringContaining(errorText)));
-	
-});
-
-test.each([
-	['{ "dbNameCharLimit": 1, "entityDescCharLimit": 1 }'],
-	['{ "apiBaseURL": "http://myapi.com", "entityDescCharLimit": 1 }'], 
-	['{ "apiBaseURL": "http://myapi.com", "dbNameCharLimit": 1 }']
-])("App will raise an error if the API Settings JSON is missing a property", async (json) => {
-	
-	fetch.mockResponseOnce(json);
-	
-	const application = ReactTestUtils.renderIntoDocument(
-		<MemoryRouter initialEntries={["/"]}>
-			<App />
-		</MemoryRouter>
-	);
-	
-	await waitFor(() => expect(console.error).toHaveBeenCalledWith(expect.stringContaining("Settings JSON is misshapen")));
 	
 });
