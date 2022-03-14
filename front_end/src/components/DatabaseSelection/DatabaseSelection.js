@@ -141,8 +141,6 @@ class DatabaseSelection extends Component
 		const selectedDatabaseID = 
 			(selectedDatabaseIndex < 0) ? -1 : this.state.databaseList[selectedDatabaseIndex].id;
 		
-		const listChildren = 
-			(!this.state.databaseList) ? "" : this.state.databaseList.map(this.databaseListMapper.bind(this));
 		
 		return (
 			<div className="DatabaseSelection">
@@ -154,7 +152,7 @@ class DatabaseSelection extends Component
 					isLoading={(!this.state.hasFailedToLoad && !this.state.databaseList)}
 					hasFailedToLoad={this.state.hasFailedToLoad}
 				>
-					{listChildren}
+					{this.state.databaseList && this.state.databaseList.map(this.databaseListMapper.bind(this))}
 				</SelectableList>
 				<DatabaseListOptions 
 					deleteSelectedDatabase={async () => await this.deleteDatabaseAndRemoveFromList.apply(this, [selectedDatabaseID])} 
