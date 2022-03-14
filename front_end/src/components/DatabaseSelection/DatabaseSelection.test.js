@@ -1,8 +1,6 @@
 import DatabaseSelection from './DatabaseSelection';
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
-import MockAPIAccessor from '../testingHelpers/MockAPIAccessor';
-import sleep from '../testingHelpers/sleepFunc';
 
 test("DatabaseSelection will render a single SelectableList component", () => {
 	

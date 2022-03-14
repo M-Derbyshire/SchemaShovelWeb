@@ -2,7 +2,7 @@ import DatabaseAddition from './DatabaseAddition';
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter, Route } from 'react-router-dom';
 import MockAPIAccessor from '../testingHelpers/MockAPIAccessor';
-import sleep from '../testingHelpers/sleepFunc';
+import { wait, waitFor } from '@testing-library/react';
 
 test("DatabaseAddition will pass its onErrorHandler prop down to AddDatabaseForm", async () => {
 	
@@ -22,9 +22,8 @@ test("DatabaseAddition will pass its onErrorHandler prop down to AddDatabaseForm
 	const file = null; 
 	ReactTestUtils.Simulate.change(fileInput, { target: { files: [file] } });
 	
-	await sleep(100);
+	await waitFor(() => expect(mockErrorHandler).toHaveBeenCalled());
 	
-	expect(mockErrorHandler).toHaveBeenCalled();
 });
 
 test.each([
@@ -72,9 +71,8 @@ test("DatabaseAddition will call createDatabase on apiAccessor, with the set nam
 	ReactTestUtils.Simulate.change(jsonInput, {target: {value: testJSON} });
 	ReactTestUtils.Simulate.submit(form);
 	
-	await sleep(100); //We're waiting on an asynchronous operation
+	await waitFor(() => expect(apiAccessor.createDatabase).toHaveBeenCalled());
 	
-	expect(apiAccessor.createDatabase).toHaveBeenCalled();
 });
 
 

@@ -1,6 +1,6 @@
 import AddDatabaseForm from './AddDatabaseForm';
 import ReactTestUtils from 'react-dom/test-utils';
-import sleep from '../testingHelpers/sleepFunc';
+import { waitFor } from '@testing-library/react'
 
 const fakeFormOnSubmit = (name, json) => {};
 const fakeOnErrorHandler = (name, json) => {};
@@ -40,9 +40,8 @@ test("AddDatabaseForm will pass the onErrorHandler prop to TextFileInput", async
 	const file = null; 
 	ReactTestUtils.Simulate.change(fileInput, { target: { files: [file] } });
 	
-	await sleep(100);
+	await waitFor(() => expect(mockErrorHandler).toBeCalled());
 	
-	expect(mockErrorHandler).toBeCalled();
 });
 
 

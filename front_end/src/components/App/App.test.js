@@ -1,7 +1,7 @@
 import App from './App';
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
-import sleep from '../testingHelpers/sleepFunc';
+import { waitFor } from '@testing-library/react';
 import { enableFetchMocks } from 'jest-fetch-mock'
 
 enableFetchMocks();
@@ -101,14 +101,15 @@ test("App will map ErrorMessage objects (from onErrorHandler) for errors into Er
 		</MemoryRouter>
 	);
 	
-	await sleep(100); //Awaiting loading of settings (which will fail)
+	await waitFor(() => {
+		const errorDisplay = ReactTestUtils.findRenderedDOMComponentWithClass(application, "ErrorDisplay");
+		const errors = ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "ErrorMessage");
+		
+		expect(errorDisplay.textContent).toEqual(expect.stringContaining(errorText));
+		expect(errors.length).toBe(1);
+		expect(errors[0].textContent).toEqual(expect.stringContaining(errorText));
+	});
 	
-	const errorDisplay = ReactTestUtils.findRenderedDOMComponentWithClass(application, "ErrorDisplay");
-	const errors = ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "ErrorMessage");
-	
-	expect(errorDisplay.textContent).toEqual(expect.stringContaining(errorText));
-	expect(errors.length).toBe(1);
-	expect(errors[0].textContent).toEqual(expect.stringContaining(errorText));
 });
 
 test("App's onErrorHandler will console.error the errors", async () => {
@@ -123,9 +124,8 @@ test("App's onErrorHandler will console.error the errors", async () => {
 		</MemoryRouter>
 	);
 	
-	await sleep(100); //Awaiting loading of settings (which will fail)
+	await waitFor(() => expect(console.error).toHaveBeenCalledWith(expect.stringContaining(errorText)));
 	
-	expect(console.error).toHaveBeenCalledWith(expect.stringContaining(errorText));
 });
 
 test.each([
@@ -142,7 +142,6 @@ test.each([
 		</MemoryRouter>
 	);
 	
-	await sleep(100); //Awaiting loading of settings (which will fail)
+	await waitFor(() => expect(console.error).toHaveBeenCalledWith(expect.stringContaining("Settings JSON is misshapen")));
 	
-	expect(console.error).toHaveBeenCalledWith(expect.stringContaining("Settings JSON is misshapen"));
 });

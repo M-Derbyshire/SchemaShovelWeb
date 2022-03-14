@@ -1,6 +1,6 @@
 import TextFileInput from './TextFileInput';
 import ReactTestUtils from 'react-dom/test-utils';
-import sleep from '../testingHelpers/sleepFunc';
+import { waitFor } from '@testing-library/react';
 
 const fakeErrorHandler = (err) => {};
 const fakeSetFileText = (text) => {};
@@ -91,9 +91,8 @@ test("TextFileInput will call the setFileText prop function when the fileInput h
 	const file = new File(['testing'], 'chucknorris.txt', { type: '.txt' });
 	ReactTestUtils.Simulate.change(fileInput, { target: { files: [file] } });
 	
-	await sleep(100);
+	await waitFor(() => expect(mockSetFileText).toBeCalledWith("testing"));
 	
-	expect(mockSetFileText).toBeCalledWith("testing");
 });
 
 test("TextFileInput will call the onErrorHandler prop function if there is an exception during file upload", async () => {
@@ -111,7 +110,6 @@ test("TextFileInput will call the onErrorHandler prop function if there is an ex
 	const file = null; 
 	ReactTestUtils.Simulate.change(fileInput, { target: { files: [file] } });
 	
-	await sleep(100);
+	await waitFor(() => expect(mockErrorHandler).toBeCalled());
 	
-	expect(mockErrorHandler).toBeCalled();
 });

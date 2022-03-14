@@ -1,6 +1,5 @@
 import ReactTestUtils from 'react-dom/test-utils';
 import MockAPIAccessor from '../testingHelpers/MockAPIAccessor';
-import sleep from '../testingHelpers/sleepFunc';
 import EntityElementIdGenerator from '../../EntityElementIdGenerator/EntityElementIdGenerator';
 import DatabaseEntityList from './DatabaseEntityList';
 

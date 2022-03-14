@@ -1,7 +1,7 @@
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter, Route } from 'react-router-dom';
+import { waitFor } from '@testing-library/react';
 import MockAPIAccessor from '../testingHelpers/MockAPIAccessor';
-import sleep from '../testingHelpers/sleepFunc';
 import DatabaseViewer from './DatabaseViewer';
 
 test("DatabaseViewer's main menu button will take you back to the root route", () => {
@@ -52,11 +52,11 @@ test("DatabaseViewer's title will become an error message, if apiAccessor gives 
 		</MemoryRouter>
 	);
 	
-	await sleep(100); //Await the async load method finishing
+	await waitFor(() => {
+		const titleElem = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "dbViewerTitle");
+		expect(titleElem.textContent.toLowerCase()).toEqual(expect.stringContaining("error"));
+	});
 	
-	const titleElem = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "dbViewerTitle");
-	
-	expect(titleElem.textContent.toLowerCase()).toEqual(expect.stringContaining("error"));
 });
 
 test("DatabaseViewer's title will become the database name, if apiAccessor returns it", async () => {
@@ -71,11 +71,11 @@ test("DatabaseViewer's title will become the database name, if apiAccessor retur
 		</MemoryRouter>
 	);
 	
-	await sleep(100); //Await the async load method finishing
+	await waitFor(() => {
+		const titleElem = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "dbViewerTitle");
+		expect(titleElem.textContent.toLowerCase()).toEqual(expect.stringContaining(name));
+	});
 	
-	const titleElem = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "dbViewerTitle");
-	
-	expect(titleElem.textContent.toLowerCase()).toEqual(expect.stringContaining(name));
 });
 
 

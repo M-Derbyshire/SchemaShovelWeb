@@ -1,7 +1,7 @@
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter, Route } from 'react-router-dom';
 import MockAPIAccessor from '../testingHelpers/MockAPIAccessor';
-import sleep from '../testingHelpers/sleepFunc';
+import { wait, waitFor, screen } from '@testing-library/react';
 import EntityElementIdGenerator from '../../EntityElementIdGenerator/EntityElementIdGenerator';
 import DatabaseViewer from './DatabaseViewer';
 
@@ -19,12 +19,13 @@ test.each("DatabaseViewer will pass apiAccessor to DatabaseEntityList", async ()
 		</MemoryRouter>
 	);
 	
-	await sleep(100);
+	await waitFor(() => {
+		const dbEntities = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "DatabaseEntity");
+		
+		//Will have loaded the db entities with the apiAccessor
+		expect(dbEntities.length).toEqual(1);
+	});
 	
-	const dbEntities = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "DatabaseEntity");
-	
-	//Will have loaded the db entities with the apiAccessor
-	expect(dbEntities.length).toEqual(1);
 });
 
 test("DatabaseViewer will pass the full schema list to DatabaseEntityFilterOptions (even when a filter is applied)", async () => {
@@ -42,7 +43,9 @@ test("DatabaseViewer will pass the full schema list to DatabaseEntityFilterOptio
 		</MemoryRouter>
 	);
 	
-	await sleep(100); //Await the async load method finishing
+	await waitFor(() => {
+		expect(screen.queryByText(/loading/i)).toBeNull();
+	});
 	
 	const schemaTextFilterInput = 
 		ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "schemaTextFilterInput");
@@ -52,12 +55,16 @@ test("DatabaseViewer will pass the full schema list to DatabaseEntityFilterOptio
 	ReactTestUtils.Simulate.change(schemaTextFilterInput, { "target": { "value": "match" } });
 	ReactTestUtils.Simulate.click(textFilterRunBtn);
 	
-	const fkSchemaOptions = ReactTestUtils.scryRenderedDOMComponentsWithTag(dbViewer, "option");
+	await waitFor(() => {
+		
+		const fkSchemaOptions = ReactTestUtils.scryRenderedDOMComponentsWithTag(dbViewer, "option");
+		
+		const titleElem = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "dbViewerTitle");
+		
+		//This is 4, not 2, as the first in both lists is the blank -1 value
+		expect(fkSchemaOptions.length).toBe(4);
+	});
 	
-	const titleElem = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "dbViewerTitle");
-	
-	//This is 4, not 2, as the first in both lists is the blank -1 value
-	expect(fkSchemaOptions.length).toBe(4);
 });
 
 
@@ -79,21 +86,22 @@ test("DatabaseViewer will pass the runTextFilter method to the DatabaseEntityFil
 		</MemoryRouter>
 	);
 	
-	await sleep(100); //Await the async load method finishing
+	await waitFor(() => {
+		const schemaTextFilterInput = 
+			ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "schemaTextFilterInput");
+		const textFilterRunBtn = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "textFilterRunBtn");
+		
+		const anchors = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "entityAnchor");
+		expect(anchors.length).toBe(2);
+		
+		//This will only match one of the mock schemas
+		ReactTestUtils.Simulate.change(schemaTextFilterInput, { "target": { "value": "match" } });
+		ReactTestUtils.Simulate.click(textFilterRunBtn);
+		
+		const anchorsFiltered = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "entityAnchor");
+		expect(anchorsFiltered.length).toBe(1);
+	});
 	
-	const schemaTextFilterInput = 
-		ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "schemaTextFilterInput");
-	const textFilterRunBtn = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "textFilterRunBtn");
-	
-	const anchors = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "entityAnchor");
-	expect(anchors.length).toBe(2);
-	
-	//This will only match one of the mock schemas
-	ReactTestUtils.Simulate.change(schemaTextFilterInput, { "target": { "value": "match" } });
-	ReactTestUtils.Simulate.click(textFilterRunBtn);
-	
-	const anchorsFiltered = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "entityAnchor");
-	expect(anchorsFiltered.length).toBe(1);
 });
 
 
@@ -118,23 +126,24 @@ test("DatabaseViewer will pass the runFkFilter method to the DatabaseEntityFilte
 		</MemoryRouter>
 	);
 	
-	await sleep(100); //Await the async load method finishing
+	await waitFor(() => {
+		const schemaSelect = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "fkSchemaSelect");
+		const tableSelect = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "fkTableSelect");
+		const runBtn = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "fkFilterRunBtn");
+		
+		const anchors = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "entityAnchor");
+		expect(anchors[0].textContent).toEqual(expect.not.stringContaining("subject"));
+		
+		//This will only match one of the mock tables
+		ReactTestUtils.Simulate.change(schemaSelect, { target: { value: 1 } });
+		ReactTestUtils.Simulate.change(tableSelect, { target: { value: 1 } });
+		ReactTestUtils.Simulate.click(runBtn);
+		
+		const anchorsFiltered = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "entityAnchor");
+		
+		expect(anchorsFiltered[0].textContent).toEqual(expect.stringContaining("subject"));
+	});
 	
-	const schemaSelect = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "fkSchemaSelect");
-	const tableSelect = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "fkTableSelect");
-	const runBtn = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "fkFilterRunBtn");
-	
-	const anchors = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "entityAnchor");
-	expect(anchors[0].textContent).toEqual(expect.not.stringContaining("subject"));
-	
-	//This will only match one of the mock tables
-	ReactTestUtils.Simulate.change(schemaSelect, { target: { value: 1 } });
-	ReactTestUtils.Simulate.change(tableSelect, { target: { value: 1 } });
-	ReactTestUtils.Simulate.click(runBtn);
-	
-	const anchorsFiltered = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "entityAnchor");
-	
-	expect(anchorsFiltered[0].textContent).toEqual(expect.stringContaining("subject"));
 });
 
 
@@ -166,7 +175,9 @@ test("DatabaseViewer will pass the full table label list to DatabaseEntityList (
 		</MemoryRouter>
 	);
 	
-	await sleep(100); // await async loading
+	await waitFor(() => {
+		expect(screen.queryByText(/loading/i)).toBeNull();
+	});
 	
 	const tableTextFilterInput = 
 		ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "tableTextFilterInput");
@@ -176,11 +187,15 @@ test("DatabaseViewer will pass the full table label list to DatabaseEntityList (
 	ReactTestUtils.Simulate.change(tableTextFilterInput, { "target": { "value": "table1" } });
 	ReactTestUtils.Simulate.click(textFilterRunBtn);
 	
-	const dbEntities =  ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "DatabaseEntity");
+	await waitFor(() => {
+		
+		const dbEntities =  ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "DatabaseEntity");
+		
+		//The column should still have the correct fk to table string
+		expect(dbEntities.length).toBe(3);
+		expect(dbEntities[2].textContent).toEqual(expect.stringContaining("schema2.table2"));
+	});
 	
-	//The column should still have the correct fk to table string
-	expect(dbEntities.length).toBe(3);
-	expect(dbEntities[2].textContent).toEqual(expect.stringContaining("schema2.table2"));
 });
 
 
@@ -207,7 +222,10 @@ test("DatabaseViewer will pass fkFilterSubjectTable to DatabaseEntityList, after
 		</MemoryRouter>
 	);
 	
-	await sleep(100); // await async loading
+	
+	await waitFor(() => {
+		expect(screen.queryByText(/loading/i)).toBeNull();
+	});
 	
 	const schemaSelect = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "fkSchemaSelect");
 	const tableSelect = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "fkTableSelect");
@@ -215,13 +233,18 @@ test("DatabaseViewer will pass fkFilterSubjectTable to DatabaseEntityList, after
 	
 	ReactTestUtils.Simulate.change(schemaSelect, { target: { value: 1 } });
 	ReactTestUtils.Simulate.change(tableSelect, { target: { value: 1 } });
+	
 	ReactTestUtils.Simulate.click(runBtn);
 	
-	const tableID = idGenerator.getIdForTable(subject.id, subject.name);
+	await waitFor(() => {
+		
+		const tableID = idGenerator.getIdForTable(subject.id, subject.name);
+		
+		const dbEntities = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "DatabaseEntity");
+		
+		expect(dbEntities[0].getAttribute("id")).toEqual(tableID);
+	});
 	
-	const dbEntities = ReactTestUtils.scryRenderedDOMComponentsWithClass(dbViewer, "DatabaseEntity");
-	
-	expect(dbEntities[0].getAttribute("id")).toEqual(tableID);
 });
 
 
@@ -244,12 +267,13 @@ test.each([
 		</MemoryRouter>
 	);
 	
-	await sleep(100);
+	await waitFor(() => {
+		const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "EIEditButton");
+		ReactTestUtils.Simulate.click(editButton);
+		
+		const textInput = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "EITextInput");
+		
+		expect(textInput.getAttribute("maxLength")).toEqual(charLimit.toString());
+	});
 	
-	const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "EIEditButton");
-	ReactTestUtils.Simulate.click(editButton);
-	
-	const textInput = ReactTestUtils.findRenderedDOMComponentWithClass(dbViewer, "EITextInput");
-	
-	expect(textInput.getAttribute("maxLength")).toEqual(charLimit.toString());
 });

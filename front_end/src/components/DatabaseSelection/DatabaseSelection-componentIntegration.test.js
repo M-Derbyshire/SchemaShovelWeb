@@ -2,7 +2,7 @@ import DatabaseSelection from './DatabaseSelection';
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import MockAPIAccessor from '../testingHelpers/MockAPIAccessor';
-import sleep from '../testingHelpers/sleepFunc';
+import { waitFor } from '@testing-library/react';
 
 test("DatabaseSelection will load the database list, and pass it to the SelectableList as EditableItems", async () => {
 	
@@ -20,12 +20,12 @@ test("DatabaseSelection will load the database list, and pass it to the Selectab
 		</MemoryRouter>
 	);
 	
-	//We're dealing with asynchronous methods, so let it load
-	await sleep(100);
 	
-	const editableItemText = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "EIStaticText");
+	await waitFor(() => {
+		const editableItemText = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "EIStaticText");
+		expect(editableItemText.textContent).toEqual(testName);
+	});
 	
-	expect(editableItemText.textContent).toEqual(testName);
 });
 
 test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method to EditableItems", async () => {
@@ -47,21 +47,20 @@ test("DatabaseSelection will pass the apiAccessor's updateDatabaseName() method 
 		</MemoryRouter>
 	);
 	
-	//We're dealing with asynchronous methods, so let it load
-	await sleep(100);
-	
-	const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "EIEditButton");
-	ReactTestUtils.Simulate.click(editButton);
-	
-	//Edit the text
-	const textInput = ReactTestUtils.findRenderedDOMComponentWithTag(databaseSelectionRouter, "input");
-	ReactTestUtils.Simulate.change(textInput, { "target": { "value": changedName }});
-	
-	//Click save
-	const saveButton = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "EISaveButton");
-	ReactTestUtils.Simulate.click(saveButton);
-	
+	await waitFor(() => {
+		const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "EIEditButton");
+		ReactTestUtils.Simulate.click(editButton);
+		
+		//Edit the text
+		const textInput = ReactTestUtils.findRenderedDOMComponentWithTag(databaseSelectionRouter, "input");
+		ReactTestUtils.Simulate.change(textInput, { "target": { "value": changedName }});
+		
+		//Click save
+		const saveButton = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "EISaveButton");
+		ReactTestUtils.Simulate.click(saveButton);
+		
 	expect(mockAPIAccessor.updateDatabaseName).toHaveBeenCalledWith(testID, changedName);
+	});
 	
 });
 
@@ -82,14 +81,15 @@ test.each([
 		</MemoryRouter>
 	);
 	
-	//We're dealing with asynchronous methods, so let it load
-	await sleep(100);
 	
-	const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "EIEditButton");
-	ReactTestUtils.Simulate.click(editButton); //Enter edit mode
-	const textInput = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "EITextInput");
+	await waitFor(() => {
+		const editButton = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "EIEditButton");
+		ReactTestUtils.Simulate.click(editButton); //Enter edit mode
+		const textInput = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "EITextInput");
+		
+		expect(textInput.getAttribute("maxLength")).toBe(lengthLimit.toString());
+	});
 	
-	expect(textInput.getAttribute("maxLength")).toBe(lengthLimit.toString());
 });
 
 test("DatabaseSelection will pass the deleteSelectedDatabase func to the DatabaseListOptions", async () => {
@@ -107,18 +107,20 @@ test("DatabaseSelection will pass the deleteSelectedDatabase func to the Databas
 		</MemoryRouter>
 	);
 	
-	//We're dealing with asynchronous methods, so let it load
-	await sleep(100);
 	
-	const dbLiItems = ReactTestUtils.scryRenderedDOMComponentsWithTag(databaseSelectionRouter, "li");
-	ReactTestUtils.Simulate.click(dbLiItems[1]);
+	await waitFor(() => {
+		const dbLiItems = ReactTestUtils.scryRenderedDOMComponentsWithTag(databaseSelectionRouter, "li");
+		ReactTestUtils.Simulate.click(dbLiItems[1]);
+		
+		//This means id passed in should be 2
+		
+		const deleteButton = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "deleteDatabaseButton");
+		ReactTestUtils.Simulate.click(deleteButton);
+		
+		expect(mockAPIAccessor.deleteDatabase).toHaveBeenCalledWith(2);
+	});
 	
-	//This means id passed in should be 2
 	
-	const deleteButton = ReactTestUtils.findRenderedDOMComponentWithClass(databaseSelectionRouter, "deleteDatabaseButton");
-	ReactTestUtils.Simulate.click(deleteButton);
-	
-	expect(mockAPIAccessor.deleteDatabase).toHaveBeenCalledWith(2);
 });
 
 test("DatabaseSelection's will pass the SelectableList isLoading prop as true when there's no database data loaded.", () => {
@@ -149,12 +151,14 @@ test("DatabaseSelection will pass the SelectableList hasFailedToLoad prop as tru
 		</MemoryRouter>
 	);
 	
-	//We're dealing with asynchronous methods, so let it load
-	await sleep(100);
 	
-	const li = ReactTestUtils.findRenderedDOMComponentWithTag(databaseSelectionRouter, "li");
+	await waitFor(() => {
+		const li = ReactTestUtils.findRenderedDOMComponentWithTag(databaseSelectionRouter, "li");
+		
+		//Wanted to check this specifically in the SelectableList, but you can't test the internals of an 
+		//inner component with ReactTestUtils.
+		expect(li.textContent.toLowerCase()).toEqual(expect.stringContaining("an error has occurred"));
+	});
 	
-	//Wanted to check this specifically in the SelectableList, but you can't test the internals of an 
-	//inner component with ReactTestUtils.
-	expect(li.textContent.toLowerCase()).toEqual(expect.stringContaining("an error has occurred"));
+	
 });

@@ -2,7 +2,7 @@ import DatabaseAddition from './DatabaseAddition';
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter, Route } from 'react-router-dom';
 import MockAPIAccessor from '../testingHelpers/MockAPIAccessor';
-import sleep from '../testingHelpers/sleepFunc';
+import { waitFor } from '@testing-library/react';
 
 
 test("onCancelHandler will redirect to root", () => {
@@ -58,9 +58,8 @@ test("databaseAdditionHandler will call createDatabase on apiAccessor, with the 
 	ReactTestUtils.Simulate.change(jsonInput, {target: {value: testJSON} });
 	ReactTestUtils.Simulate.submit(form);
 	
-	await sleep(100); //We're waiting on an asynchronous operation
+	await waitFor(() => expect(apiAccessor.createDatabase).toHaveBeenCalledWith(expectedObject));
 	
-	expect(apiAccessor.createDatabase).toHaveBeenCalledWith(expectedObject);
 });
 
 
@@ -89,9 +88,8 @@ test("databaseAdditionHandler will catch any exceptions thrown by apiAccessor.cr
 	ReactTestUtils.Simulate.change(jsonInput, {target: {value: testJSON} });
 	ReactTestUtils.Simulate.submit(form);
 	
-	await sleep(100); //We're waiting on an asynchronous operation
+	await waitFor(() => expect(1).toBe(1));
 	
-	expect(1).toBe(1);
 });
 
 
@@ -117,8 +115,8 @@ test("databaseAdditionHandler will redirect to root when finished", async () => 
 	
 	const form = ReactTestUtils.findRenderedDOMComponentWithTag(addition, "form"); 
 	ReactTestUtils.Simulate.submit(form);
-	await sleep(100);
 	
-	expect(testLocation.pathname).toBe("/");
+	await waitFor(() => expect(testLocation.pathname).toBe("/"));
+	
 	
 });

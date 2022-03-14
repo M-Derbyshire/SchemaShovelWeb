@@ -1,7 +1,7 @@
 import DatabaseListOptions from './DatabaseListOptions';
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter, Route } from 'react-router-dom';
-import sleep from '../testingHelpers/sleepFunc';
+import { waitFor } from '@testing-library/react';
 
 const fakeDeletedSelectedDatabase = () => {}
 
@@ -87,12 +87,13 @@ test("DatabaseListOptions will disable the create/load/delete buttons after pres
 	expect(createButton).toBeDisabled();
 	expect(loadButton).toBeDisabled();
 	
-	//We're dealing with asynchronous methods, so let it load
-	await sleep(100);
 	
-	expect(deleteButton).not.toBeDisabled();
-	expect(createButton).not.toBeDisabled();
-	expect(loadButton).not.toBeDisabled();
+	await waitFor(() => {
+		expect(deleteButton).not.toBeDisabled();
+		expect(createButton).not.toBeDisabled();
+		expect(loadButton).not.toBeDisabled();
+	});
+	
 });
 
 test("DatabaseListOptions will re-enable its buttons after an exception is thrown during database deletion", async () => {
@@ -114,12 +115,13 @@ test("DatabaseListOptions will re-enable its buttons after an exception is throw
 	
 	ReactTestUtils.Simulate.click(deleteButton);
 	
-	//We're dealing with asynchronous methods, so let it load
-	await sleep(100);
 	
-	expect(deleteButton).not.toBeDisabled();
-	expect(createButton).not.toBeDisabled();
-	expect(loadButton).not.toBeDisabled();
+	await waitFor(() => {
+		expect(deleteButton).not.toBeDisabled();
+		expect(createButton).not.toBeDisabled();
+		expect(loadButton).not.toBeDisabled();
+	});
+	
 });
 
 test("DatabaseListOptions will route to /create when the add database button is pressed", () => {

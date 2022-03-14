@@ -2,7 +2,7 @@ import App from './App';
 import ReactTestUtils from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import { enableFetchMocks } from 'jest-fetch-mock'
-import sleep from '../testingHelpers/sleepFunc';
+import { waitFor } from '@testing-library/react';
 
 enableFetchMocks();
 
@@ -41,10 +41,12 @@ test("App will pass the apiAccessor to DatabaseAddition component", async () => 
 	const loadingText = ReactTestUtils.findRenderedDOMComponentWithClass(application, "infoText");
 	expect(loadingText.textContent.toLowerCase()).toEqual(expect.stringContaining("loading"));
 	
-	await sleep(100); //We're waiting on an asynchronous operation (loading the settings json)
+	await waitFor(() => {
+		const forms = ReactTestUtils.scryRenderedDOMComponentsWithTag(application, "form");
+		expect(forms.length).toBe(1);
+	});
 	
-	const forms = ReactTestUtils.scryRenderedDOMComponentsWithTag(application, "form");
-	expect(forms.length).toBe(1);
+	
 });
 
 
@@ -62,22 +64,24 @@ test("App will pass the onErrorHandler to DatabaseAddition component", async () 
 		</MemoryRouter>
 	);
 	
-	await sleep(100); //Awaiting loading of settings
+	await waitFor(() => {
+		const fileInput = ReactTestUtils.findRenderedDOMComponentWithClass(application, "TextFileFileInput");
+		
+		//Will cause an exception
+		const file = null; 
+		ReactTestUtils.Simulate.change(fileInput, { target: { files: [file] } });
+		
+		const errorDisplay = ReactTestUtils.findRenderedDOMComponentWithClass(application, "ErrorDisplay");
+		const errors = ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "ErrorMessage");
+		
+		expect(errorDisplay.textContent).not.toEqual("");
+		expect(errors.length).toBeGreaterThan(0);
+		
+		expect(console.error).toHaveBeenCalled();
+		console.error = originalConsoleError;
+	});
 	
-	const fileInput = ReactTestUtils.findRenderedDOMComponentWithClass(application, "TextFileFileInput");
 	
-	//Will cause an exception
-	const file = null; 
-	ReactTestUtils.Simulate.change(fileInput, { target: { files: [file] } });
-	
-	const errorDisplay = ReactTestUtils.findRenderedDOMComponentWithClass(application, "ErrorDisplay");
-	const errors = ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "ErrorMessage");
-	
-	expect(errorDisplay.textContent).not.toEqual("");
-	expect(errors.length).toBeGreaterThan(0);
-	
-	expect(console.error).toHaveBeenCalled();
-	console.error = originalConsoleError;
 });
 
 test("App will pass the dbNameCharLimit to the DatabaseAddition component", async () => {
@@ -90,12 +94,14 @@ test("App will pass the dbNameCharLimit to the DatabaseAddition component", asyn
 		</MemoryRouter>
 	);
 	
-	await sleep(100); //We're waiting on an asynchronous operation (loading the settings json)
+	await waitFor(() => {
+		const nameInput = 
+			ReactTestUtils.findRenderedDOMComponentWithClass(application, "databaseSchemaNameInput");
+		
+		expect(nameInput.getAttribute("maxLength")).toBe(testSettings.dbNameCharLimit.toString());
+	});
 	
-	const nameInput = 
-		ReactTestUtils.findRenderedDOMComponentWithClass(application, "databaseSchemaNameInput");
 	
-	expect(nameInput.getAttribute("maxLength")).toBe(testSettings.dbNameCharLimit.toString());
 });
 
 
@@ -118,19 +124,20 @@ test("App will pass the entityDescCharLimit and apiAccessor to the DatabaseViewe
 		</MemoryRouter>
 	);
 	
-	await sleep(100); //We're waiting on an asynchronous operation (loading the settings json)
+	await waitFor(() => {
+		const editableItems = ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "EditableItem");
 	
-	const editableItems = ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "EditableItem");
+		const editableItemsEditBtns = 
+			ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "EIEditButton");
+		editableItemsEditBtns.forEach((btn) => ReactTestUtils.Simulate.click(btn));
+		
+		const descriptionInputs = ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "EITextInput")
+			.filter(inp => inp.value === schemaDescription);
+		
+		expect(descriptionInputs.length).toBe(1);
+		expect(descriptionInputs[0].getAttribute("maxLength")).toBe(testSettings.entityDescCharLimit.toString());
+	});
 	
-	const editableItemsEditBtns = 
-		ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "EIEditButton");
-	editableItemsEditBtns.forEach((btn) => ReactTestUtils.Simulate.click(btn));
-	
-	const descriptionInputs = ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "EITextInput")
-		.filter(inp => inp.value === schemaDescription);
-	
-	expect(descriptionInputs.length).toBe(1);
-	expect(descriptionInputs[0].getAttribute("maxLength")).toBe(testSettings.entityDescCharLimit.toString());
 });
 
 
@@ -152,17 +159,18 @@ test("App will pass the entityDescCharLimit and apiAccessor to the DatabaseSelec
 		</MemoryRouter>
 	);
 	
-	await sleep(100); //We're waiting on an asynchronous operation (loading the settings json)
+	await waitFor(() => {
+		const editableItems = ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "EditableItem");
+		
+		const editableItemsEditBtns = 
+			ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "EIEditButton");
+		editableItemsEditBtns.forEach((btn) => ReactTestUtils.Simulate.click(btn));
+		
+		const nameInputs = ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "EITextInput")
+			.filter(inp => inp.value === dbTitle);
+		
+		expect(nameInputs.length).toBe(1);
+		expect(nameInputs[0].getAttribute("maxLength")).toBe(testSettings.dbNameCharLimit.toString());
+	});
 	
-	const editableItems = ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "EditableItem");
-	
-	const editableItemsEditBtns = 
-		ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "EIEditButton");
-	editableItemsEditBtns.forEach((btn) => ReactTestUtils.Simulate.click(btn));
-	
-	const nameInputs = ReactTestUtils.scryRenderedDOMComponentsWithClass(application, "EITextInput")
-		.filter(inp => inp.value === dbTitle);
-	
-	expect(nameInputs.length).toBe(1);
-	expect(nameInputs[0].getAttribute("maxLength")).toBe(testSettings.dbNameCharLimit.toString());
 });

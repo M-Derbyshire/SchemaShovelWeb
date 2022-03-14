@@ -1,5 +1,5 @@
 import ReactTestUtils from 'react-dom/test-utils';
-import sleep from '../testingHelpers/sleepFunc';
+import { waitFor } from '@testing-library/react';
 import DatabaseEntity from './DatabaseEntity';
 
 const dummyDescChange = async () => {};
@@ -75,9 +75,8 @@ test("DatabaseEntity will pass the saveDescriptionErrorHandler prop on to the Ed
 	const editableItemSaveButton = ReactTestUtils.findRenderedDOMComponentWithClass(dbEntity, "EISaveButton");
 	ReactTestUtils.Simulate.click(editableItemSaveButton);
 	
-	await sleep(100); //Dealing with an async operation, so wait
+	await waitFor(() => expect(mockErrorHandler).toHaveBeenCalled());
 	
-	expect(mockErrorHandler).toHaveBeenCalled();
 });
 
 
