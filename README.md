@@ -15,10 +15,10 @@ The application has a ReactJS front-end, and a Spring-Boot back-end. You should 
 That being said, there a few pre-requisites you will need to set up before you can get the application running:
 
 - In */back_end/database*, there is a file called *create_database.sql*. This script will need to be ran on your MySQL instance, to generate the database.
-- In */front_end/public*, you will find a file called *settings.json*. This file will contain 3 properties: 
-    - **apiBaseURL** - This is the root URL of the API. E.g. http://api.com/api/v1
-    - **dbNameCharLimit** - The database-generation script will set the max-size of the name field for records in the [database] table. This should match that character limit.
-    - **entityDescCharLimit** - The database-generation script will also set the maximum character size of the description fields in the [schema]/[table]/[column] tables. This should match that limit.
+- In */front_end/public*, you will find a file called *.env.development*. This file will contain 3 properties: 
+    - **REACT_APP_API_BASE_URL** - This is the root URL of the API. E.g. http://api.com/api/v1
+    - **REACT_APP_DB_NAME_CHAR_LIMIT** - The database-generation script will set the max-size of the name field for records in the [database] table. This should match that character limit.
+    - **REACT_APP_ENTITY_DESC_CHAR_LIMIT** - The database-generation script will also set the maximum character size of the description fields in the [schema]/[table]/[column] tables. This should match that limit.
 - In */back_end/SchemaShovelWebAPI/src/main/resources*, you will need to create a file called *application.properties*. You will see a file already in that directory named *application.properties.example*. That example file will contain example values for all of the settings the API will need in *application.properties*.
 
 ## Documentation
