@@ -3,6 +3,7 @@ import './DatabaseAddition.css';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import AddDatabaseForm from '../AddDatabaseForm/AddDatabaseForm';
+import SQLScriptsDownloads from '../SQLScriptsDownloads/SQLScriptsDownloads';
 
 /**
 * Controls the additions of database records to the app's database, and renders an AddDatabaseForm component
@@ -87,6 +88,9 @@ class DatabaseAddition extends Component
 					disabled={isDisabled}
 					isSaving={this.state.isCreating}
 					dbNameCharLimit={this.props.dbNameCharLimit} />
+				
+				
+				<SQLScriptsDownloads />
 			</div>
 		);
 	}

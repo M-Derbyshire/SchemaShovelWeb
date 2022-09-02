@@ -4,6 +4,21 @@ import { MemoryRouter, Route } from 'react-router-dom';
 import MockAPIAccessor from '../testingHelpers/MockAPIAccessor';
 import { wait, waitFor } from '@testing-library/react';
 
+test("DatabaseAddition will render an SQLScriptsDownloads component", () => {
+	
+	const addition = ReactTestUtils.renderIntoDocument(
+		<MemoryRouter initialEntries={["/create"]}>
+			<DatabaseAddition 
+				apiAccessor={new MockAPIAccessor()} 
+				onErrorHandler={()=>{}}
+				dbNameCharLimit={100} />
+		</MemoryRouter>
+	);
+	
+	expect(ReactTestUtils.findRenderedDOMComponentWithClass(addition, "SQLScriptsDownloads")).not.toBeNull();
+	
+});
+
 test("DatabaseAddition will pass its onErrorHandler prop down to AddDatabaseForm", async () => {
 	
 	const mockErrorHandler = jest.fn();
