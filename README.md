@@ -2,7 +2,7 @@
 
 SchemaShovelWeb is a web-based application, designed to make it easier to analyse and document a database's structure, when you don't have any pre-existing documentation for it. The application has a ReactJS front-end, a Java/Spring-Boot back-end, and a MySQL database.
 
-First, the user will use one of the schema-generation SQL scripts (see */schema_generation_scripts*) to generate a JSON representation of the schemas/tables/columns in the database (at the time of writing -- as a proof of concept -- this project only contains a SQL Server script). Next, the user will need to enter that JSON into the database-addition screen, along with a name for the database. Finally, once the JSON has been uploaded into the system, the user can start to analyse and document.
+First, the user will use one of the schema-generation SQL scripts (see */front_end/public/downloads/sql*), that they can download from the application, to generate a JSON representation of the schemas/tables/columns in the database (at the time of writing -- as a proof of concept -- this project only contains a SQL Server script). Next, the user will need to enter that JSON into the database-addition screen, along with a name for the database. Finally, once the JSON has been uploaded into the system, the user can start to analyse and document.
 
 The application allows you to add descriptions to the schemas/tables/columns in the database record. You can also filter by the names/descriptions of these entities. You can also select a table, and have the application filter to just tables that have a foreign-key constraint to that table -- helping you to truly get to grips with how entities are connected in that particular database.
 
