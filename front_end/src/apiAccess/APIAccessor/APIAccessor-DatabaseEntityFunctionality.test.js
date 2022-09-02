@@ -17,7 +17,7 @@ test("getDatabaseList() will access the database list from the correct URL, and 
 	
 	const result = await api.getDatabaseList();
 	
-	expect(fetch).toHaveBeenCalledWith(base_url + "/databases", {});
+	expect(fetch).toHaveBeenCalledWith(base_url + "/databases", expect.objectContaining({}));
 	
 	expect(result[0].id).toBe(1);
 	expect(result[0].name).toBe("test1");
@@ -33,7 +33,7 @@ test("getDatabaseByID() will return the database object, from the right URL", as
 	
 	const result = await api.getDatabaseByID(id);
 	
-	expect(fetch).toHaveBeenCalledWith(base_url + "/databases/" + id, {});
+	expect(fetch).toHaveBeenCalledWith(base_url + "/databases/" + id, expect.objectContaining({}));
 	expect(Array.isArray(result)).toBeFalsy();
 	expect(result.name).toBe("test1");
 });
@@ -53,14 +53,14 @@ test("createDatabase() will return a new DB object, after having sent the correc
 	const result = await api.createDatabase(newDB);
 	
 	expect(result.name).toBe(name);
-	expect(fetch).toHaveBeenCalledWith(base_url + "/databases", {
+	expect(fetch).toHaveBeenCalledWith(base_url + "/databases", expect.objectContaining({
 		method: "POST",
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json'
 		},
 		body: newDB
-	});
+	}));
 });
 
 
@@ -80,14 +80,14 @@ test("updateDatabaseName() will return the new DB object, after having sent the 
 	const result = await api.updateDatabaseName(dbID, newName);
 	
 	expect(result.name).toBe(resultValue);
-	expect(fetch).toHaveBeenCalledWith(base_url + "/databases/" + dbID, {
+	expect(fetch).toHaveBeenCalledWith(base_url + "/databases/" + dbID, expect.objectContaining({
 		method: "PATCH",
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json'
 		},
 		body: `{"name":"${newName}"}`
-	});
+	}));
 });
 
 
@@ -109,7 +109,7 @@ test("deleteDatabase() will call the API with the correct path", async () => {
 	
 	api.deleteDatabase(id);
 	
-	expect(fetch).toHaveBeenCalledWith(`${base_url}/databases/${id}`, {
+	expect(fetch).toHaveBeenCalledWith(`${base_url}/databases/${id}`, expect.objectContaining({
 		method: "DELETE"
-	});
+	}));
 });
