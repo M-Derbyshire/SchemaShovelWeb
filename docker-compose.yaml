@@ -1,0 +1,8 @@
+version: '3'
+services:
+  ui: 
+    build: 
+      context: ./front_end
+      dockerfile: Dockerfile
+    ports:
+      - "8001:3000"
