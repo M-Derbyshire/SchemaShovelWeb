@@ -10,7 +10,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^5.0.1",
     "react-test-renderer": "^17.0.2",
     "web-vitals": "^1.1.2"
   },
@@ -20,7 +20,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "class-docs": "jsdoc -c jsdoc.conf.json",
-	"component-docs": "npx styleguidist build"
+    "component-docs": "npx styleguidist build"
   },
   "eslintConfig": {
     "extends": [
@@ -41,8 +41,8 @@
     ]
   },
   "devDependencies": {
-    "better-docs": "^2.3.2",
-    "jsdoc": "^3.6.7",
-    "react-styleguidist": "^11.1.7"
+    "better-docs": "^1.2.2",
+    "jsdoc": "^4.0.0",
+    "react-styleguidist": "^13.0.0"
   }
 }
