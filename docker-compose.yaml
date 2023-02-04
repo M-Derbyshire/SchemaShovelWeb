@@ -1,8 +1,14 @@
 version: '3'
 services:
+  api:
+    build:
+      context: ./back_end/SchemaShovelWebAPI
+      dockerfile: Dockerfile
+    ports:
+      - "3002:8080"
   ui: 
     build: 
       context: ./front_end
       dockerfile: Dockerfile
     ports:
-      - "8001:3000"
+      - "3003:3000"
