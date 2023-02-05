@@ -4,7 +4,7 @@ COPY package.json ./
 COPY package-lock.json ./
 
 RUN npm install -g serve
-RUN npm install --omit=dev
+RUN npm install
 
 COPY . ./
 RUN npm run build
